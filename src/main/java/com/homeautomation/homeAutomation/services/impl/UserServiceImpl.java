@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.services.impl;
 
 
+import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.UserRepository;
 import com.homeautomation.homeAutomation.services.UserService;
@@ -24,6 +25,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity saveUpdate(Long id, UserEntity userEntity) {
+            userEntity.setUser_Id(id);
+            return userRepository.save(userEntity);
+    }
+
+    @Override
     public Iterable<UserEntity> findAll() {
         return userRepository.findAll();
     }
@@ -31,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserEntity> findOne(Long id) {
-        return Optional.empty();
+        return userRepository.findById(id);
     }
 
     @Override
@@ -41,7 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity partialUpdate(Long id, UserEntity userEntity) {
-        return null;
+        userEntity.setUser_Id(id);
+        return userRepository.findById(id).map(existingUser -> {
+            Optional.ofNullable(userEntity.getUsername()).ifPresent(existingUser::setUsername);
+            Optional.ofNullable(userEntity.getPassword()).ifPresent(existingUser::setPassword);
+            return userRepository.save(existingUser);
+        }).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
 
     @Override

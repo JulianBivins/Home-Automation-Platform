@@ -1,8 +1,11 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
+import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +18,6 @@ public class UserDto {
     String username;
 
     String password;
+
+    private List<HomeAutomationRuleEntity> rules;
 }

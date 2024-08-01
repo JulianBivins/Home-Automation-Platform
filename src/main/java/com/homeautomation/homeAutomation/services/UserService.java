@@ -1,11 +1,14 @@
 package com.homeautomation.homeAutomation.services;
 
+import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 
 import java.util.Optional;
 
 public interface UserService {
     UserEntity save(UserEntity userEntity);
+
+    UserEntity saveUpdate(Long id, UserEntity userEntity);
 
     Iterable<UserEntity> findAll();
 

@@ -1,12 +1,20 @@
 package com.homeautomation.homeAutomation.services;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
-import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DeviceService {
-    DeviceEntity saveUpdate(Long id, DeviceEntity deviceEntity);
+
+
+    DeviceEntity save(
+            DeviceEntity deviceEntity);
+
+    DeviceEntity saveUpdate(
+            Long id,
+            DeviceEntity deviceEntity);
+
 
     Iterable<DeviceEntity> findAll();
 
@@ -14,7 +22,11 @@ public interface DeviceService {
 
     boolean isExists(Long id);
 
-    DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
+//    DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
+
+    List<DeviceEntity> getDeviceByGroupId(Long groupId);
 
     void delete(Long id);
+
+    DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
 }

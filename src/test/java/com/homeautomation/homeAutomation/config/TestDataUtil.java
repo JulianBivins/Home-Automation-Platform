@@ -199,6 +199,7 @@ public final class TestDataUtil {
                 generateBehaviourEntity());
     }
 
+
     private static List<HomeAutomationRuleDto> listOfRuleDtos() {
         return List.of(
                 createTestRuleDtoA(),

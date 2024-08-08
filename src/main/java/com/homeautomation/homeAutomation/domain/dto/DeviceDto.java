@@ -31,8 +31,8 @@ public class DeviceDto {
     private DeviceEntity.DeviceType type;
 
     //!Might need to be Dto instead
-    private GroupDto groupDto;
+    private GroupEntity groupEntity;
 
-    private List<BehaviourDto> behaviourDtos;
+    private List<BehaviourEntity> behaviourEntities;
 
 }

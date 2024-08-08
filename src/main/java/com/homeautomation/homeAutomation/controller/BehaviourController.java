@@ -4,7 +4,11 @@ import com.homeautomation.homeAutomation.domain.dto.BehaviourDto;
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
+import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
+import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.mapper.impl.BehaviourMapperImpl;
+import com.homeautomation.homeAutomation.mapper.impl.DeviceMapperImpl;
+import com.homeautomation.homeAutomation.mapper.impl.HomeAutomationRuleMapperImpl;
 import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,10 @@ public class BehaviourController {
 	private BehaviourMapperImpl behaviourMapper;
 	@Autowired
 	private HomeAutomationRuleService homeAutomationRuleService;
+	@Autowired
+	private HomeAutomationRuleMapperImpl homeAutomationRuleMapper;
+	@Autowired
+	private DeviceMapperImpl deviceMapper;
 
 
     @PostMapping("/behaviours")
@@ -34,7 +42,9 @@ public class BehaviourController {
 			case "TIMED" -> BehaviourDto.Behaviour.TIMED;
 			default -> throw new IllegalArgumentException("Invalid behaviourType: " + behaviourString);
 		};
-			BehaviourDto behaviourDto = new BehaviourDto(behaviour, homeAutomationRuleDto, deviceDto);
+		HomeAutomationRuleEntity homeAutomationRuleEntity = homeAutomationRuleMapper.mapFrom(homeAutomationRuleDto);
+		DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
+			BehaviourDto behaviourDto = new BehaviourDto(behaviour, homeAutomationRuleEntity, deviceEntity);
 			return new ResponseEntity<>(behaviourDto, HttpStatus.OK);
 	}
 

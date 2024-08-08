@@ -23,7 +23,7 @@ public final class TestDataUtil {
         userEntityA.setUser_Id(1L);
         userEntityA.setUsername("UserA");
         userEntityA.setPassword("1234");
-        userEntityA.setRules(listOfRuleDtos());
+        userEntityA.setRules(listOfRuleEntitys());
         return userEntityA;
     }
 
@@ -34,7 +34,7 @@ public final class TestDataUtil {
         userEntityB.setUsername("UserB");
         userEntityB.setPassword("5678");
         userEntityB.setRules(
-                listOfRuleDtos()
+                listOfRuleEntitys()
         );
         return userEntityB;
     }
@@ -44,65 +44,43 @@ public final class TestDataUtil {
         userEntityC.setUsername("UserC");
         userEntityC.setPassword("9012");
         userEntityC.setRules(
-                listOfRuleDtos()
+                listOfRuleEntitys()
         );
         return userEntityC;
     }
 
-    public static UserDto createTestUserDtoA() {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(1L);
-        userDto.setUsername("UserDtoA");
-        userDto.setRules(listOfRuleDtos());
-        return userDto;
+    private static HomeAutomationRuleEntity createTestRuleEntityA() {
+        HomeAutomationRuleEntity homeAutomationRuleEntity = new HomeAutomationRuleEntity();
+        homeAutomationRuleEntity.setRule_id(1L);
+        homeAutomationRuleEntity.setRuleName("RuleA");
+        homeAutomationRuleEntity.setDescription("Mock RuleA");
+        homeAutomationRuleEntity.setUserEntity(createTestUserEntityA());
+        homeAutomationRuleEntity.setGroupEntity(createGroupEntityA());
+        homeAutomationRuleEntity.setBehaviourEntitys(listOfBehaviourEntitys());
+        homeAutomationRuleEntity.setTrigger(generateTriggerEventEntity());
+        return homeAutomationRuleEntity;
     }
-    public static UserDto createTestUserDtoB() {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(2L);
-        userDto.setUsername("UserDtoB");
-        userDto.setRules(listOfRuleDtos());
-        return userDto;
+    private static HomeAutomationRuleEntity createTestRuleEntityB() {
+        HomeAutomationRuleEntity homeAutomationRuleEntity = new HomeAutomationRuleEntity();
+        homeAutomationRuleEntity.setRule_id(2L);
+        homeAutomationRuleEntity.setRuleName("RuleB");
+        homeAutomationRuleEntity.setDescription("Mock RuleB");
+        homeAutomationRuleEntity.setUserEntity(createTestUserEntityA());
+        homeAutomationRuleEntity.setGroupEntity(createGroupEntityA());
+        homeAutomationRuleEntity.setBehaviourEntitys(listOfBehaviourEntitys());
+        homeAutomationRuleEntity.setTrigger(generateTriggerEventEntity());
+        return homeAutomationRuleEntity;
     }
-    public static UserDto createTestUserDtoC() {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(6L);
-        userDto.setUsername("UserDtoC");
-        userDto.setRules(listOfRuleDtos());
-        return userDto;
-    }
-
-    private static HomeAutomationRuleDto createTestRuleDtoA() {
-        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
-        homeAutomationRuleDto.setRule_id(1L);
-        homeAutomationRuleDto.setRuleName("RuleA");
-        homeAutomationRuleDto.setDescription("Mock RuleA");
-        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
-        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
-        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
-        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
-        return homeAutomationRuleDto;
-    }
-    private static HomeAutomationRuleDto createTestRuleDtoB() {
-        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
-        homeAutomationRuleDto.setRule_id(2L);
-        homeAutomationRuleDto.setRuleName("RuleB");
-        homeAutomationRuleDto.setDescription("Mock RuleB");
-        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
-        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
-        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
-        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
-        return homeAutomationRuleDto;
-    }
-    private static HomeAutomationRuleDto createTestRuleDtoC() {
-        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
-        homeAutomationRuleDto.setRule_id(6L);
-        homeAutomationRuleDto.setRuleName("RuleC");
-        homeAutomationRuleDto.setDescription("Mock RuleC");
-        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
-        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
-        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
-        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
-        return homeAutomationRuleDto;
+    private static HomeAutomationRuleEntity createTestRuleEntityC() {
+        HomeAutomationRuleEntity homeAutomationRuleEntity = new HomeAutomationRuleEntity();
+        homeAutomationRuleEntity.setRule_id(6L);
+        homeAutomationRuleEntity.setRuleName("RuleC");
+        homeAutomationRuleEntity.setDescription("Mock RuleC");
+        homeAutomationRuleEntity.setUserEntity(createTestUserEntityA());
+        homeAutomationRuleEntity.setGroupEntity(createGroupEntityA());
+        homeAutomationRuleEntity.setBehaviourEntitys(listOfBehaviourEntitys());
+        homeAutomationRuleEntity.setTrigger(generateTriggerEventEntity());
+        return homeAutomationRuleEntity;
     }
 
 //    private static HomeAutomationRuleEntity createTestRuleEntityA() {
@@ -160,68 +138,68 @@ public final class TestDataUtil {
 //        return groupEntityA;
 //    }
 
-    private static GroupDto createGroupDtoA() {
-        GroupDto groupDtoA = new GroupDto();
-        groupDtoA.setId(1L);
-        groupDtoA.setName("LivingRoom");
-        groupDtoA.setRules(listOfRuleDtos());
-        return groupDtoA;
+    private static GroupEntity createGroupEntityA() {
+        GroupEntity groupEntityA = new GroupEntity();
+        groupEntityA.setId(1L);
+        groupEntityA.setName("LivingRoom");
+        groupEntityA.setRules(listOfRuleEntitys());
+        return groupEntityA;
     }
-    private static GroupDto createGroupDtoB() {
-        GroupDto groupDtoB = new GroupDto();
-        groupDtoB.setId(2L);
-        groupDtoB.setName("Kitchen");
-        groupDtoB.setRules(listOfRuleDtos());
-        return groupDtoB;
-    }
-
-    private static DeviceDto createDeviceDtoA() {
-        DeviceDto deviceDto = new DeviceDto();
-        deviceDto.setDevice_Id(1L);
-        deviceDto.setName("Lights_Bathroom");
-        deviceDto.setType(DeviceEntity.DeviceType.LIGHTS);
-        deviceDto.setGroupDto(createGroupDtoA());
-        deviceDto.setBehaviourDtos(listOfBehaviourDtos());
-        return deviceDto;
-    }
-    private static DeviceDto createDeviceDtoB() {
-        DeviceDto deviceDto = new DeviceDto();
-        deviceDto.setDevice_Id(2L);
-        deviceDto.setName("Speaker_LivingRoom");
-        deviceDto.setType(DeviceEntity.DeviceType.SPEAKER);
-        deviceDto.setGroupDto(createGroupDtoA());
-        deviceDto.setBehaviourDtos(listOfBehaviourDtos());
-        return deviceDto;
+    private static GroupEntity createGroupEntityB() {
+        GroupEntity groupEntityB = new GroupEntity();
+        groupEntityB.setId(2L);
+        groupEntityB.setName("Kitchen");
+        groupEntityB.setRules(listOfRuleEntitys());
+        return groupEntityB;
     }
 
-    private static BehaviourDto generateBehaviourEntity() {
+    private static DeviceEntity createDeviceEntityA() {
+        DeviceEntity deviceEntity = new DeviceEntity();
+        deviceEntity.setDevice_Id(1L);
+        deviceEntity.setName("Lights_Bathroom");
+        deviceEntity.setType(DeviceEntity.DeviceType.LIGHTS);
+        deviceEntity.setGroupEntity(createGroupEntityA());
+        deviceEntity.setBehaviourEntitys(listOfBehaviourEntitys());
+        return deviceEntity;
+    }
+    private static DeviceEntity createDeviceEntityB() {
+        DeviceEntity deviceEntity = new DeviceEntity();
+        deviceEntity.setDevice_Id(2L);
+        deviceEntity.setName("Speaker_LivingRoom");
+        deviceEntity.setType(DeviceEntity.DeviceType.SPEAKER);
+        deviceEntity.setGroupEntity(createGroupEntityA());
+        deviceEntity.setBehaviourEntitys(listOfBehaviourEntitys());
+        return deviceEntity;
+    }
+
+    private static BehaviourEntity generateBehaviourEntity() {
         int randomOrdinal = randomBehaviour.nextInt(4);
         id++;
-        BehaviourDto behaviourDto = new BehaviourDto();
-        behaviourDto.setBehaviourId(id);
-        behaviourDto.setBehaviour(BehaviourDto.Behaviour.values()[randomOrdinal]);
-        behaviourDto.setDeviceDto(createDeviceDtoA());
-        behaviourDto.setHomeAutomationRuleDto(createTestRuleDtoA());
-        return behaviourDto;
+        BehaviourEntity behaviourEntity = new BehaviourEntity();
+        behaviourEntity.setBehaviourId(id);
+        behaviourEntity.setBehaviour(BehaviourEntity.Behaviour.values()[randomOrdinal]);
+        behaviourEntity.setDeviceEntity(createDeviceEntityA());
+        behaviourEntity.setHomeAutomationRuleEntity(createTestRuleEntityA());
+        return behaviourEntity;
     }
     
-    private static HomeAutomationRuleDto.Event generateTriggerEventDto() {
+    private static HomeAutomationRuleEntity.Event generateTriggerEventEntity() {
        int randomOrdinal = randomEvent.nextInt(6);
-       return HomeAutomationRuleDto.Event.values()[randomOrdinal];
+       return HomeAutomationRuleEntity.Event.values()[randomOrdinal];
     }
 
-    private static List<BehaviourDto> listOfBehaviourDtos() {
+    private static List<BehaviourEntity> listOfBehaviourEntitys() {
         return List.of(generateBehaviourEntity(),
                 generateBehaviourEntity(),
                 generateBehaviourEntity());
     }
 
 
-    private static List<HomeAutomationRuleDto> listOfRuleDtos() {
+    private static List<HomeAutomationRuleEntity> listOfRuleEntitys() {
         return List.of(
-                createTestRuleDtoA(),
-                createTestRuleDtoB(),
-                createTestRuleDtoC()
+                createTestRuleEntityA(),
+                createTestRuleEntityB(),
+                createTestRuleEntityC()
         );
     }
 

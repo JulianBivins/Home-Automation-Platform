@@ -52,7 +52,7 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity()).ifPresent(existingRule::setGroupEntity);
-            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(existingRule::setBehaviourEntities);
+            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntitys()).ifPresent(existingRule::setBehaviourEntitys);
             Optional.ofNullable(homeAutomationRuleEntity.getTrigger()).ifPresent(existingRule::setTrigger);
             return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));

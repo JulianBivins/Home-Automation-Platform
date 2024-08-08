@@ -1,7 +1,5 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
-import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
-import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,15 +27,15 @@ public class BehaviourEntity {
 
     @ManyToOne
     @JoinColumn(name = "device_id")
-    private DeviceDto deviceDto;
+    private DeviceEntity deviceEntity;
 
     @ManyToOne
     @JoinColumn(name = "rule_id")
-    private HomeAutomationRuleDto homeAutomationRuleDto;
+    private HomeAutomationRuleEntity homeAutomationRuleEntity;
 
-    public BehaviourEntity(Behaviour behaviour, HomeAutomationRuleDto homeAutomationRuleDto, DeviceDto deviceDto) {
+    public BehaviourEntity(Behaviour behaviour, HomeAutomationRuleEntity homeAutomationRuleEntity, DeviceEntity deviceEntity) {
         this.behaviour = behaviour;
-        this.deviceDto = deviceDto;
-        this.homeAutomationRuleDto = homeAutomationRuleDto;
+        this.deviceEntity = deviceEntity;
+        this.homeAutomationRuleEntity = homeAutomationRuleEntity;
     }
 }

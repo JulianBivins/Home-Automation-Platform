@@ -21,12 +21,12 @@ public class HomeAutomationRuleDto {
     private String description;
 
     //!Might need to be Dto
-    private UserDto userDto;
+    private UserEntity userEntity;
 
-    //!Might need to be Dto
-    private GroupDto groupDto;
+    //!Might need to be Entity
+    private GroupEntity groupEntity;
 
-    private List<BehaviourDto> behaviourDtos;
+    private List<BehaviourEntity> behaviourEntitys;
 
     public enum Event {
         TIME,

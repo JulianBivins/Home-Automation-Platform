@@ -1,8 +1,5 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
-import com.homeautomation.homeAutomation.domain.dto.BehaviourDto;
-import com.homeautomation.homeAutomation.domain.dto.GroupDto;
-import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,21 +25,21 @@ public class HomeAutomationRuleEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    //!Might need to be Dto
-    private UserDto userDto;
+    //!Might need to be Entity
+    private UserEntity userEntity;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
-    //!Might need to be Dto
-    private GroupDto groupDto;
+    //!Might need to be Entity
+    private GroupEntity groupEntity;
 
     //I think this is unnecessary since the devices will be give over through the rules or the behavior table anyway
 //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
 //    @JoinColumn(name = "device_id")
 //    private List<DeviceEntity> device;
 
-    @OneToMany(mappedBy = "homeAutomationRuleDto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BehaviourDto> behaviourDtos;
+    @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BehaviourEntity> behaviourEntitys;
 
     public enum Event {
         TIME,

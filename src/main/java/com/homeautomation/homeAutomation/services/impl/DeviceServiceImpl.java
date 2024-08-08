@@ -64,7 +64,7 @@ public class DeviceServiceImpl implements DeviceService {
             Optional.ofNullable(deviceEntity.getName()).ifPresent(existingDevice::setName);
             Optional.ofNullable(deviceEntity.getType()).ifPresent(existingDevice::setType);
             Optional.ofNullable(deviceEntity.getGroupEntity()).ifPresent(existingDevice::setGroupEntity);
-            Optional.ofNullable(deviceEntity.getBehaviourEntities()).ifPresent(existingDevice::setBehaviourEntities);
+            Optional.ofNullable(deviceEntity.getBehaviourEntitys()).ifPresent(existingDevice::setBehaviourEntitys);
             return deviceRepository.save(existingDevice);
         }).orElseThrow(() -> new RuntimeException("Device does not exist"));
     }

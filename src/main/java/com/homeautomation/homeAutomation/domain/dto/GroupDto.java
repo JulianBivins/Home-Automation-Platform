@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
+import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,19 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="Groups")
 public class GroupDto {
 
     private Long id;
 
     private String name;
 
-    private List<HomeAutomationRuleDto> rules;
+    private List<HomeAutomationRuleEntity> rules;
 
-    private UserDto userDto;
+    private UserEntity userEntity;
 
 }

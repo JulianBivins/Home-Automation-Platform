@@ -19,9 +19,9 @@ public class UserDto {
 
     String password;
 
-    private List<HomeAutomationRuleDto> rules;
+    private List<HomeAutomationRuleEntity> rules;
 
-    public UserDto(Long l, String userDtoB, List<HomeAutomationRuleDto> homeAutomationRuleDtos) {
+    public UserDto(Long l, String userEntityB, List<HomeAutomationRuleEntity> homeAutomationRuleEntitys) {
 
     }
 }

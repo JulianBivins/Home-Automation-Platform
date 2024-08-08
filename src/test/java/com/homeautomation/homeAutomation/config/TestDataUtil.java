@@ -50,51 +50,59 @@ public final class TestDataUtil {
     }
 
     public static UserDto createTestUserDtoA() {
-        return new UserDto(
-              1L, "UserDtoA", listOfRuleDtos());
+        UserDto userDto = new UserDto();
+        userDto.setUserId(1L);
+        userDto.setUsername("UserDtoA");
+        userDto.setRules(listOfRuleDtos());
+        return userDto;
     }
     public static UserDto createTestUserDtoB() {
-        return new UserDto(
-                2L, "UserDtoB", listOfRuleDtos());
+        UserDto userDto = new UserDto();
+        userDto.setUserId(2L);
+        userDto.setUsername("UserDtoB");
+        userDto.setRules(listOfRuleDtos());
+        return userDto;
     }
     public static UserDto createTestUserDtoC() {
-        var l = listOfRuleDtos();
-        return new UserDto(
-                6L, "UserDtoC", listOfRuleDtos());
+        UserDto userDto = new UserDto();
+        userDto.setUserId(6L);
+        userDto.setUsername("UserDtoC");
+        userDto.setRules(listOfRuleDtos());
+        return userDto;
     }
 
     private static HomeAutomationRuleDto createTestRuleDtoA() {
-        return new HomeAutomationRuleDto(
-                1L,
-                "RuleA",
-                "Mock RuleA",
-                createTestUserDtoA(),
-                createGroupDtoA(),
-                listOfBehaviourDtos(),
-                generateEventDto());
+        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
+        homeAutomationRuleDto.setRule_id(1L);
+        homeAutomationRuleDto.setRuleName("RuleA");
+        homeAutomationRuleDto.setDescription("Mock RuleA");
+        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
+        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
+        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
+        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
+        return homeAutomationRuleDto;
     }
-
-
-
     private static HomeAutomationRuleDto createTestRuleDtoB() {
-        return new HomeAutomationRuleDto(
-                2L,
-                "RuleB",
-                "Mock RuleB",
-                createTestUserDtoB(),
-                createGroupDtoB(),
-                listOfBehaviourDtos(),
-                generateEventDto());
+        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
+        homeAutomationRuleDto.setRule_id(2L);
+        homeAutomationRuleDto.setRuleName("RuleB");
+        homeAutomationRuleDto.setDescription("Mock RuleB");
+        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
+        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
+        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
+        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
+        return homeAutomationRuleDto;
     }
     private static HomeAutomationRuleDto createTestRuleDtoC() {
-        return new HomeAutomationRuleDto(
-                6L,
-                "RuleC",
-                "Mock RuleC",
-                createTestUserDtoA(),
-                createGroupDtoA(),
-                listOfBehaviourDtos(),
-                generateEventDto());
+        HomeAutomationRuleDto homeAutomationRuleDto = new HomeAutomationRuleDto();
+        homeAutomationRuleDto.setRule_id(6L);
+        homeAutomationRuleDto.setRuleName("RuleC");
+        homeAutomationRuleDto.setDescription("Mock RuleC");
+        homeAutomationRuleDto.setUserDto(createTestUserDtoA());
+        homeAutomationRuleDto.setGroupDto(createGroupDtoA());
+        homeAutomationRuleDto.setBehaviourDtos(listOfBehaviourDtos());
+        homeAutomationRuleDto.setTrigger(generateTriggerEventDto());
+        return homeAutomationRuleDto;
     }
 
 //    private static HomeAutomationRuleEntity createTestRuleEntityA() {
@@ -168,27 +176,36 @@ public final class TestDataUtil {
     }
 
     private static DeviceDto createDeviceDtoA() {
-        return new DeviceDto(1L,
-                "Lights_Bathroom",
-                DeviceEntity.DeviceType.LIGHTS,
-                createGroupDtoA(),
-                List.of(generateBehaviourEntity(),
-                        generateBehaviourEntity()));
+        DeviceDto deviceDto = new DeviceDto();
+        deviceDto.setDevice_Id(1L);
+        deviceDto.setName("Lights_Bathroom");
+        deviceDto.setType(DeviceEntity.DeviceType.LIGHTS);
+        deviceDto.setGroupDto(createGroupDtoA());
+        deviceDto.setBehaviourDtos(listOfBehaviourDtos());
+        return deviceDto;
+    }
+    private static DeviceDto createDeviceDtoB() {
+        DeviceDto deviceDto = new DeviceDto();
+        deviceDto.setDevice_Id(2L);
+        deviceDto.setName("Speaker_LivingRoom");
+        deviceDto.setType(DeviceEntity.DeviceType.SPEAKER);
+        deviceDto.setGroupDto(createGroupDtoA());
+        deviceDto.setBehaviourDtos(listOfBehaviourDtos());
+        return deviceDto;
     }
 
     private static BehaviourDto generateBehaviourEntity() {
         int randomOrdinal = randomBehaviour.nextInt(4);
         id++;
-        return new BehaviourDto(
-//                1L,
-                id,
-                BehaviourDto.Behaviour.values()[randomOrdinal],
-                createDeviceDtoA(),
-                createTestRuleDtoA()
-                );
+        BehaviourDto behaviourDto = new BehaviourDto();
+        behaviourDto.setBehaviourId(id);
+        behaviourDto.setBehaviour(BehaviourDto.Behaviour.values()[randomOrdinal]);
+        behaviourDto.setDeviceDto(createDeviceDtoA());
+        behaviourDto.setHomeAutomationRuleDto(createTestRuleDtoA());
+        return behaviourDto;
     }
     
-    private static HomeAutomationRuleDto.Event generateEventDto() {
+    private static HomeAutomationRuleDto.Event generateTriggerEventDto() {
        int randomOrdinal = randomEvent.nextInt(6);
        return HomeAutomationRuleDto.Event.values()[randomOrdinal];
     }

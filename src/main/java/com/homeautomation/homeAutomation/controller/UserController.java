@@ -21,7 +21,6 @@ public class UserController {
     @Autowired
     private Mapper<UserEntity, UserDto> userMapper;
 
-    //!Method should be correct for now
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserDto> getUser (@PathVariable Long userId) {
         Optional<UserEntity> newUser = userService.findOne(userId);

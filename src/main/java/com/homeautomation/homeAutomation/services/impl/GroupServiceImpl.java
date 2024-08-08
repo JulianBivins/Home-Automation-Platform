@@ -3,7 +3,7 @@ package com.homeautomation.homeAutomation.services.impl;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
-import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
+import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.GroupService;
 
 import java.util.List;
@@ -12,9 +12,11 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
 
     final private GroupRepository groupRepository;
+    final private DeviceService deviceService;
 
-    public GroupServiceImpl(GroupRepository groupRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, DeviceService deviceService) {
         this.groupRepository = groupRepository;
+        this.deviceService = deviceService;
     }
 
     @Override
@@ -32,10 +34,9 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findById(id);
     }
 
-    //TODO
     @Override
     public List<DeviceEntity> getDevices(Long groupId) {
-        return List.of();
+        return deviceService.getDevicesByGroupId(groupId);
     }
 
     @Override
@@ -45,6 +46,6 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void delete(Long id) {
-
+        groupRepository.deleteById(id);
     }
 }

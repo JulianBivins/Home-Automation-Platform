@@ -1,6 +1,5 @@
 package com.homeautomation.homeAutomation.mapper.impl;
 
-import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;

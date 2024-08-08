@@ -22,9 +22,7 @@ public interface DeviceService {
 
     boolean isExists(Long id);
 
-//    DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
-
-    List<DeviceEntity> getDeviceByGroupId(Long groupId);
+    List<DeviceEntity> getDevicesByGroupId(Long groupId);
 
     void delete(Long id);
 

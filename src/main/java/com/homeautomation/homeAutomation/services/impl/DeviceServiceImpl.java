@@ -53,7 +53,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     //TODO
     @Override
-    public List<DeviceEntity> getDeviceByGroupId(Long groupId) {
+    public List<DeviceEntity> getDevicesByGroupId(Long groupId) {
         return groupService.getDevices(groupId);
     }
 

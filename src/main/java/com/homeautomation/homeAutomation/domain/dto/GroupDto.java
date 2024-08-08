@@ -21,6 +21,6 @@ public class GroupDto {
 
     private List<HomeAutomationRuleDto> rules;
 
-    private UserEntity userEntity;
+    private UserDto userDto;
 
 }

@@ -1,7 +1,6 @@
 package com.homeautomation.homeAutomation.services.impl;
 
 
-import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.UserRepository;
 import com.homeautomation.homeAutomation.services.UserService;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+//!
 @Service
 public class UserServiceImpl implements UserService {
 

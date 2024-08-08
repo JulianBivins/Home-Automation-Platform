@@ -1,7 +1,5 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
-import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,18 +12,23 @@ import lombok.NoArgsConstructor;
 @Table(name="behaviours")
 public class BehaviourDto {
 
-    private Long id;
+    private Long behaviourId;
 
-    enum Behaviour {
+    public enum Behaviour {
         ON,
         OFF,
         STAND_BY,
         TIMED,
     }
-    private String behaviour;
+    private Behaviour behaviour;
 
-    private DeviceEntity deviceEntity;
+    private DeviceDto deviceDto;
 
-    private HomeAutomationRuleEntity homeAutomationRuleEntity;
+    private HomeAutomationRuleDto homeAutomationRuleDto;
 
+    public BehaviourDto(Behaviour behaviour, HomeAutomationRuleDto homeAutomationRuleDto, DeviceDto deviceDto) {
+        this.behaviour = behaviour;
+        this.deviceDto = deviceDto;
+        this.homeAutomationRuleDto = homeAutomationRuleDto;
+    }
 }

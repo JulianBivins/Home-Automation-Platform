@@ -1,14 +1,19 @@
 package com.homeautomation.homeAutomation.controller;
 
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
+import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.mapper.impl.DeviceMapperImpl;
+import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.DeviceService;
+import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,6 +23,10 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private DeviceMapperImpl deviceMapper;
+    @Autowired
+    private BehaviourService behaviourService;
+    @Autowired
+    private HomeAutomationRuleService homeAutomationRuleService;
 
     @GetMapping("/devices")
     public ResponseEntity<DeviceDto> getDeviceById(@PathVariable Long deviceId) {
@@ -28,10 +37,28 @@ public class DeviceController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/behaviours/{deviceId}/behaviours")
+    //TODO need to think if a Requestbody of DeviceDto or if a long id is better
+    public ResponseEntity<ArrayList<String>> retrieveBehavioursByDeviceId (@RequestBody DeviceDto deviceDto) {
+        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByDeviceID(deviceDto);
+        ArrayList<String> behaviourArray = new ArrayList<>();
+        for(var behaviour : behaviours) {
+            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+        }
+        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
+    }
+
     @PostMapping("/devices/{deviceType}")
-    public ResponseEntity<DeviceDto> createDevice(@PathVariable DeviceEntity.DeviceType deviceType,
+    public ResponseEntity<DeviceDto> createDevice(@PathVariable String deviceTypeString,
                                                   @RequestBody DeviceDto deviceDto) {
-        //Type of device needs to be set manually
+        DeviceEntity.DeviceType deviceType = switch(deviceTypeString.toUpperCase()) {
+            case "LIGHTS" -> DeviceEntity.DeviceType.LIGHTS;
+            case "UTILITY" -> DeviceEntity.DeviceType.UTILITY;
+            case "SPEAKER" -> DeviceEntity.DeviceType.SPEAKER;
+            case "TELEVISION" -> DeviceEntity.DeviceType.TELEVISION;
+            case "CAMERA" -> DeviceEntity.DeviceType.CAMERA;
+            default -> throw new IllegalArgumentException("Invalid deviceType: " + deviceTypeString);
+        };
         deviceDto.setType(deviceType);
         DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
         DeviceEntity savedDeviceEntity = deviceService.save(deviceEntity);
@@ -62,14 +89,19 @@ public class DeviceController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/{userId}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
-        //right now deleted with or without actually checking if device exists in the homeAutomationRuleDB exists.
-        //should change implementation to include return type of boolean for self measures
-        //also this needs to delete the device out of the HomeAutomationDB not out of RegisteredDeviceDB itself
-            // user can still have to lights but have exchanged the lightbulb from the livingroom into the kithcen hence
-            // also changing the applied rule set
-        deviceService.delete(id);
+    @DeleteMapping("/devices/rules/{deviceId}")
+    public ResponseEntity deleteDeviceOutOfRule(@PathVariable Long deviceId) {
+         if(homeAutomationRuleService.isDeviceExistsInRule(deviceId)) {
+             homeAutomationRuleService.deleteDeviceById(deviceId);
+             return new ResponseEntity(HttpStatus.NO_CONTENT);
+         }else {
+             return new ResponseEntity(HttpStatus.NOT_FOUND);
+         }
+    }
+
+    @DeleteMapping("/devices/{deviceId}")
+    public ResponseEntity deleteDevice (@PathVariable Long deviceId){
+        deviceService.delete(deviceId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

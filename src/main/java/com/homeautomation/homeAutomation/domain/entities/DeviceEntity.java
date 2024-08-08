@@ -1,5 +1,7 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.homeautomation.homeAutomation.domain.dto.BehaviourDto;
+import com.homeautomation.homeAutomation.domain.dto.GroupDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,10 +39,10 @@ public class DeviceEntity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     //!Might need to be Dto instead
-    private GroupEntity groupEntity;
+    private GroupDto groupDto;
 
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BehaviourEntity> behaviourEntities;
+    private List<BehaviourDto> behaviourDtos;
 
     //Think it is unnecessary since I already have the behaviour class defining the table
 //    @ManyToMany

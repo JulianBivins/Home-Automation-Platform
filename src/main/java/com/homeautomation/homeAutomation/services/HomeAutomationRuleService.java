@@ -16,11 +16,20 @@ public interface HomeAutomationRuleService {
 
     Optional<HomeAutomationRuleEntity> findOne(Long id);
 
-    List<HomeAutomationRuleEntity> getRulesByUserID (UserEntity userEntity);
+    List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity);
+
 
     HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity);
 
     boolean isExists(Long id);
 
+    boolean isDeviceExistsInRule(Long deviceId);
+
+    boolean isBehaviourExistsInRule(Long behaviourId);
+
     void delete(Long id);
+
+    void deleteDeviceById(Long deviceId);
+
+    void deleteBehaviourById(Long behaviourId);
 }

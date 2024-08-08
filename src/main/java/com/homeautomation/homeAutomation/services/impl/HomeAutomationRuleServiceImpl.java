@@ -5,7 +5,6 @@ import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntit
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,6 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     public HomeAutomationRuleServiceImpl(HomeAutomationRuleRepository homeAutomationRuleRepository) {
         this.homeAutomationRuleRepository = homeAutomationRuleRepository;
     }
-
 
     @Override
     public HomeAutomationRuleEntity save(HomeAutomationRuleEntity homeAutomationRuleEntity) {
@@ -42,10 +40,9 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.findById(id);
     }
 
-    //TODO
     @Override
-    public List<HomeAutomationRuleEntity> getRulesByUserID(UserEntity userEntity) {
-        return homeAutomationRuleRepository.findAllById(userEntity.getUser_Id());
+    public List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity) {
+        return homeAutomationRuleRepository.findByUserId(userEntity.getUser_Id());
     }
 
     @Override
@@ -66,9 +63,31 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.existsById(id);
     }
 
+    @Override
+    public boolean isDeviceExistsInRule(Long deviceId) {
+        return homeAutomationRuleRepository.existsByDeviceId(deviceId);
+    }
+
+    @Override
+    public boolean isBehaviourExistsInRule(Long behaviourId) {
+        return homeAutomationRuleRepository.isBehaviourExistsInRule(behaviourId);
+    }
+
 
     @Override
     public void delete(Long id) {
         homeAutomationRuleRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteDeviceById(Long deviceId) {
+        homeAutomationRuleRepository.deleteDeviceById(deviceId);
+    }
+
+    @Override
+    public void deleteBehaviourById(Long behaviourId) {
+        homeAutomationRuleRepository.deleteBehaviourById(behaviourId);
+    }
+
+
 }

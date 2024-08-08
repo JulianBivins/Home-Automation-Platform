@@ -2,9 +2,7 @@ package com.homeautomation.homeAutomation.domain.dto;
 
 import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,25 +14,27 @@ import java.util.List;
 @NoArgsConstructor
 public class HomeAutomationRuleDto {
 
-    private String rule_id;
+    private Long rule_id;
 
     private String ruleName;
 
     private String description;
 
     //!Might need to be Dto
-    private UserEntity userEntity;
+    private UserDto userDto;
 
     //!Might need to be Dto
-    private GroupEntity groupEntity;
+    private GroupDto groupDto;
 
-    private List<BehaviourEntity> behaviourEntities;
+    private List<BehaviourDto> behaviourDtos;
 
     public enum Event {
-        AUTO, // aka Time sensitive
+        TIME,
+        PERIOD,
         BEFORE_OTHER,
-        AFTER_OTHER
-
+        AFTER_OTHER,
+        WHEN_INSERT_ON,
+        WHEN_INSERT_OFF
     }
     private Event trigger;
 

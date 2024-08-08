@@ -1,17 +1,18 @@
 package com.homeautomation.homeAutomation.controller;
 
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
-import com.homeautomation.homeAutomation.domain.dto.UserDto;
+import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
-import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;
+import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +26,8 @@ public class HomeAutomationRuleController {
 
     @Autowired
     private  Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper;
+    @Autowired
+    private BehaviourService behaviourService;
 
 //    public HomeAutomationRuleController(HomeAutomationRuleService homeAutomationRuleService, Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper) {
 //        this.homeAutomationRuleService = homeAutomationRuleService;
@@ -32,7 +35,7 @@ public class HomeAutomationRuleController {
 //    }
 
 
-
+//TODO ALL
     //need to check this solution
 
      @GetMapping("rules/{ruleId}")
@@ -58,6 +61,16 @@ public class HomeAutomationRuleController {
     }
 
 
+    @GetMapping("/rules/{ruleId}/behaviours")
+    public ResponseEntity<ArrayList<String>> retrieveBehavioursByRule (@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByRuleID(homeAutomationRuleDto);
+        ArrayList<String> behaviourArray = new ArrayList<>();
+        for(var behaviour : behaviours) {
+            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+        }
+        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
+    }
+
     @PostMapping("rules/{ruleId}")
     public ResponseEntity<HomeAutomationRuleDto> createUpdateFullRule (@PathVariable Long ruleId, @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
 
@@ -74,6 +87,7 @@ public class HomeAutomationRuleController {
 
     }
 
+    //TODO
     @PatchMapping("rules/{device}")
     void addDevice (@RequestBody DeviceEntity deviceEntity){
         //Device id will be generated for the specific homeautomationrule
@@ -81,10 +95,11 @@ public class HomeAutomationRuleController {
     }
 
 
-    @DeleteMapping( "/users/{userId}")
+    @DeleteMapping( "/rules/{ruleId}")
     public ResponseEntity deleteRule(@PathVariable Long id) {
-        //right now deleted with or without actually checking if rule exists.
-        //should change implementation to include return type of boolean for self measures and to see if it was successful
+         if(!homeAutomationRuleService.isExists(id)) {
+             return new ResponseEntity(HttpStatus.NOT_FOUND);
+         }
         homeAutomationRuleService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

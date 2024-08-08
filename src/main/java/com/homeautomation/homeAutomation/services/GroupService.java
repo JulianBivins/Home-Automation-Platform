@@ -2,7 +2,6 @@ package com.homeautomation.homeAutomation.services;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
-import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 
 import java.util.List;
 import java.util.Optional;

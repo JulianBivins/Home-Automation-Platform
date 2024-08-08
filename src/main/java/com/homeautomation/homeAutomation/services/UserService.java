@@ -1,6 +1,5 @@
 package com.homeautomation.homeAutomation.services;
 
-import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 
 import java.util.Optional;

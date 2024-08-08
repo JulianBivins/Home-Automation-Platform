@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +24,5 @@ public class UserEntity {
     String password;
 
     @OneToMany(mappedBy = "userEntity")
-    private List<HomeAutomationRuleEntity> rules;
+    private List<HomeAutomationRuleDto> rules;
 }

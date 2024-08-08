@@ -3,7 +3,6 @@ package com.homeautomation.homeAutomation.domain.dto;
 import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,8 +31,8 @@ public class DeviceDto {
     private DeviceEntity.DeviceType type;
 
     //!Might need to be Dto instead
-    private GroupEntity groupEntity;
+    private GroupDto groupDto;
 
-    private List<BehaviourEntity> behaviourEntities;
+    private List<BehaviourDto> behaviourDtos;
 
 }

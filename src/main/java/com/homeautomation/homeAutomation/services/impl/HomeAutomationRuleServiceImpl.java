@@ -6,6 +6,7 @@ import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
 
     @Override
     public HomeAutomationRuleEntity saveUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
-        homeAutomationRuleEntity.setRule_id(id);
+        homeAutomationRuleEntity.setRuleId(id);
         return homeAutomationRuleRepository.save(homeAutomationRuleEntity);
     }
 
@@ -42,18 +43,18 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
 
     @Override
     public List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity) {
-        return homeAutomationRuleRepository.findByUserId(userEntity.getUser_Id());
+        return homeAutomationRuleRepository.findByUserEntity_UserId(userEntity.getUserId());
     }
 
     @Override
     public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
-        homeAutomationRuleEntity.setRule_id(id);
+        homeAutomationRuleEntity.setRuleId(id);
         return homeAutomationRuleRepository.findById(id).map(existingRule -> {
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity()).ifPresent(existingRule::setGroupEntity);
-            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntitys()).ifPresent(existingRule::setBehaviourEntitys);
-            Optional.ofNullable(homeAutomationRuleEntity.getTrigger()).ifPresent(existingRule::setTrigger);
+            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(existingRule::setBehaviourEntities);
+            Optional.ofNullable(homeAutomationRuleEntity.getEvent()).ifPresent(existingRule::setEvent);
             return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
     }
@@ -65,12 +66,12 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
 
     @Override
     public boolean isDeviceExistsInRule(Long deviceId) {
-        return homeAutomationRuleRepository.existsByDeviceId(deviceId);
+        return homeAutomationRuleRepository.existsByBehaviourEntities_DeviceEntity_DeviceId(deviceId);
     }
 
     @Override
     public boolean isBehaviourExistsInRule(Long behaviourId) {
-        return homeAutomationRuleRepository.isBehaviourExistsInRule(behaviourId);
+        return homeAutomationRuleRepository.existsByBehaviourEntities_BehaviourId(behaviourId);
     }
 
 
@@ -79,15 +80,36 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         homeAutomationRuleRepository.deleteById(id);
     }
 
+//    @Override
+//    public void deleteDeviceById(Long deviceId) {
+//        homeAutomationRuleRepository.deleteDeviceById(deviceId);
+//    }
     @Override
-    public void deleteDeviceById(Long deviceId) {
-        homeAutomationRuleRepository.deleteDeviceById(deviceId);
+    @Transactional
+    public void removeDeviceFromRule(Long ruleId, Long deviceId) {
+        HomeAutomationRuleEntity rule = homeAutomationRuleRepository.findById(ruleId)
+                .orElseThrow(() -> new RuntimeException("Rule not found with id " + ruleId));
+
+        rule.getBehaviourEntities().removeIf(behaviour ->
+                behaviour.getDeviceEntity().getDeviceId().equals(deviceId));
+
+        homeAutomationRuleRepository.save(rule);
     }
 
-    @Override
-    public void deleteBehaviourById(Long behaviourId) {
-        homeAutomationRuleRepository.deleteBehaviourById(behaviourId);
-    }
 
+//    @Override
+//    public void deleteBehaviourById(Long behaviourId) {
+//        homeAutomationRuleRepository.deleteBehaviourByBehaviourId(behaviourId);
+//    }
+
+    @Override
+    @Transactional
+    public void removeBehaviourFromRule(Long ruleId, Long behaviourId) {
+        HomeAutomationRuleEntity rule = homeAutomationRuleRepository.findById(ruleId)
+                .orElseThrow(() -> new RuntimeException("Rule not found with id " + ruleId));
+        rule.getBehaviourEntities().removeIf(behaviour -> behaviour.getBehaviourId().equals(behaviourId));
+
+        homeAutomationRuleRepository.save(rule);
+    }
 
 }

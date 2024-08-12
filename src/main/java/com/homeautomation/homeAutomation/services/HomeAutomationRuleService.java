@@ -29,7 +29,10 @@ public interface HomeAutomationRuleService {
 
     void delete(Long id);
 
-    void deleteDeviceById(Long deviceId);
+//    void deleteDeviceById(Long deviceId);
 
-    void deleteBehaviourById(Long behaviourId);
+//    void deleteBehaviourById(Long behaviourId);
+
+    void removeBehaviourFromRule(Long ruleId, Long behaviourId);
+    void removeDeviceFromRule(Long ruleId, Long deviceId);
 }

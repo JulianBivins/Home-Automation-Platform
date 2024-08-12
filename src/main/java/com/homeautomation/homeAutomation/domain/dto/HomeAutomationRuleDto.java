@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class HomeAutomationRuleDto {
 
-    private Long rule_id;
+    private Long ruleId;
 
     private String ruleName;
 
@@ -36,6 +36,6 @@ public class HomeAutomationRuleDto {
         WHEN_INSERT_ON,
         WHEN_INSERT_OFF
     }
-    private Event trigger;
+    private Event event;
 
 }

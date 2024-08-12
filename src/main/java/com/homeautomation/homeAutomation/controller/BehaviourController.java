@@ -73,12 +73,12 @@ public class BehaviourController {
 	}
 
 	@DeleteMapping("/behaviours/rules/{behaviourId}")
-	public ResponseEntity deleteBehaviour(@PathVariable Long id) {
-		if(!homeAutomationRuleService.isBehaviourExistsInRule(id)){
+	public ResponseEntity deleteBehaviourFromRule(@PathVariable Long ruleId, @PathVariable Long behaviourid) {
+		if(!homeAutomationRuleService.isBehaviourExistsInRule(behaviourid)){
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		//TODO should this delete out of homeAutomationService or the behaviour table? Will it cascade delete?
-		homeAutomationRuleService.deleteBehaviourById(id);
+		homeAutomationRuleService.removeBehaviourFromRule(ruleId, behaviourid);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
 

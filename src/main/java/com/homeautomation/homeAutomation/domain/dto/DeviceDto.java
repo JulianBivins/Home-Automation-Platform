@@ -14,10 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class DeviceDto {
 
-    Long device_Id;
+    private Long deviceId;
 
     // ex: Lights -> Living room
-    String name;
+    private String name;
 
     public enum DeviceType {
         LIGHTS,

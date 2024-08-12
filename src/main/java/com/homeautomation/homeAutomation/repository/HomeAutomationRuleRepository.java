@@ -9,10 +9,13 @@ import java.util.List;
 @Repository
 public interface HomeAutomationRuleRepository extends JpaRepository<HomeAutomationRuleEntity, Long> {
 
-    boolean existsByDeviceId(Long deviceId);
-    boolean isBehaviourExistsInRule(Long behaviourId);
-    List<HomeAutomationRuleEntity> findByUserId(Long userId);
-    void deleteDeviceById(Long deviceId);
-    void deleteBehaviourById(Long behaviourId);
+    boolean existsByBehaviourEntities_DeviceEntity_DeviceId(Long deviceId);
+    boolean
+//    isBehaviourExistsInRule
+    existsByBehaviourEntities_BehaviourId
+            (Long behaviourId);
+    List<HomeAutomationRuleEntity> findByUserEntity_UserId(Long userId);
+//    void deleteDeviceById(Long deviceId);
+//    void deleteBehaviourByBehaviourId(Long behaviourId);
 
 }

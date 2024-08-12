@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity saveUpdate(Long id, UserEntity userEntity) {
-            userEntity.setUser_Id(id);
+            userEntity.setUserId(id);
             return userRepository.save(userEntity);
     }
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity partialUpdate(Long id, UserEntity userEntity) {
-        userEntity.setUser_Id(id);
+        userEntity.setUserId(id);
         return userRepository.findById(id).map(existingUser -> {
             Optional.ofNullable(userEntity.getUsername()).ifPresent(existingUser::setUsername);
             Optional.ofNullable(userEntity.getPassword()).ifPresent(existingUser::setPassword);

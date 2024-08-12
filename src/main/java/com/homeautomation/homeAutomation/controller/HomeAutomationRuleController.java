@@ -104,6 +104,12 @@ public class HomeAutomationRuleController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/{ruleId}/devices/{deviceId}")
+    public ResponseEntity removeDeviceFromRule(@PathVariable Long ruleId, @PathVariable Long deviceId) {
+        homeAutomationRuleService.removeDeviceFromRule(ruleId, deviceId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 
 
 }

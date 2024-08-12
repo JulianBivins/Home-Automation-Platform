@@ -8,7 +8,13 @@ import java.util.List;
 
 @Repository
 public interface BehaviourRepository extends JpaRepository<BehaviourEntity, Long> {
-    List<BehaviourEntity> findByRuleId(Long ruleId);
+    List<BehaviourEntity>
+//    findByRuleId
+    findByHomeAutomationRuleEntity_RuleId
+            (Long ruleId);
 
-    List<BehaviourEntity> findByDeviceId(Long deviceId);
+    List<BehaviourEntity>
+//    findByDeviceId
+    findByDeviceEntity_DeviceId
+            (Long deviceId);
 }

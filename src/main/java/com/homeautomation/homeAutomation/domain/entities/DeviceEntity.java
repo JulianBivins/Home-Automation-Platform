@@ -16,10 +16,10 @@ public class DeviceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long device_Id;
+    private Long deviceId;
 
     // ex: Lights -> Living room
-    String name;
+    private String name;
 
     public enum DeviceType {
             LIGHTS,
@@ -31,7 +31,7 @@ public class DeviceEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @OneToOne (mappedBy = "device_type")
+//    @OneToOne (mappedBy = "device_type")
     private DeviceType type;
 
     @ManyToOne
@@ -39,8 +39,8 @@ public class DeviceEntity {
     //!Might need to be Entity instead
     private GroupEntity groupEntity;
 
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BehaviourEntity> behaviourEntitys;
+    @OneToMany(mappedBy = "deviceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BehaviourEntity> behaviourEntities;
 
     //Think it is unnecessary since I already have the behaviour class defining the table
 //    @ManyToMany

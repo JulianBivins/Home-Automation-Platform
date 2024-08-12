@@ -25,6 +25,5 @@ public interface BehaviourService {
 
     List<BehaviourEntity> getBehavioursByRuleID(HomeAutomationRuleDto homeAutomationRuleDto);
 
-
     void delete(Long id);
 }

@@ -5,10 +5,12 @@ import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.repository.BehaviourRepository;
 import com.homeautomation.homeAutomation.services.BehaviourService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BehaviourServiceImpl implements BehaviourService {
 
     private BehaviourRepository behaviourRepository;
@@ -55,12 +57,12 @@ public class BehaviourServiceImpl implements BehaviourService {
 
     @Override
     public List<BehaviourEntity> getBehavioursByRuleID(HomeAutomationRuleDto homeAutomationRuleDto) {
-        return behaviourRepository.findByRuleId(homeAutomationRuleDto.getRule_id());
+        return behaviourRepository.findByHomeAutomationRuleEntity_RuleId(homeAutomationRuleDto.getRuleId());
     }
 
     @Override
     public List<BehaviourEntity> getBehavioursByDeviceID(DeviceDto deviceDto) {
-        return behaviourRepository.findByDeviceId(deviceDto.getDevice_Id());
+        return behaviourRepository.findByDeviceEntity_DeviceId(deviceDto.getDeviceId());
     }
 
     @Override

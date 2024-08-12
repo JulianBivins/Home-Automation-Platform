@@ -70,14 +70,14 @@ public class DeviceController {
         if(!deviceService.isExists(deviceId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        deviceDto.setDevice_Id(deviceId);
+        deviceDto.setDeviceId(deviceId);
         DeviceEntity updatedDeviceEntity = deviceMapper.mapFrom(deviceDto);
         DeviceEntity savedUpdateDevice = deviceService.saveUpdate(deviceId, updatedDeviceEntity);
         return new ResponseEntity<>(deviceMapper.mapTo(savedUpdateDevice), HttpStatus.OK);
     }
 
 
-    @PatchMapping("/users/{userId}")
+    @PatchMapping("/devices/{deviceId}")
     public ResponseEntity<DeviceDto> partialUpdate(@PathVariable Long id, @RequestBody DeviceDto deviceDto) {
         if(!deviceService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,15 +89,15 @@ public class DeviceController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/devices/rules/{deviceId}")
-    public ResponseEntity deleteDeviceOutOfRule(@PathVariable Long deviceId) {
-         if(homeAutomationRuleService.isDeviceExistsInRule(deviceId)) {
-             homeAutomationRuleService.deleteDeviceById(deviceId);
-             return new ResponseEntity(HttpStatus.NO_CONTENT);
-         }else {
-             return new ResponseEntity(HttpStatus.NOT_FOUND);
-         }
-    }
+//    @DeleteMapping("/devices/rules/{deviceId}")
+//    public ResponseEntity deleteDeviceOutOfRule(@PathVariable Long deviceId) {
+//         if(homeAutomationRuleService.isDeviceExistsInRule(deviceId)) {
+//             homeAutomationRuleService.removeDeviceFromRule(deviceId);
+//             return new ResponseEntity(HttpStatus.NO_CONTENT);
+//         }else {
+//             return new ResponseEntity(HttpStatus.NOT_FOUND);
+//         }
+//    }
 
     @DeleteMapping("/devices/{deviceId}")
     public ResponseEntity deleteDevice (@PathVariable Long deviceId){

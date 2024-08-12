@@ -17,7 +17,7 @@ public class HomeAutomationRuleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long rule_id;
+    private Long ruleId;
 
     private String ruleName;
 
@@ -39,7 +39,7 @@ public class HomeAutomationRuleEntity {
 //    private List<DeviceEntity> device;
 
     @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BehaviourEntity> behaviourEntitys;
+    private List<BehaviourEntity> behaviourEntities;
 
     public enum Event {
         TIME,
@@ -49,6 +49,7 @@ public class HomeAutomationRuleEntity {
         WHEN_INSERT_ON,
         WHEN_INSERT_OFF
     }
-    private Event trigger;
+    @Enumerated(EnumType.STRING)
+    private Event event;
 
 }

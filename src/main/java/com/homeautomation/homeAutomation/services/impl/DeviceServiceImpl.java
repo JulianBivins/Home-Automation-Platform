@@ -3,6 +3,7 @@ package com.homeautomation.homeAutomation.services.impl;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
+import com.homeautomation.homeAutomation.repository.GroupRepository;
 import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.GroupService;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,20 @@ public class DeviceServiceImpl implements DeviceService {
 
     final private DeviceRepository deviceRepository;
 
-    final private GroupService groupService;
+//    final private GroupRepository groupRepository;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository, GroupService groupService) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository
+//                             ,GroupRepository groupRepository
+    ) {
         this.deviceRepository = deviceRepository;
-        this.groupService = groupService;
+//        this.groupRepository = groupRepository;
     }
 
     @Override
     public DeviceEntity saveUpdate(
             Long id,
             DeviceEntity deviceEntity) {
-        deviceEntity.setDevice_Id(id);
+        deviceEntity.setDeviceId(id);
         return deviceRepository.save(deviceEntity);
     }
 
@@ -54,17 +57,17 @@ public class DeviceServiceImpl implements DeviceService {
     //TODO
     @Override
     public List<DeviceEntity> getDevicesByGroupId(Long groupId) {
-        return groupService.getDevices(groupId);
+        return deviceRepository.findByGroupEntity_GroupId(groupId);
     }
 
     @Override
     public DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity) {
-        deviceEntity.setDevice_Id(id);
+        deviceEntity.setDeviceId(id);
         return deviceRepository.findById(id).map(existingDevice -> {
             Optional.ofNullable(deviceEntity.getName()).ifPresent(existingDevice::setName);
             Optional.ofNullable(deviceEntity.getType()).ifPresent(existingDevice::setType);
             Optional.ofNullable(deviceEntity.getGroupEntity()).ifPresent(existingDevice::setGroupEntity);
-            Optional.ofNullable(deviceEntity.getBehaviourEntitys()).ifPresent(existingDevice::setBehaviourEntitys);
+            Optional.ofNullable(deviceEntity.getBehaviourEntities()).ifPresent(existingDevice::setBehaviourEntities);
             return deviceRepository.save(existingDevice);
         }).orElseThrow(() -> new RuntimeException("Device does not exist"));
     }

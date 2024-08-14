@@ -1,6 +1,5 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +18,9 @@ public class UserDto {
 
     String password;
 
-    private List<HomeAutomationRuleEntity> rules;
+    private List<HomeAutomationRuleDto> rules;
 
-    public UserDto(Long l, String userEntityB, List<HomeAutomationRuleEntity> homeAutomationRuleEntitys) {
+    public UserDto(Long l, String userEntityB, List<HomeAutomationRuleDto> homeAutomationRuleEntities) {
 
     }
 }

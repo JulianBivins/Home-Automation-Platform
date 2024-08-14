@@ -18,8 +18,8 @@ public class GroupDto {
 
     private String name;
 
-    private List<HomeAutomationRuleEntity> rules;
+    private List<HomeAutomationRuleDto> rules;
 
-    private UserEntity userEntity;
+    private UserDto userDto;
 
 }

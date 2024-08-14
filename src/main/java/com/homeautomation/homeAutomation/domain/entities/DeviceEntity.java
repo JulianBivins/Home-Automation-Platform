@@ -3,12 +3,14 @@ package com.homeautomation.homeAutomation.domain.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
+//@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="devices")
@@ -41,6 +43,10 @@ public class DeviceEntity {
 
     @OneToMany(mappedBy = "deviceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BehaviourEntity> behaviourEntities;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 
     //Think it is unnecessary since I already have the behaviour class defining the table
 //    @ManyToMany

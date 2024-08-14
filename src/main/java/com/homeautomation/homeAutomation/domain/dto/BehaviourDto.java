@@ -1,7 +1,5 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
-import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,13 +20,13 @@ public class BehaviourDto {
     }
     private Behaviour behaviour;
 
-    private DeviceEntity deviceEntity;
+    private DeviceDto deviceDto;
 
-    private HomeAutomationRuleEntity homeAutomationRuleEntity;
+    private HomeAutomationRuleDto homeAutomationRuleDto;
 
-    public BehaviourDto(Behaviour behaviour, HomeAutomationRuleEntity homeAutomationRuleEntity, DeviceEntity deviceEntity) {
+    public BehaviourDto(Behaviour behaviour, HomeAutomationRuleDto homeAutomationRuleDto, DeviceDto deviceDto) {
         this.behaviour = behaviour;
-        this.deviceEntity = deviceEntity;
-        this.homeAutomationRuleEntity = homeAutomationRuleEntity;
+        this.deviceDto = deviceDto;
+        this.homeAutomationRuleDto = homeAutomationRuleDto;
     }
 }

@@ -3,12 +3,14 @@ package com.homeautomation.homeAutomation.domain.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
+//@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="home_automation_rules")
@@ -25,12 +27,10 @@ public class HomeAutomationRuleEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    //!Might need to be Entity
     private UserEntity userEntity;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
-    //!Might need to be Entity
     private GroupEntity groupEntity;
 
     //I think this is unnecessary since the devices will be give over through the rules or the behavior table anyway
@@ -38,7 +38,9 @@ public class HomeAutomationRuleEntity {
 //    @JoinColumn(name = "device_id")
 //    private List<DeviceEntity> device;
 
-    @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = CascadeType.ALL
+//            ,orphanRemoval = true
+    )
     private List<BehaviourEntity> behaviourEntities;
 
     public enum Event {
@@ -52,4 +54,16 @@ public class HomeAutomationRuleEntity {
     @Enumerated(EnumType.STRING)
     private Event event;
 
+    @Override
+    public String toString() {
+        return "HomeAutomationRuleEntity{" +
+               "ruleId=" + ruleId +
+               ", ruleName='" + ruleName + '\'' +
+               ", description='" + description + '\'' +
+//               ", userEntity=" + userEntity +
+//               ", groupEntity=" + groupEntity +
+//               ", behaviourEntities=" + behaviourEntities +
+               ", event=" + event +
+               '}';
+    }
 }

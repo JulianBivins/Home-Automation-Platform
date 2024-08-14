@@ -42,9 +42,9 @@ public class BehaviourController {
 			case "TIMED" -> BehaviourDto.Behaviour.TIMED;
 			default -> throw new IllegalArgumentException("Invalid behaviourType: " + behaviourString);
 		};
-		HomeAutomationRuleEntity homeAutomationRuleEntity = homeAutomationRuleMapper.mapFrom(homeAutomationRuleDto);
-		DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
-			BehaviourDto behaviourDto = new BehaviourDto(behaviour, homeAutomationRuleEntity, deviceEntity);
+//		HomeAutomationRuleEntity homeAutomationRuleEntity = homeAutomationRuleMapper.mapFrom(homeAutomationRuleDto);
+//		DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
+			BehaviourDto behaviourDto = new BehaviourDto(behaviour, homeAutomationRuleDto, deviceDto);
 			return new ResponseEntity<>(behaviourDto, HttpStatus.OK);
 	}
 

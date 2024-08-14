@@ -210,7 +210,7 @@ public final class TestDataUtil {
     public static UserEntity createTestUserEntityA() {
         UserEntity userEntityA = new UserEntity();
         userEntityA.setUserId(1L);
-        userEntityA.setUsername("UserA");
+        userEntityA.setUsername("testuser");
         userEntityA.setPassword("1234");
         userEntityA.setRules(manuallyCreateRuleEntities(userEntityA));
         return userEntityA;
@@ -219,7 +219,7 @@ public final class TestDataUtil {
     public static UserEntity createTestUserEntityB() {
         UserEntity userEntityB = new UserEntity();
         userEntityB.setUserId(2L);
-        userEntityB.setUsername("UserB");
+        userEntityB.setUsername("testuser");
         userEntityB.setPassword("5678");
         userEntityB.setRules(manuallyCreateRuleEntities(userEntityB));
         return userEntityB;
@@ -228,81 +228,106 @@ public final class TestDataUtil {
     public static UserEntity createTestUserEntityC() {
         UserEntity userEntityC = new UserEntity();
         userEntityC.setUserId(6L);
-        userEntityC.setUsername("UserC");
+        userEntityC.setUsername("testuser");
         userEntityC.setPassword("9012");
         userEntityC.setRules(manuallyCreateRuleEntities(userEntityC));
         return userEntityC;
     }
 
-    private static HomeAutomationRuleEntity createTestRuleEntityA(UserEntity userEntity, GroupEntity groupEntity) {
+    public static HomeAutomationRuleEntity createTestRuleEntityA(UserEntity userEntity, GroupEntity groupEntity) {
         HomeAutomationRuleEntity ruleEntityA = new HomeAutomationRuleEntity();
-        ruleEntityA.setRuleId(1L);
+//        ruleEntityA.setRuleId(1L);
         ruleEntityA.setRuleName("RuleA");
         ruleEntityA.setDescription("Mock RuleA");
         ruleEntityA.setUserEntity(userEntity);
         ruleEntityA.setGroupEntity(groupEntity);
         ruleEntityA.setBehaviourEntities(manuallyCreateBehaviourEntities(ruleEntityA, groupEntity));
-        ruleEntityA.setEvent(generateTriggerEventEntity());
+        ruleEntityA.setEvent(HomeAutomationRuleEntity.Event.TIME);
         return ruleEntityA;
     }
 
-    private static HomeAutomationRuleEntity createTestRuleEntityB(UserEntity userEntity, GroupEntity groupEntity) {
+    public static HomeAutomationRuleEntity createTestRuleEntityB(UserEntity userEntity, GroupEntity groupEntity) {
         HomeAutomationRuleEntity ruleEntityB = new HomeAutomationRuleEntity();
-        ruleEntityB.setRuleId(2L);
+//        ruleEntityB.setRuleId(2L);
         ruleEntityB.setRuleName("RuleB");
         ruleEntityB.setDescription("Mock RuleB");
         ruleEntityB.setUserEntity(userEntity);
         ruleEntityB.setGroupEntity(groupEntity);
         ruleEntityB.setBehaviourEntities(manuallyCreateBehaviourEntities(ruleEntityB, groupEntity));
-        ruleEntityB.setEvent(generateTriggerEventEntity());
+        ruleEntityB.setEvent(HomeAutomationRuleEntity.Event.PERIOD);
         return ruleEntityB;
     }
 
-    private static HomeAutomationRuleEntity createTestRuleEntityC(UserEntity userEntity, GroupEntity groupEntity) {
+    public static HomeAutomationRuleEntity createTestRuleEntityC(UserEntity userEntity, GroupEntity groupEntity) {
         HomeAutomationRuleEntity ruleEntityC = new HomeAutomationRuleEntity();
-        ruleEntityC.setRuleId(6L);
+//        ruleEntityC.setRuleId(6L);
         ruleEntityC.setRuleName("RuleC");
         ruleEntityC.setDescription("Mock RuleC");
         ruleEntityC.setUserEntity(userEntity);
         ruleEntityC.setGroupEntity(groupEntity);
         ruleEntityC.setBehaviourEntities(manuallyCreateBehaviourEntities(ruleEntityC, groupEntity));
-        ruleEntityC.setEvent(generateTriggerEventEntity());
+        ruleEntityC.setEvent(HomeAutomationRuleEntity.Event.AFTER_OTHER);
         return ruleEntityC;
     }
 
-    private static GroupEntity createGroupEntityA() {
+    public static GroupEntity createGroupEntityA(UserEntity userEntity) {
         GroupEntity groupEntityA = new GroupEntity();
-        groupEntityA.setGroupId(1L);
+//        groupEntityA.setGroupId(1L);
         groupEntityA.setName("LivingRoom");
+        groupEntityA.setUserEntity(userEntity);
         return groupEntityA;
     }
 
-    private static GroupEntity createGroupEntityB() {
+    public static GroupEntity createGroupEntityB(UserEntity userEntity) {
         GroupEntity groupEntityB = new GroupEntity();
-        groupEntityB.setGroupId(2L);
+//        groupEntityB.setGroupId(2L);
         groupEntityB.setName("Kitchen");
+        groupEntityB.setUserEntity(userEntity);
         return groupEntityB;
     }
 
-    private static DeviceEntity createDeviceEntityA(GroupEntity groupEntity) {
+
+
+    //TODO: DELETE THIS METHOD LATER
+    public static DeviceEntity createDeviceEntityA(GroupEntity groupEntity) {
         DeviceEntity deviceEntityA = new DeviceEntity();
-        deviceEntityA.setDeviceId(1L);
+//        deviceEntityA.setDeviceId(1L);
         deviceEntityA.setName("Lights_Bathroom");
         deviceEntityA.setType(DeviceEntity.DeviceType.LIGHTS);
         deviceEntityA.setGroupEntity(groupEntity);
         return deviceEntityA;
     }
-
-    private static DeviceEntity createDeviceEntityB(GroupEntity groupEntity) {
+    //TODO: DELETE THIS METHOD LATER
+    public static DeviceEntity createDeviceEntityB( GroupEntity groupEntity) {
         DeviceEntity deviceEntityB = new DeviceEntity();
-        deviceEntityB.setDeviceId(2L);
+//        deviceEntityB.setDeviceId(2L);
         deviceEntityB.setName("Speaker_LivingRoom");
         deviceEntityB.setType(DeviceEntity.DeviceType.SPEAKER);
         deviceEntityB.setGroupEntity(groupEntity);
         return deviceEntityB;
     }
 
-    private static BehaviourEntity generateBehaviourEntity(HomeAutomationRuleEntity ruleEntity, DeviceEntity deviceEntity) {
+    public static DeviceEntity createDeviceEntityA(UserEntity userEntity, GroupEntity groupEntity) {
+        DeviceEntity deviceEntityA = new DeviceEntity();
+//        deviceEntityA.setDeviceId(1L);
+        deviceEntityA.setName("Lights_Bathroom");
+        deviceEntityA.setType(DeviceEntity.DeviceType.LIGHTS);
+        deviceEntityA.setGroupEntity(groupEntity);
+        deviceEntityA.setUserEntity(userEntity);
+        return deviceEntityA;
+    }
+
+    public static DeviceEntity createDeviceEntityB(UserEntity userEntity, GroupEntity groupEntity) {
+        DeviceEntity deviceEntityB = new DeviceEntity();
+//        deviceEntityB.setDeviceId(2L);
+        deviceEntityB.setName("Speaker_LivingRoom");
+        deviceEntityB.setType(DeviceEntity.DeviceType.SPEAKER);
+        deviceEntityB.setGroupEntity(groupEntity);
+        deviceEntityB.setUserEntity(userEntity);
+        return deviceEntityB;
+    }
+
+    public static BehaviourEntity generateBehaviourEntity(HomeAutomationRuleEntity ruleEntity, DeviceEntity deviceEntity) {
         int randomOrdinal = randomBehaviour.nextInt(4);
         id++;
         BehaviourEntity behaviourEntity = new BehaviourEntity();
@@ -313,12 +338,12 @@ public final class TestDataUtil {
         return behaviourEntity;
     }
 
-    private static HomeAutomationRuleEntity.Event generateTriggerEventEntity() {
-        int randomOrdinal = randomEvent.nextInt(6);
-        return HomeAutomationRuleEntity.Event.values()[randomOrdinal];
-    }
+//    public static HomeAutomationRuleEntity.Event generateTriggerEventEntity() {
+//        int randomOrdinal = randomEvent.nextInt(6);
+//        return HomeAutomationRuleEntity.Event.values()[randomOrdinal];
+//    }
 
-    private static List<BehaviourEntity> manuallyCreateBehaviourEntities(HomeAutomationRuleEntity ruleEntity, GroupEntity groupEntity) {
+    public static List<BehaviourEntity> manuallyCreateBehaviourEntities(HomeAutomationRuleEntity ruleEntity, GroupEntity groupEntity) {
         DeviceEntity deviceEntityA = createDeviceEntityA(groupEntity);
         DeviceEntity deviceEntityB = createDeviceEntityB(groupEntity);
         return List.of(
@@ -327,8 +352,8 @@ public final class TestDataUtil {
         );
     }
 
-    private static List<HomeAutomationRuleEntity> manuallyCreateRuleEntities(UserEntity userEntity) {
-        GroupEntity groupEntity = createGroupEntityA();
+    public static List<HomeAutomationRuleEntity> manuallyCreateRuleEntities(UserEntity userEntity) {
+        GroupEntity groupEntity = createGroupEntityA(userEntity);
         return List.of(
                 createTestRuleEntityA(userEntity, groupEntity),
                 createTestRuleEntityB(userEntity, groupEntity),

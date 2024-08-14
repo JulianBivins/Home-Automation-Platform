@@ -13,6 +13,8 @@ public interface UserService {
 
     Optional<UserEntity> findOne(Long id);
 
+    Optional<UserEntity> findByUsername(String username);
+
     boolean isExists(Long id);
 
     UserEntity partialUpdate(Long id, UserEntity userEntity);

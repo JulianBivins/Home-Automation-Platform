@@ -51,12 +51,12 @@ public class DeviceController {
     @PostMapping("/devices/{deviceType}")
     public ResponseEntity<DeviceDto> createDevice(@PathVariable String deviceTypeString,
                                                   @RequestBody DeviceDto deviceDto) {
-        DeviceEntity.DeviceType deviceType = switch(deviceTypeString.toUpperCase()) {
-            case "LIGHTS" -> DeviceEntity.DeviceType.LIGHTS;
-            case "UTILITY" -> DeviceEntity.DeviceType.UTILITY;
-            case "SPEAKER" -> DeviceEntity.DeviceType.SPEAKER;
-            case "TELEVISION" -> DeviceEntity.DeviceType.TELEVISION;
-            case "CAMERA" -> DeviceEntity.DeviceType.CAMERA;
+        DeviceDto.DeviceType deviceType = switch(deviceTypeString.toUpperCase()) {
+            case "LIGHTS" -> DeviceDto.DeviceType.LIGHTS;
+            case "UTILITY" -> DeviceDto.DeviceType.UTILITY;
+            case "SPEAKER" -> DeviceDto.DeviceType.SPEAKER;
+            case "TELEVISION" -> DeviceDto.DeviceType.TELEVISION;
+            case "CAMERA" -> DeviceDto.DeviceType.CAMERA;
             default -> throw new IllegalArgumentException("Invalid deviceType: " + deviceTypeString);
         };
         deviceDto.setType(deviceType);

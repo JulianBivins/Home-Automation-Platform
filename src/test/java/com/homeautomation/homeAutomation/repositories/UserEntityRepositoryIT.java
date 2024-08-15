@@ -82,7 +82,7 @@ public class UserEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+    public void testThatMultipleUsersCanBeCreatedAndRecalled() {
         userRepository.delete(userEntity);
         UserEntity userEntityA = TestDataUtil.createTestUserEntityA();
         userRepository.save(userEntityA);

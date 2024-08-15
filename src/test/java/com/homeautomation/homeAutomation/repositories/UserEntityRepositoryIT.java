@@ -13,10 +13,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -64,6 +64,11 @@ public class UserEntityRepositoryIT {
         rule2 = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity);
         ruleRepository.saveAll(List.of(rule1,rule2));
 
+        //Maybe should be tested independently
+//        userEntity.setRules(List.of(rule1, rule2));
+
+        //
+
     }
 
     @Test
@@ -73,6 +78,21 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> result = userRepository.findById(userEntity.getUserId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(userEntity);
+    }
+
+    @Test
+    @Transactional
+    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+        userRepository.delete(userEntity);
+        UserEntity userEntityA = TestDataUtil.createTestUserEntityA();
+        userRepository.save(userEntityA);
+        UserEntity userEntityB = TestDataUtil.createTestUserEntityA();
+        userRepository.save(userEntityB);
+        UserEntity userEntityC = TestDataUtil.createTestUserEntityC();
+        userRepository.save(userEntityC);
+
+        List<UserEntity> resultEntities = userRepository.findAll();
+        assertThat(resultEntities).hasSize(3).containsExactly(userEntityA, userEntityB, userEntityC);
     }
 
     @Test
@@ -98,17 +118,18 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> retrievedUser = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUser).isPresent();
 
-    UserEntity updatedUserEntity = TestDataUtil.createTestUserEntityC();
+        UserEntity updatedUserEntity = TestDataUtil.createTestUserEntityC();
+        updatedUserEntity.setUsername("testuserC");
 
-    userService.partialUpdate(retrievedUser.get().getUserId(), updatedUserEntity);
+        UserEntity userEntityAfterPartialUpdate = userService.partialUpdate(retrievedUser.get().getUserId(), updatedUserEntity);
+        userRepository.save(userEntityAfterPartialUpdate);
 
-    Optional<UserEntity> retrievedUserAfterUpdate = userRepository.findById(updatedUserEntity.getUserId());
-    assertThat(retrievedUserAfterUpdate).isPresent();
+        Optional<UserEntity> retrievedUserAfterUpdate = userRepository.findById(userEntityAfterPartialUpdate.getUserId());
+        assertThat(retrievedUserAfterUpdate).isPresent();
 
-    assertThat(retrievedUserAfterUpdate.get()).isEqualTo(updatedUserEntity);
-    assertThat(retrievedUserAfterUpdate.get()).isEqualTo(updatedUserEntity);
-    assertThat(retrievedUser.get()).isNotEqualTo(retrievedUserAfterUpdate.get());
-}
+        assertThat(retrievedUserAfterUpdate.get()).isEqualTo(updatedUserEntity);
+        assertThat(retrievedUser.get()).isNotEqualTo(retrievedUserAfterUpdate.get());
+    }
 
     @Test
     @Transactional
@@ -123,15 +144,81 @@ public class UserEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testUserToHomeAutomationRuleAssociation() {
+    public void testCascadeDeleteUserEntity() {
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
 
-        List<HomeAutomationRuleEntity> rules = userEntity.getRules();
+        List<HomeAutomationRuleEntity> rules = ruleRepository.findAll();
+        HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
+        HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
+        retrievedUser.get().setRules(List.of(retrievedRule1, retrievedRule2));
+
+        List<GroupEntity> groups = groupRepository.findAll();
+        GroupEntity retrievedGroup = groups.get(0);
+        retrievedUser.get().setGroups(List.of(retrievedGroup));
+
+        userRepository.delete(retrievedUser.get());
+        Optional<UserEntity> deletedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(deletedUser).isNotPresent();
+
+        assertThat(ruleRepository.findById(rule1.getRuleId())).isNotPresent();
+        assertThat(ruleRepository.findById(rule2.getRuleId())).isNotPresent();
+
+        assertThat(groupRepository.findById(groupEntity.getGroupId())).isNotPresent();
+    }
+
+    @Test
+    @Transactional
+    public void testAddHomeAutomationRuleToUser() {
+        List<HomeAutomationRuleEntity> rules = ruleRepository.findAll();
+        HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
+        HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
+
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+        retrievedUser.get().setRules(List.of(retrievedRule1, retrievedRule2));
+
+        assertThat(retrievedUser.get().getRules()).isEqualTo(List.of(retrievedRule1, retrievedRule2));
+    }
+
+    @Test
+    @Transactional
+    public void testRemoveHomeAutomationRuleFromUser() {
+        List<HomeAutomationRuleEntity> rules = ruleRepository.findAll();
+        HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
+        HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
+
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+
+        retrievedUser.get().setRules(new ArrayList<>(List.of(retrievedRule1, retrievedRule2)));
+        assertThat(retrievedUser.get().getRules()).hasSize(2);
+
+        retrievedUser.get().getRules().clear();
+
+        userRepository.save(retrievedUser.get());
+        Optional<UserEntity> retrievedUserAfterRemovedRules = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUserAfterRemovedRules).isPresent();
+
+        assertThat(retrievedUserAfterRemovedRules.get().getRules()).hasSize(0);
+    }
+
+    @Test
+    @Transactional
+    public void testUserToHomeAutomationRuleAssociation() {
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+        UserEntity localUserEntity = retrievedUser.get();
+
+        localUserEntity.setRules(List.of(rule1, rule2));
+
+        List<HomeAutomationRuleEntity> rules = localUserEntity.getRules();
         assertThat(rules).hasSize(2);
+        assertThat(ruleRepository.findByUserEntity_UserId(localUserEntity.getUserId())).hasSize(2);
 
         HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
         HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
 
-        assertThat(ruleRepository.findByUserEntity_UserId(userEntity.getUserId())).hasSize(2);
 
         assertThat(retrievedRule1.getRuleName()).isEqualTo("RuleA");
         assertThat(retrievedRule1.getDescription()).isEqualTo("Mock RuleA");
@@ -142,17 +229,26 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedRule2.getDescription()).isEqualTo("Mock RuleC");
         assertThat(retrievedRule2.getEvent()).isEqualTo(HomeAutomationRuleEntity.Event.AFTER_OTHER);
         assertThat(retrievedRule2.getUserEntity().getUsername()).isEqualTo("testuser");
+    }
 
+    @Test
+    @Transactional
+    public void testUserEntityToGroupEntityAssociation(){
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+        UserEntity localUserEntity = retrievedUser.get();
 
+        localUserEntity.setGroups(List.of(groupEntity));
+
+        List<GroupEntity> groups = localUserEntity.getGroups();
+        assertThat(groups).hasSize(1);
+        assertThat(groupRepository.findByUserEntity_UserId(localUserEntity.getUserId())).hasSize(1);
+
+        GroupEntity retrievedGroup = groups.get(0);
+
+        assertThat(retrievedGroup.getUserEntity()).isEqualTo(localUserEntity);
+        assertThat(retrievedGroup.getName()).isEqualTo("LivingRoom");
     }
 
 
-
-
-//	testAddHomeAutomationRuleToUser()
-//    testRemoveHomeAutomationRuleFromUser()
-//    testUserEntityToGroupEntityAssociation()
-//    testFindHomeAutomationRulesByUserId()
-//    testFindGroupEntitiesByUserId()
-//    testCascadeDeleteUserEntity()
 }

@@ -39,6 +39,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<GroupEntity> findByUserEntity_UserId(Long userId) {
+        return groupRepository.findByUserEntity_UserId(userId);
+    }
+
+    @Override
     public List<DeviceEntity> getDevices(Long groupId) {
         return deviceRepository.findByGroupEntity_GroupId(groupId);
     }

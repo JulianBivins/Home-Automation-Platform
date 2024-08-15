@@ -13,7 +13,7 @@ import java.util.List;
 //@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="`Groups`")
+@Table(name="`groups`")
 public class GroupEntity {
 
     @Id
@@ -22,26 +22,16 @@ public class GroupEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "groupEntity")
+    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<HomeAutomationRuleEntity> rules;
 
+
     //    I think this is might be unnecessary since the devices will be give over through the rules or the behavior table anyway
-    @OneToMany(mappedBy = "groupEntity")
+    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<DeviceEntity> devices;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    public GroupEntity(long l, String livingRoom, List<HomeAutomationRuleEntity> homeAutomationRuleEntities) {
-
-    }
-
-    public GroupEntity(String name, Long groupId, List<HomeAutomationRuleEntity> rules, List<DeviceEntity> devices, UserEntity userEntity) {
-        this.name = name;
-        this.groupId = groupId;
-        this.rules = rules;
-        this.devices = devices;
-        this.userEntity = userEntity;
-    }
 }

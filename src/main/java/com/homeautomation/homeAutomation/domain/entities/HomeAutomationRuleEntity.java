@@ -25,11 +25,11 @@ public class HomeAutomationRuleEntity {
 
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "group_id")
     private GroupEntity groupEntity;
 
@@ -38,9 +38,7 @@ public class HomeAutomationRuleEntity {
 //    @JoinColumn(name = "device_id")
 //    private List<DeviceEntity> device;
 
-    @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = CascadeType.ALL
-//            ,orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "homeAutomationRuleEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<BehaviourEntity> behaviourEntities;
 
     public enum Event {
@@ -60,9 +58,6 @@ public class HomeAutomationRuleEntity {
                "ruleId=" + ruleId +
                ", ruleName='" + ruleName + '\'' +
                ", description='" + description + '\'' +
-//               ", userEntity=" + userEntity +
-//               ", groupEntity=" + groupEntity +
-//               ", behaviourEntities=" + behaviourEntities +
                ", event=" + event +
                '}';
     }

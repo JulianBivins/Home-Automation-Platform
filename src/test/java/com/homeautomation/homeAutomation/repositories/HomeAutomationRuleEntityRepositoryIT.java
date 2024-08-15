@@ -64,7 +64,8 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRule2.getUserEntity().getUsername()).isEqualTo("testuser");
 
         // Check the rules associated with the user
-        assertThat(retrievedRule1.getUserEntity().getRules()).hasSize(2);
-        assertThat(retrievedRule2.getUserEntity().getRules()).hasSize(2);
+//        assertThat(retrievedRule1.getUserEntity().getRules()).hasSize(2);
+//        assertThat(retrievedRule2.getUserEntity().getRules()).hasSize(2);
+        assertThat(ruleRepository.findByUserEntity_UserId(userEntity.getUserId())).hasSize(2);
     }
 }

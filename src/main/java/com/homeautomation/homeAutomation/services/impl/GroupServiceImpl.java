@@ -4,10 +4,10 @@ import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
-import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.GroupService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +25,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupEntity save(GroupEntity groupEntity) {
+        return groupRepository.save(groupEntity);
+    }
+
+    @Override
+    public GroupEntity saveUpdate(Long id, GroupEntity groupEntity) {
+        groupEntity.setGroupId(id);
         return groupRepository.save(groupEntity);
     }
 
@@ -57,4 +63,19 @@ public class GroupServiceImpl implements GroupService {
     public void delete(Long id) {
         groupRepository.deleteById(id);
     }
+
+    @Override
+    public GroupEntity partialUpdate(Long id, GroupEntity groupEntity) {
+        groupEntity.setGroupId(id);
+        return groupRepository.findById(id).map(existingGroup -> {
+            Optional.ofNullable(groupEntity.getUserEntity()).ifPresent(existingGroup::setUserEntity);
+            Optional.ofNullable(groupEntity.getName()).ifPresent(existingGroup::setName);
+            Optional.ofNullable(groupEntity.getDevices()).ifPresent(newDevices -> {
+                existingGroup.setDevices(new ArrayList<>(newDevices));
+            });
+            return groupRepository.save(existingGroup);
+        }).orElseThrow(() -> new RuntimeException("Group does not exist"));
+    }
+
+
 }

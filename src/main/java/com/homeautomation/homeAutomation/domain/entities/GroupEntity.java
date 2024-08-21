@@ -3,9 +3,9 @@ package com.homeautomation.homeAutomation.domain.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,13 +22,17 @@ public class GroupEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<HomeAutomationRuleEntity> rules;
+    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<HomeAutomationRuleEntity> rules
+           = new ArrayList<>()
+            ;
 
 
     //    I think this is might be unnecessary since the devices will be give over through the rules or the behavior table anyway
-    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<DeviceEntity> devices;
+    @OneToMany(mappedBy = "groupEntity", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<DeviceEntity> devices
+            = new ArrayList<>()
+            ;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

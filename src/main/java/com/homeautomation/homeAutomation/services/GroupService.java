@@ -21,4 +21,8 @@ public interface GroupService {
     boolean isExists(Long id);
 
     void delete(Long id);
+
+    GroupEntity partialUpdate(Long id, GroupEntity groupEntity);
+
+    GroupEntity saveUpdate(Long id, GroupEntity groupEntity);
 }

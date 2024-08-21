@@ -74,7 +74,6 @@ public class UserEntityRepositoryIT {
     @Test
     @Transactional
     public void testThatUserCanBeCreatedAndRecalled() {
-        // Retrieve the user by ID
         Optional<UserEntity> result = userRepository.findById(userEntity.getUserId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(userEntity);
@@ -82,8 +81,33 @@ public class UserEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+    public void testDeleteUserEntity(){
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+
+        userRepository.delete(retrievedUser.get());
+        Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
+        assertThat(retrievedUserAfterDeletion).isNotPresent();
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteUserEntityById(){
+        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+        assertThat(retrievedUser).isPresent();
+
+        userRepository.deleteById(retrievedUser.get().getUserId());
+        Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
+        assertThat(retrievedUserAfterDeletion).isNotPresent();
+    }
+
+
+    @Test
+    @Transactional
+    public void testThatMultipleUsersCanBeCreatedAndRecalled() {
         userRepository.delete(userEntity);
+        assertThat(userRepository.findById(userEntity.getUserId())).isNotPresent();
+
         UserEntity userEntityA = TestDataUtil.createTestUserEntityA();
         userRepository.save(userEntityA);
         UserEntity userEntityB = TestDataUtil.createTestUserEntityA();
@@ -129,17 +153,6 @@ public class UserEntityRepositoryIT {
 
         assertThat(retrievedUserAfterUpdate.get()).isEqualTo(updatedUserEntity);
         assertThat(retrievedUser.get()).isNotEqualTo(retrievedUserAfterUpdate.get());
-    }
-
-    @Test
-    @Transactional
-    public void testDeleteUserEntity(){
-        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
-        assertThat(retrievedUser).isPresent();
-
-        userRepository.delete(retrievedUser.get());
-        Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
-        assertThat(retrievedUserAfterDeletion).isNotPresent();
     }
 
     @Test

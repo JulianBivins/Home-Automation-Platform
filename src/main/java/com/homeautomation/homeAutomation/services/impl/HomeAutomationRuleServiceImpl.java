@@ -8,6 +8,7 @@ import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,13 +48,25 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     }
 
     @Override
+    public List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId) {
+        return homeAutomationRuleRepository.findByGroupEntity_GroupId(groupId);
+    }
+
+    @Override
+    public Optional<HomeAutomationRuleEntity> findByRuleName(String ruleName) {
+        return homeAutomationRuleRepository.findByRuleName(ruleName);
+    }
+
+    @Override
     public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
         homeAutomationRuleEntity.setRuleId(id);
         return homeAutomationRuleRepository.findById(id).map(existingRule -> {
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity()).ifPresent(existingRule::setGroupEntity);
-            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(existingRule::setBehaviourEntities);
+            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(newBehaviours -> {
+                existingRule.setBehaviourEntities(new ArrayList<>(newBehaviours));
+            });
             Optional.ofNullable(homeAutomationRuleEntity.getEvent()).ifPresent(existingRule::setEvent);
             return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));

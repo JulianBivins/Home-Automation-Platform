@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -29,7 +30,9 @@ public class HomeAutomationRuleEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {
+//            CascadeType.PERSIST,
+            CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "group_id")
     private GroupEntity groupEntity;
 
@@ -61,4 +64,22 @@ public class HomeAutomationRuleEntity {
                ", event=" + event +
                '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HomeAutomationRuleEntity that = (HomeAutomationRuleEntity) o;
+        return Objects.equals(ruleId, that.ruleId) &&
+               Objects.equals(ruleName, that.ruleName) &&
+               Objects.equals(description, that.description) &&
+               event == that.event;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ruleId, ruleName, description, event);
+    }
+
+
 }

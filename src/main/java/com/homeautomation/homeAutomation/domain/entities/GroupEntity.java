@@ -22,10 +22,14 @@ public class GroupEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<HomeAutomationRuleEntity> rules
-           = new ArrayList<>()
-            ;
+//    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+//    private List<HomeAutomationRuleEntity> rules
+//           = new ArrayList<>()
+//            ;
+
+    @ManyToOne
+    @JoinColumn(name = "rule_id")
+    private HomeAutomationRuleEntity rule;
 
 
     //    I think this is might be unnecessary since the devices will be give over through the rules or the behavior table anyway

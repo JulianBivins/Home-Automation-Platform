@@ -18,7 +18,7 @@ public interface HomeAutomationRuleService {
 
     List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity);
 
-    List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId);
+    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
 
 
     Optional<HomeAutomationRuleEntity> findByRuleName (String ruleName);

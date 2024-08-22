@@ -1,6 +1,5 @@
 package com.homeautomation.homeAutomation.repository;
 
-import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,7 +16,7 @@ public interface HomeAutomationRuleRepository extends JpaRepository<HomeAutomati
     existsByBehaviourEntities_BehaviourId
             (Long behaviourId);
     List<HomeAutomationRuleEntity> findByUserEntity_UserId(Long userId);
-    List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId);
+    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
 
     Optional<HomeAutomationRuleEntity> findByRuleName(String ruleName);
 //    void deleteDeviceById(Long deviceId);

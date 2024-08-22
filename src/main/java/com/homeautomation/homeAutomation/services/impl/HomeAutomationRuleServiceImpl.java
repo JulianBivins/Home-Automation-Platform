@@ -48,8 +48,8 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     }
 
     @Override
-    public List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId) {
-        return homeAutomationRuleRepository.findByGroupEntity_GroupId(groupId);
+    public List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId) {
+        return homeAutomationRuleRepository.findByGroupEntities_GroupId(groupId);
     }
 
     @Override
@@ -63,7 +63,9 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.findById(id).map(existingRule -> {
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
-            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity()).ifPresent(existingRule::setGroupEntity);
+            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> {
+                existingRule.setGroupEntities(new ArrayList<>(newGroups));
+            });
             Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(newBehaviours -> {
                 existingRule.setBehaviourEntities(new ArrayList<>(newBehaviours));
             });

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,11 +31,14 @@ public class HomeAutomationRuleEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @ManyToOne(cascade = {
-//            CascadeType.PERSIST,
-            CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "group_id")
-    private GroupEntity groupEntity;
+//    @ManyToOne(cascade = {
+////            CascadeType.PERSIST,
+//            CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+//    @JoinColumn(name = "group_id")
+//    private GroupEntity groupEntity;
+
+    @OneToMany(mappedBy = "rule", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    private List<GroupEntity> groupEntities = new ArrayList<>();
 
     //I think this is unnecessary since the devices will be give over through the rules or the behavior table anyway
 //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)

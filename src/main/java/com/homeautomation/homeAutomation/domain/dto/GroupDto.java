@@ -24,7 +24,7 @@ public class GroupDto {
             = new ArrayList<>()
             ;
 
-    private List<DeviceEntity> devices
+    private List<DeviceDto> devices
             = new ArrayList<>()
             ;
 

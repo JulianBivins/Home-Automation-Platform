@@ -190,7 +190,7 @@ public class HomeAutomationRuleEntityRepositoryIT {
     @Test
     @Transactional
     public void testFindHomeAutomationRuleEntitiesByGroupId() {
-        List<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findByGroupEntity_GroupId(groupEntity.getGroupId());
+        List<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findByGroupEntities_GroupId(groupEntity.getGroupId());
         assertThat(retrievedRule).hasSize(1);
     }
 

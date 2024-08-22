@@ -131,7 +131,7 @@ public class GroupEntityRepositoryIT {
         HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
         ruleRepository.save(ruleEntity);
 
-        List<HomeAutomationRuleEntity> rules = retrievedGroup.get().getRules();
+        HomeAutomationRuleEntity rules = retrievedGroup.get().getRule();
 
         //rules might be unmodifiable
 //        retrievedGroup.get().setRules(new ArrayList<>(rules));

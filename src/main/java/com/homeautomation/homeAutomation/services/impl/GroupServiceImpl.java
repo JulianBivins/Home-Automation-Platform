@@ -49,10 +49,8 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findByUserEntity_UserId(userId);
     }
 
-    @Override
-    public List<DeviceEntity> getDevices(Long groupId) {
-        return deviceRepository.findByGroupEntity_GroupId(groupId);
-    }
+//
+
 
     @Override
     public boolean isExists(Long id) {
@@ -70,9 +68,9 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findById(id).map(existingGroup -> {
             Optional.ofNullable(groupEntity.getUserEntity()).ifPresent(existingGroup::setUserEntity);
             Optional.ofNullable(groupEntity.getName()).ifPresent(existingGroup::setName);
-            Optional.ofNullable(groupEntity.getDevices()).ifPresent(newDevices -> {
-                existingGroup.setDevices(new ArrayList<>(newDevices));
-            });
+//            Optional.ofNullable(groupEntity.getDevices()).ifPresent(newDevices -> {
+//                existingGroup.setDevices(new ArrayList<>(newDevices));
+//            });
             return groupRepository.save(existingGroup);
         }).orElseThrow(() -> new RuntimeException("Group does not exist"));
     }

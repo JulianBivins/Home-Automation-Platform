@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
-import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
+//import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
+import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,13 +22,15 @@ public class HomeAutomationRuleDto {
 
     private String description;
 
-    //!Might need to be Dto
     private UserDto userDto;
 
-    //!Might need to be Entity
-    private GroupDto groupDto;
+    private List<GroupDto> groupDtos;
 
-    private List<BehaviourDto> behaviourEntities;
+    private List<DeviceDto> deviceDtos;
+
+    private List<Event> events;
+
+    private Map<DeviceDto, Behaviour> deviceBehaviours;
 
     public enum Event {
         TIME,
@@ -36,6 +40,11 @@ public class HomeAutomationRuleDto {
         WHEN_INSERT_ON,
         WHEN_INSERT_OFF
     }
-    private Event event;
 
+    public enum Behaviour {
+        ON,
+        OFF,
+        STAND_BY,
+        TIMED,
+    }
 }

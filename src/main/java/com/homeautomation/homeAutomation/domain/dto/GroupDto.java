@@ -15,18 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupDto {
-
     private Long groupId;
 
     private String name;
 
-    private List<HomeAutomationRuleDto> rules
-            = new ArrayList<>()
-            ;
-
-    private List<DeviceDto> devices
-            = new ArrayList<>()
-            ;
+    private List<HomeAutomationRuleDto> rules;
 
     private UserDto userDto;
 

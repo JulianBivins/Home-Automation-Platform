@@ -13,10 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -117,7 +115,9 @@ public class GroupEntityRepositoryIT {
     @Test
     @Transactional
     public void testFindGroupEntitiesByUserId() {
-
+        List<GroupEntity> retrievedGroup = groupRepository.findByUserEntity_UserId(userEntity.getUserId());
+        assertThat(retrievedGroup).hasSize(1);
+        assertThat(retrievedGroup.get(0)).isEqualTo(groupEntity);
     }
 
 
@@ -131,22 +131,15 @@ public class GroupEntityRepositoryIT {
         HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
         ruleRepository.save(ruleEntity);
 
-        HomeAutomationRuleEntity rules = retrievedGroup.get().getRule();
+        HomeAutomationRuleEntity rule = retrievedGroup.get().getRule();
 
-        //rules might be unmodifiable
-//        retrievedGroup.get().setRules(new ArrayList<>(rules));
+        retrievedGroup.get().setRule(ruleEntity);
 
-        if (!rules.contains(ruleEntity)) {
-            rules.add(ruleEntity);
-        }
-
-        retrievedGroup.get().setRules(new ArrayList<>(rules));
-
-         groupService.save(retrievedGroup.get());
+        groupRepository.save(retrievedGroup.get());
 
         Optional<GroupEntity> retrievedGroupAfterSettingRule = groupRepository.findById(retrievedGroup.get().getGroupId());
         assertThat(retrievedGroupAfterSettingRule).isPresent();
-        assertThat(retrievedGroupAfterSettingRule.get().getRules()).contains(ruleEntity);
+        assertThat(retrievedGroupAfterSettingRule.get().getRule()).isEqualTo(ruleEntity);
     }
 
     @Test
@@ -159,33 +152,23 @@ public class GroupEntityRepositoryIT {
         HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
         ruleRepository.save(ruleEntity);
 
-        List<HomeAutomationRuleEntity> rules = retrievedGroup.get().getRules();
+        HomeAutomationRuleEntity rule = retrievedGroup.get().getRule();
 
-        //rules might be unmodifiable
-//        retrievedGroup.get().setRules(new ArrayList<>(rules));
+        retrievedGroup.get().setRule(ruleEntity);
 
-//        if (!rules.contains(ruleEntity)) {
-            rules.add(ruleEntity);
-//        }
-
-        retrievedGroup.get().setRules(new ArrayList<>(rules));
-
-         groupService.save(retrievedGroup.get());
+        groupRepository.save(retrievedGroup.get());
 
         Optional<GroupEntity> retrievedGroupAfterSettingRule = groupRepository.findById(retrievedGroup.get().getGroupId());
         assertThat(retrievedGroupAfterSettingRule).isPresent();
-        assertThat(retrievedGroupAfterSettingRule.get().getRules()).contains(ruleEntity);
+        assertThat(retrievedGroupAfterSettingRule.get().getRule()).isEqualTo(ruleEntity);
 
-        List<HomeAutomationRuleEntity> updatedRules = retrievedGroupAfterSettingRule.get().getRules().stream()
-                .filter(rule -> !rule.equals(ruleEntity))
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        retrievedGroupAfterSettingRule.get().setRules(new ArrayList<>(updatedRules));
-        GroupEntity save = groupService.save(retrievedGroupAfterSettingRule.get());
+        retrievedGroup.get().setRule(null);
+        groupRepository.save(retrievedGroupAfterSettingRule.get());
 
         Optional<GroupEntity> retrievedGroupAfterDeletingRule = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroupAfterDeletingRule).isPresent();
-        assertThat(retrievedGroupAfterDeletingRule.get().getRules()).doesNotContain(ruleEntity);
+        assertThat(retrievedGroupAfterDeletingRule.get().getRule()).isNotEqualTo(ruleEntity);
+        assertThat(retrievedGroupAfterDeletingRule.get().getRule()).isNull();
     }
 
     @Test
@@ -194,56 +177,25 @@ public class GroupEntityRepositoryIT {
         Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroup).isPresent();
 
-        HomeAutomationRuleEntity ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
-        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity);
         HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity);
-
-        ruleRepository.save(ruleEntityA);
-        ruleRepository.save(ruleEntityB);
         ruleRepository.save(ruleEntityC);
 
-        List<HomeAutomationRuleEntity> rules = retrievedGroup.get().getRules();
+        retrievedGroup.get().setRule(ruleEntityC);
+        groupRepository.save(retrievedGroup.get());
 
-        //rules might be unmodifiable
-//        retrievedGroup.get().setRules(new ArrayList<>(rules));
-//
-////        if (!rules.contains(ruleEntityA)) {
-//            rules.add(ruleEntityA);
-////        }
-////        if (!rules.contains(ruleEntityB)) {
-//            rules.add(ruleEntityB);
-////        }
-////        if (!rules.contains(ruleEntityC)) {
-//            rules.add(ruleEntityC);
-////        }
+        Optional<GroupEntity> retrievedGroupAfterSettingRule = groupRepository.findById(retrievedGroup.get().getGroupId());
+        assertThat(retrievedGroupAfterSettingRule).isPresent();
+        assertThat(retrievedGroupAfterSettingRule.get().getRule()).isEqualTo(ruleEntityC);
 
-         List<HomeAutomationRuleEntity> newRules = new ArrayList<>(List.of(ruleEntityA, ruleEntityB, ruleEntityC));
-
-        retrievedGroup.get().setRules(newRules);
-
-        GroupEntity save = groupService.save(retrievedGroup.get());
-
-        Optional<GroupEntity> retrievedGroupAfterSettingRules = groupRepository.findById(retrievedGroup.get().getGroupId());
-        assertThat(retrievedGroupAfterSettingRules).isPresent();
-        assertThat(retrievedGroupAfterSettingRules.get().getRules()).contains(ruleEntityA, ruleEntityB, ruleEntityC);
-
-        assertThat(retrievedGroupAfterSettingRules.get().getRules().get(0).getGroupEntity()).isEqualTo(groupEntity);
-        assertThat(retrievedGroupAfterSettingRules.get().getRules().get(1).getGroupEntity()).isEqualTo(groupEntity);
-        assertThat(retrievedGroupAfterSettingRules.get().getRules().get(2).getGroupEntity()).isEqualTo(groupEntity);
+        assertThat(retrievedGroupAfterSettingRule.get().getRule().getGroupEntities().contains(groupEntity));
     }
-
-
-
 
     @Test
     @Transactional
-    public void testCascadeDeleteGroupWithHomeAutomationRules() {}
+    public void testGroupToDeviceAssociation(){
 
+    }
     
-//             testGroupToHomeAutomationRuleAssociation()
-//             testAddDeviceToGroup()
-//             testRemoveDeviceFromGroup()
-//             testGroupToDeviceAssociation()
-//             testGroupEntityToUserEntityAssociation()
-
+//           @Test @Transactional public void testGroupToDeviceAssociation(){}
+//           @Test @Transactional public void testGroupEntityToUserEntityAssociation(){}
 }

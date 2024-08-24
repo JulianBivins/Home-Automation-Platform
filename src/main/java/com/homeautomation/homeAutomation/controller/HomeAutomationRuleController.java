@@ -1,11 +1,11 @@
 package com.homeautomation.homeAutomation.controller;
 
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
-import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
+//import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;
-import com.homeautomation.homeAutomation.services.BehaviourService;
+//import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +26,8 @@ public class HomeAutomationRuleController {
 
     @Autowired
     private  Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper;
-    @Autowired
-    private BehaviourService behaviourService;
+//    @Autowired
+//    private BehaviourService behaviourService;
 
 //    public HomeAutomationRuleController(HomeAutomationRuleService homeAutomationRuleService, Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper) {
 //        this.homeAutomationRuleService = homeAutomationRuleService;
@@ -63,11 +63,11 @@ public class HomeAutomationRuleController {
 
     @GetMapping("/rules/{ruleId}/behaviours")
     public ResponseEntity<ArrayList<String>> retrieveBehavioursByRule (@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
-        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByRuleID(homeAutomationRuleDto);
+//        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByRuleID(homeAutomationRuleDto);
         ArrayList<String> behaviourArray = new ArrayList<>();
-        for(var behaviour : behaviours) {
-            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
-        }
+//        for(var behaviour : behaviours) {
+//            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+//        }
         return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
     }
 

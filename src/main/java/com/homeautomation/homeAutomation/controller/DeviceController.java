@@ -1,10 +1,10 @@
 package com.homeautomation.homeAutomation.controller;
 
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
-import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
+//import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.mapper.impl.DeviceMapperImpl;
-import com.homeautomation.homeAutomation.services.BehaviourService;
+//import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private DeviceMapperImpl deviceMapper;
-    @Autowired
-    private BehaviourService behaviourService;
+//    @Autowired
+//    private BehaviourService behaviourService;
     @Autowired
     private HomeAutomationRuleService homeAutomationRuleService;
 
@@ -40,11 +40,11 @@ public class DeviceController {
     @GetMapping("/behaviours/{deviceId}/behaviours")
     //TODO need to think if a Requestbody of DeviceDto or if a long id is better
     public ResponseEntity<ArrayList<String>> retrieveBehavioursByDeviceId (@RequestBody DeviceDto deviceDto) {
-        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByDeviceID(deviceDto);
+//        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByDeviceID(deviceDto);
         ArrayList<String> behaviourArray = new ArrayList<>();
-        for(var behaviour : behaviours) {
-            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
-        }
+//        for(var behaviour : behaviours) {
+//            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+//        }
         return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
     }
 

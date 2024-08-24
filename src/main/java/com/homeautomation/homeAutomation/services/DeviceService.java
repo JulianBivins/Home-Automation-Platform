@@ -22,7 +22,7 @@ public interface DeviceService {
 
     boolean isExists(Long id);
 
-    List<DeviceEntity> getDevicesByGroupId(Long groupId);
+//    List<DeviceEntity> getDevicesByGroupId(Long groupId);
 
     void delete(Long id);
 

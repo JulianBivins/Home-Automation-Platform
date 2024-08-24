@@ -13,24 +13,19 @@ public class DeviceDto {
 
     private Long deviceId;
 
-    // ex: Lights -> Living room
     private String name;
+
+    private DeviceType type;
+
+    private UserDto userDto;
+
+    private List<HomeAutomationRuleDto> rules;
 
     public enum DeviceType {
         LIGHTS,
-        //Washer, Fridge, Blinds...
         UTILITY,
         SPEAKER,
         TELEVISION,
         CAMERA,
     }
-
-    private DeviceDto.DeviceType type;
-
-    //!Might need to be Dto instead
-    private GroupDto groupDto;
-
-    private List<BehaviourDto> behaviourEntities;
-
-    private UserDto userDto;
 }

@@ -33,27 +33,13 @@ public class DeviceEntity {
     }
 
     @Enumerated(EnumType.STRING)
-//    @OneToOne (mappedBy = "device_type")
     private DeviceType type;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    //!Might need to be Entity instead
-    private GroupEntity groupEntity;
-
-    @OneToMany(mappedBy = "deviceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BehaviourEntity> behaviourEntities;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    //Think it is unnecessary since I already have the behaviour class defining the table
-//    @ManyToMany
-//    @JoinTable(
-//            name = "device_rule",
-//            joinColumns = @JoinColumn(name = "device_id"),
-//            inverseJoinColumns = @JoinColumn(name = "rule_id")
-//    )
-//    private List<HomeAutomationRuleEntity> rules;
+    @ManyToMany(mappedBy = "deviceEntities", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<HomeAutomationRuleEntity> rules;
 }
+

@@ -16,7 +16,7 @@ public interface GroupService {
 
     List<GroupEntity> findByUserEntity_UserId(Long userId);
 
-    List<DeviceEntity> getDevices(Long groupId);
+//    List<DeviceEntity> getDevices(Long groupId);
 
     boolean isExists(Long id);
 

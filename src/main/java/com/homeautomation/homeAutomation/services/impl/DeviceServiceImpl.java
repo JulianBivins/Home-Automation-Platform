@@ -54,11 +54,11 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.existsById(id);
     }
 
-    //TODO
-    @Override
-    public List<DeviceEntity> getDevicesByGroupId(Long groupId) {
-        return deviceRepository.findByGroupEntity_GroupId(groupId);
-    }
+//    //TODO
+//    @Override
+//    public List<DeviceEntity> getDevicesByGroupId(Long groupId) {
+//        return deviceRepository.findByGroupEntity_GroupId(groupId);
+//    }
 
     @Override
     public DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity) {
@@ -66,8 +66,8 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findById(id).map(existingDevice -> {
             Optional.ofNullable(deviceEntity.getName()).ifPresent(existingDevice::setName);
             Optional.ofNullable(deviceEntity.getType()).ifPresent(existingDevice::setType);
-            Optional.ofNullable(deviceEntity.getGroupEntity()).ifPresent(existingDevice::setGroupEntity);
-            Optional.ofNullable(deviceEntity.getBehaviourEntities()).ifPresent(existingDevice::setBehaviourEntities);
+//            Optional.ofNullable(deviceEntity.getGroupEntity()).ifPresent(existingDevice::setGroupEntity);
+//            Optional.ofNullable(deviceEntity.getBehaviourEntities()).ifPresent(existingDevice::setBehaviourEntities);
             return deviceRepository.save(existingDevice);
         }).orElseThrow(() -> new RuntimeException("Device does not exist"));
     }

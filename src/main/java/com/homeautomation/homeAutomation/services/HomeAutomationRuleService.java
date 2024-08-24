@@ -18,28 +18,13 @@ public interface HomeAutomationRuleService {
 
     List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity);
 
-//    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
-//    List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId);
-
-//    List<HomeAutomationRuleEntity> findByGroupId(Long groupId);
-
     Optional<HomeAutomationRuleEntity> findByRuleName (String ruleName);
-
 
     HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity);
 
     boolean isExists(Long id);
 
-//    boolean isDeviceExistsInRule(Long deviceId);
-
-//    boolean isBehaviourExistsInRule(Long behaviourId);
-
     void delete(Long id);
 
-//    void deleteDeviceById(Long deviceId);
-
-//    void deleteBehaviourById(Long behaviourId);
-
-    void removeBehaviourFromRule(Long ruleId, Long behaviourId);
     void removeDeviceFromRule(Long ruleId, Long deviceId);
 }

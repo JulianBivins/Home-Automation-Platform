@@ -42,11 +42,9 @@ public class HomeAutomationRuleEntity {
     )
     private List<DeviceEntity> deviceEntities;
 
-    @ElementCollection
-    @CollectionTable(name = "rule_events", joinColumns = @JoinColumn(name = "rule_id"))
-    @Column(name = "event")
     @Enumerated(EnumType.STRING)
-    private List<Event> events;
+    @Column(name = "event")
+    private Event event;
 
     public enum Event {
         TIME,

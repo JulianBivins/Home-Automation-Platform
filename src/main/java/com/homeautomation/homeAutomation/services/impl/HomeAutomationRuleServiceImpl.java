@@ -46,21 +46,6 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     public List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity) {
         return homeAutomationRuleRepository.findByUserEntity_UserId(userEntity.getUserId());
     }
-//
-//    @Override
-//    public List<HomeAutomationRuleEntity> findByGroupId(Long groupId) {
-//        return homeAutomationRuleRepository.findByGroupId(groupId);
-//    }
-
-//    @Override
-//    public List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId) {
-//        return homeAutomationRuleRepository.findByGroupEntities_GroupId(groupId);
-//    }
-
-//    @Override
-//    public List<HomeAutomationRuleEntity> findByGroupEntity_GroupId(Long groupId) {
-//        return homeAutomationRuleRepository.findByGroupEntity_GroupId(groupId);
-//    }
 
     @Override
     public Optional<HomeAutomationRuleEntity> findByRuleName(String ruleName) {
@@ -76,11 +61,6 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> {
                 existingRule.setGroupEntities(new ArrayList<>(newGroups));
             });
-//            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity()).ifPresent(existingRule::setGroupEntity);
-//            Optional.ofNullable(homeAutomationRuleEntity.getBehaviourEntities()).ifPresent(newBehaviours -> {
-//                existingRule.setBehaviourEntities(new ArrayList<>(newBehaviours));
-//            });
-//            Optional.ofNullable(homeAutomationRuleEntity.getEvent()).ifPresent(existingRule::setEvent);
             return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
     }
@@ -90,63 +70,24 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.existsById(id);
     }
 
-//    @Override
-//    public boolean isDeviceExistsInRule(Long deviceId) {
-//        return homeAutomationRuleRepository.existsByBehaviourEntities_DeviceEntity_DeviceId(deviceId);
-//    }
-
-//    @Override
-//    public boolean isBehaviourExistsInRule(Long behaviourId) {
-//        return homeAutomationRuleRepository.existsByBehaviourEntities_BehaviourId(behaviourId);
-//    }
-
-
     @Override
     public void delete(Long id) {
         homeAutomationRuleRepository.deleteById(id);
     }
 
     @Override
-    public void removeBehaviourFromRule(Long ruleId, Long behaviourId) {
-
-    }
-
-//    @Override
-//    public void deleteDeviceById(Long deviceId) {
-//        homeAutomationRuleRepository.deleteDeviceById(deviceId);
-//    }
-
-
-//    @Override
-//    @Transactional
-//    public void removeDeviceFromRule(Long ruleId, Long deviceId) {
-//        HomeAutomationRuleEntity rule = homeAutomationRuleRepository.findById(ruleId)
-//                .orElseThrow(() -> new RuntimeException("Rule not found with id " + ruleId));
-//
-//        rule.getBehaviourEntities().removeIf(behaviour ->
-//                behaviour.getDeviceEntity().getDeviceId().equals(deviceId));
-//
-//        homeAutomationRuleRepository.save(rule);
-//    }
-
-
-//    @Override
-//    public void deleteBehaviourById(Long behaviourId) {
-//        homeAutomationRuleRepository.deleteBehaviourByBehaviourId(behaviourId);
-//    }
-
-//    @Override
-//    @Transactional
-//    public void removeBehaviourFromRule(Long ruleId, Long behaviourId) {
-//        HomeAutomationRuleEntity rule = homeAutomationRuleRepository.findById(ruleId)
-//                .orElseThrow(() -> new RuntimeException("Rule not found with id " + ruleId));
-//        rule.getBehaviourEntities().removeIf(behaviour -> behaviour.getBehaviourId().equals(behaviourId));
-//
-//        homeAutomationRuleRepository.save(rule);
-//    }
-
-    @Override
     public void removeDeviceFromRule(Long ruleId, Long deviceId) {
+        Optional<HomeAutomationRuleEntity> ruleOptional = homeAutomationRuleRepository.findById(ruleId);
+
+        if (ruleOptional.isPresent()) {
+            HomeAutomationRuleEntity rule = ruleOptional.get();
+
+            rule.getDeviceEntities().removeIf(device -> device.getDeviceId().equals(deviceId));
+
+            homeAutomationRuleRepository.save(rule);
+        } else {
+            throw new RuntimeException("Rule not found with id: " + ruleId);
+        }
     }
 
 }

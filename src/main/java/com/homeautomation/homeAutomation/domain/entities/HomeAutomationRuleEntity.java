@@ -77,7 +77,7 @@ public class HomeAutomationRuleEntity {
                "ruleId=" + ruleId +
                ", ruleName='" + ruleName + '\'' +
                ", description='" + description + '\'' +
-               ", events=" + events +
+               ", events=" + event +
                '}';
     }
 
@@ -89,12 +89,12 @@ public class HomeAutomationRuleEntity {
         return Objects.equals(ruleId, that.ruleId) &&
                Objects.equals(ruleName, that.ruleName) &&
                Objects.equals(description, that.description) &&
-               Objects.equals(events, that.events);
+               Objects.equals(event, that.event);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ruleId, ruleName, description, events);
+        return Objects.hash(ruleId, ruleName, description, event);
     }
 
 

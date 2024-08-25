@@ -6,7 +6,6 @@ import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +51,7 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.findByRuleName(ruleName);
     }
 
+
     @Override
     public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
         homeAutomationRuleEntity.setRuleId(id);
@@ -88,6 +88,11 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         } else {
             throw new RuntimeException("Rule not found with id: " + ruleId);
         }
+    }
+
+    @Override
+    public List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId) {
+        return homeAutomationRuleRepository.findByGroupEntities_GroupId(groupId);
     }
 
 }

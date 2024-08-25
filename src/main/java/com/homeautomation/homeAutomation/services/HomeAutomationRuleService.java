@@ -20,6 +20,9 @@ public interface HomeAutomationRuleService {
 
     Optional<HomeAutomationRuleEntity> findByRuleName (String ruleName);
 
+    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
+
+
     HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity);
 
     boolean isExists(Long id);
@@ -27,4 +30,5 @@ public interface HomeAutomationRuleService {
     void delete(Long id);
 
     void removeDeviceFromRule(Long ruleId, Long deviceId);
+
 }

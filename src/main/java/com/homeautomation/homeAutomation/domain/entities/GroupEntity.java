@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -29,5 +30,27 @@ public class GroupEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GroupEntity that = (GroupEntity) o;
+
+        if (!groupId.equals(that.groupId)) return false;
+        if (!name.equals(that.name)) return false;
+        if (!Objects.equals(rule, that.rule)) return false;
+        return Objects.equals(userEntity, that.userEntity);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = groupId.hashCode();
+        result = 31 * result + name.hashCode();
+        result = rule != null ? 31 * result + rule.hashCode() : 0;
+        result = userEntity != null ? 31 * result + userEntity.hashCode() : 0;
+        return result;
+    }
 
 }

@@ -34,9 +34,6 @@ public class UserEntityRepositoryIT {
     private DeviceRepository deviceRepository;
 
     @Autowired
-    private BehaviourRepository behaviourRepository;
-
-    @Autowired
     private GroupRepository groupRepository;
 
     @Autowired
@@ -46,28 +43,29 @@ public class UserEntityRepositoryIT {
     private HomeAutomationRuleEntity rule1;
     private HomeAutomationRuleEntity rule2;
     private GroupEntity groupEntity;
-    private DeviceEntity deviceEntity;
-    private List<BehaviourEntity> behaviourEntities;
+    private DeviceEntity deviceEntityA;
+    private DeviceEntity deviceEntityB;
+
+
 
     @BeforeEach
     @Transactional
     public void setUp() {
 
         userEntity = TestDataUtil.createTestUserEntityA();
-//        userRepository.saveAndFlush(userEntity);
         userRepository.save(userEntity);
 
         groupEntity = TestDataUtil.createGroupEntityA(userEntity);
         groupRepository.save(groupEntity);
 
-        rule1 = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
-        rule2 = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity);
+        deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);
+        deviceEntityB = TestDataUtil.createDeviceEntityB(userEntity);
+        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityA));
+
+        rule1 = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
+        rule2 = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.saveAll(List.of(rule1,rule2));
 
-        //Maybe should be tested independently
-//        userEntity.setRules(List.of(rule1, rule2));
-
-        //
 
     }
 

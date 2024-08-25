@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,10 +35,6 @@ public class HomeAutomationRuleEntityRepositoryIT {
 
     @Autowired
     private GroupRepository groupRepository;
-
-//    @Autowired
-//    private BehaviourRepository behaviourRepository;
-
     @Autowired
     private DeviceRepository deviceRepository;
 
@@ -47,6 +42,8 @@ public class HomeAutomationRuleEntityRepositoryIT {
     private HomeAutomationRuleEntity ruleEntity;
     private UserEntity userEntity;
     private GroupEntity groupEntity;
+    private DeviceEntity deviceEntityA;
+    private DeviceEntity deviceEntityB;
 
 
     @BeforeEach
@@ -56,7 +53,11 @@ public class HomeAutomationRuleEntityRepositoryIT {
         userRepository.save(userEntity);
         groupEntity = TestDataUtil.createGroupEntityA(userEntity);
         groupRepository.save(groupEntity);
-        ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
+        deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);
+        deviceEntityB = TestDataUtil.createDeviceEntityB(userEntity);
+        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityB));
+
+        ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntity);
 
     }
@@ -75,11 +76,11 @@ public class HomeAutomationRuleEntityRepositoryIT {
         ruleRepository.delete(ruleEntity);
         assertThat(ruleRepository.findById(ruleEntity.getRuleId())).isNotPresent();
 
-        HomeAutomationRuleEntity ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityA);
-        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityB);
-        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityC);
 
         List<HomeAutomationRuleEntity> resultEntities = ruleRepository.findAll();
@@ -92,11 +93,11 @@ public class HomeAutomationRuleEntityRepositoryIT {
         ruleRepository.delete(ruleEntity);
         assertThat(ruleRepository.findById(ruleEntity.getRuleId())).isNotPresent();
 
-        HomeAutomationRuleEntity ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityA);
-        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityB);
-        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity,groupEntity);
+        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity,groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityC);
 
         List<HomeAutomationRuleEntity> resultEntities = ruleRepository.findAll();
@@ -148,10 +149,10 @@ public class HomeAutomationRuleEntityRepositoryIT {
         Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
         assertThat(retrievedRule).isPresent();
 
-        HomeAutomationRuleEntity updatedRuleEntity = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity);
+        HomeAutomationRuleEntity updatedRuleEntity = TestDataUtil.createTestRuleEntityB(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         updatedRuleEntity.setRuleName("testRuleB");
 
-        HomeAutomationRuleEntity ruleEntityAfterPartialUpdate = ruleService.partialUpdate(retrievedRule.get().getRuleId(), updatedRuleEntity);
+        HomeAutomationRuleEntity ruleEntityAfterPartialUpdate = ruleService.partialUpdate(ruleEntity.getRuleId(), updatedRuleEntity);
         ruleRepository.save(ruleEntityAfterPartialUpdate);
 
         Optional<HomeAutomationRuleEntity> retrievedRuleAfterUpdate = ruleRepository.findById(ruleEntityAfterPartialUpdate.getRuleId());
@@ -165,20 +166,14 @@ public class HomeAutomationRuleEntityRepositoryIT {
     @Test
     @Transactional
     public void testHomeAutomationRuleToUserAssociation() {
-        // Retrieve all rules
         List<HomeAutomationRuleEntity> rules = ruleRepository.findByUserEntity_UserId(userEntity.getUserId());
         assertThat(rules).hasSize(1);
 
         HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
-//        HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
 
-        // Check the user associated with the rules
         assertThat(retrievedRule1.getUserEntity().getUsername()).isEqualTo("testuser");
-//        assertThat(retrievedRule2.getUserEntity().getUsername()).isEqualTo("testuser");
 
-        // Check the rules associated with the user
         assertThat(retrievedRule1.getUserEntity().getRules()).hasSize(1);
-//        assertThat(retrievedRule2.getUserEntity().getRules()).hasSize(2);
     }
 
     @Test
@@ -188,17 +183,10 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRule).hasSize(1);
     }
 
-//    @Test
-//    @Transactional
-//    public void testFindHomeAutomationRuleEntityByGroupId() {
-//        List<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findByGroupEntity_GroupId(groupEntity.getGroupId());
-//        assertThat(retrievedRule).hasSize(1);
-//    }
-
     @Test
     @Transactional
     public void testFindHomeAutomationRuleEntitiesByGroupId() {
-        List<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findByGroupId(groupEntity.getGroupId());
+        List<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findByGroupEntities_GroupId(groupEntity.getGroupId());
         assertThat(retrievedRule).hasSize(1);
     }
 
@@ -224,51 +212,60 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRuleAfterDeletion).isNotPresent();
     }
 
-//    @Test
-//    @Transactional
-//    public void testAddBehaviourToHomeAutomationRule(){
-//        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
-//        assertThat(retrievedRule).isPresent();
-//
-//        DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityA(userEntity, groupEntity);
-//        deviceRepository.save(deviceEntity);
-//        BehaviourEntity behaviourEntity = TestDataUtil.generateBehaviourEntity(ruleEntity, deviceEntity);
-//        behaviourRepository.save(behaviourEntity);
-//        retrievedRule.get().setBehaviourEntities(List.of(behaviourEntity));
-//
-//        Optional<HomeAutomationRuleEntity> retrievedRuleAfterSettingBehaviour = ruleRepository.findById(ruleEntity.getRuleId());
-//        assertThat(retrievedRuleAfterSettingBehaviour).isPresent();
-//        assertThat(retrievedRuleAfterSettingBehaviour.get().getBehaviourEntities()).contains(behaviourEntity);
-//    }
+    @Test
+    @Transactional
+    public void testAddDeviceToHomeAutomationRule() {
+        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
+        assertThat(retrievedRule).isPresent();
 
-//    @Test
-//    @Transactional
-//    public void testRemoveBehaviourFromHomeAutomationRule() {
-//        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
-//        assertThat(retrievedRule).isPresent();
-//
-//        DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityA(userEntity, groupEntity);
-//        deviceRepository.save(deviceEntity);
-//        BehaviourEntity behaviourEntity = TestDataUtil.generateBehaviourEntity(ruleEntity, deviceEntity);
-//        behaviourRepository.save(behaviourEntity);
-//        retrievedRule.get().setBehaviourEntities(new ArrayList<>(List.of(behaviourEntity)));
-//        ruleRepository.save(retrievedRule.get());
-////        ruleService.saveUpdate(retrievedRule.get().getRuleId(), retrievedRule.get());
-//
-//        Optional<HomeAutomationRuleEntity> retrievedRuleAfterSettingBehaviour = ruleRepository.findById(ruleEntity.getRuleId());
-//        assertThat(retrievedRuleAfterSettingBehaviour).isPresent();
-//        assertThat(retrievedRuleAfterSettingBehaviour.get().getBehaviourEntities()).contains(behaviourEntity);
-//
-//        List<BehaviourEntity> updatedBehaviours = retrievedRuleAfterSettingBehaviour.get().getBehaviourEntities()
-//                .stream()
-//                .filter(b -> !b.getBehaviour().equals(behaviourEntity.getBehaviour()))
-//                .collect(Collectors.toList());
-//        retrievedRuleAfterSettingBehaviour.get().setBehaviourEntities(updatedBehaviours);
-//        ruleRepository.save(retrievedRuleAfterSettingBehaviour.get());
-//
-//        Optional<HomeAutomationRuleEntity> retrievedRuleAfterRemovingBehaviour = ruleRepository.findById(ruleEntity.getRuleId());
-//        assertThat(retrievedRuleAfterRemovingBehaviour).isPresent();
-//        assertThat(retrievedRuleAfterRemovingBehaviour.get().getBehaviourEntities()).doesNotContain(behaviourEntity);
-//    }
+        DeviceEntity newDevice = TestDataUtil.createDeviceEntityB(userEntity);
+        deviceRepository.save(newDevice);
+        retrievedRule.get().getDeviceEntities().add(newDevice);
+
+        ruleRepository.save(retrievedRule.get());
+
+        Optional<HomeAutomationRuleEntity> retrievedRuleAfterAddingDevice = ruleRepository.findById(retrievedRule.get().getRuleId());
+        assertThat(retrievedRuleAfterAddingDevice.get().getDeviceEntities()).contains(newDevice);
+    }
+
+    @Test
+    @Transactional
+    public void testRemoveDeviceFromHomeAutomationRule() {
+        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
+        assertThat(retrievedRule).isPresent();
+
+        retrievedRule.get().getDeviceEntities().remove(deviceEntityA);
+
+        ruleRepository.save(retrievedRule.get());
+
+        Optional<HomeAutomationRuleEntity> retrievedRuleAfterRemovingDevice = ruleRepository.findById(retrievedRule.get().getRuleId());
+        assertThat(retrievedRuleAfterRemovingDevice.get().getDeviceEntities()).doesNotContain(deviceEntityA);
+    }
+
+    @Test
+    @Transactional
+    public void testAddBehaviourToHomeAutomationRule() {
+        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
+        assertThat(retrievedRule).isPresent();
+
+        retrievedRule.get().getDeviceBehaviours().put(deviceEntityA, HomeAutomationRuleEntity.Behaviour.TIMED);
+        ruleRepository.save(retrievedRule.get());
+
+        Optional<HomeAutomationRuleEntity> retrievedRuleAfterSettingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());
+        assertThat(retrievedRuleAfterSettingBehaviour.get().getDeviceBehaviours()).containsEntry(deviceEntityA, HomeAutomationRuleEntity.Behaviour.TIMED);
+    }
+
+    @Test
+    @Transactional
+    public void testRemoveBehaviourFromHomeAutomationRule() {
+        Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
+        assertThat(retrievedRule).isPresent();
+
+        retrievedRule.get().getDeviceBehaviours().remove(deviceEntityA);
+        ruleRepository.save(retrievedRule.get());
+
+        Optional<HomeAutomationRuleEntity> retrievedRuleAfterRemovingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());
+        assertThat(retrievedRuleAfterRemovingBehaviour.get().getDeviceBehaviours()).doesNotContainKey(deviceEntityA);
+    }
 
 }

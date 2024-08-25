@@ -13,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +34,16 @@ public class GroupEntityRepositoryIT {
    private HomeAutomationRuleRepository ruleRepository;
 
    @Autowired
+   private DeviceRepository deviceRepository;
+
+   @Autowired
    private GroupService groupService;
 
 
    private GroupEntity groupEntity;
    private UserEntity userEntity;
+    private DeviceEntity deviceEntityA;
+    private DeviceEntity deviceEntityB;
 
     @BeforeEach
     @Transactional
@@ -46,6 +52,9 @@ public class GroupEntityRepositoryIT {
         userRepository.save(userEntity);
         groupEntity = TestDataUtil.createGroupEntityA(userEntity);
         groupRepository.save(groupEntity);
+        deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);
+        deviceEntityB = TestDataUtil.createDeviceEntityB(userEntity);
+        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityB));
 
     }
 
@@ -128,7 +137,7 @@ public class GroupEntityRepositoryIT {
         Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroup).isPresent();
 
-        HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntity);
 
         HomeAutomationRuleEntity rule = retrievedGroup.get().getRule();
@@ -149,7 +158,7 @@ public class GroupEntityRepositoryIT {
         Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroup).isPresent();
 
-        HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntity = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntity);
 
         HomeAutomationRuleEntity rule = retrievedGroup.get().getRule();
@@ -177,7 +186,7 @@ public class GroupEntityRepositoryIT {
         Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroup).isPresent();
 
-        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity);
+        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityC);
 
         retrievedGroup.get().setRule(ruleEntityC);
@@ -192,10 +201,30 @@ public class GroupEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testGroupToDeviceAssociation(){
+    public void testGroupToDeviceAssociation() {
 
+        Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
+        assertThat(retrievedGroup).isPresent();
+
+        HomeAutomationRuleEntity ruleEntityC = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
+        ruleRepository.save(ruleEntityC);
+
+        retrievedGroup.get().setRule(ruleEntityC);
+
+        groupRepository.save(retrievedGroup.get());
+
+        Optional<GroupEntity> retrievedGroupAfterAddingRulesWithDevices = groupRepository.findById(retrievedGroup.get().getGroupId());
+        assertThat(retrievedGroupAfterAddingRulesWithDevices).isPresent();
+        List<DeviceEntity> devices = retrievedGroupAfterAddingRulesWithDevices.get().getRule().getDeviceEntities();
+
+        assertThat(devices).hasSize(2).containsExactlyInAnyOrder(deviceEntityA, deviceEntityB);
     }
-    
-//           @Test @Transactional public void testGroupToDeviceAssociation(){}
-//           @Test @Transactional public void testGroupEntityToUserEntityAssociation(){}
+
+    @Test
+    @Transactional
+    public void testGroupEntityToUserEntityAssociation() {
+        Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
+        assertThat(retrievedGroup).isPresent();
+        assertThat(retrievedGroup.get().getUserEntity()).isEqualTo(userEntity);
+    }
 }

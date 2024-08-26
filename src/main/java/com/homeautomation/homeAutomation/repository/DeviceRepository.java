@@ -8,5 +8,9 @@ import java.util.List;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<DeviceEntity, Long> {
-//    List<DeviceEntity> findByGroupEntity_GroupId(Long userId);
+List<DeviceEntity> findByUserEntity_UserId(Long userId);
+
+    List<DeviceEntity> findByRules_RuleId(Long ruleId);
+
+    List<DeviceEntity> findByRules_GroupEntities_GroupId(Long groupId);
 }

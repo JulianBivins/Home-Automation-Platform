@@ -76,4 +76,17 @@ public class DeviceServiceImpl implements DeviceService {
     public void delete(Long id) {
         deviceRepository.deleteById(id);
     }
+
+    public List<DeviceEntity> findDevicesByUserId(Long userId) {
+        return deviceRepository.findByUserEntity_UserId(userId);
+    }
+
+    public List<DeviceEntity> findDevicesByRuleId(Long ruleId) {
+        return deviceRepository.findByRules_RuleId(ruleId);
+    }
+
+    public List<DeviceEntity> findDevicesByGroupId(Long groupId) {
+        return deviceRepository.findByRules_GroupEntities_GroupId(groupId);
+
+    }
 }

@@ -20,6 +20,10 @@ public interface DeviceService {
 
     Optional<DeviceEntity> findOne(Long id);
 
+    List<DeviceEntity> findDevicesByUserId(Long userId);
+    List<DeviceEntity> findDevicesByRuleId(Long ruleId);
+    List<DeviceEntity> findDevicesByGroupId(Long groupId);
+
     boolean isExists(Long id);
 
 //    List<DeviceEntity> getDevicesByGroupId(Long groupId);

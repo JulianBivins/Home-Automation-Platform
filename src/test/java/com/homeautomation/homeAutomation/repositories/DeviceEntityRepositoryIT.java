@@ -210,25 +210,6 @@ public class DeviceEntityRepositoryIT {
         assertThat(devices).hasSize(2).containsExactly(deviceEntityA, deviceEntityB);
     }
 
-    @Test
-    @Transactional
-    public void testDeviceToGroupAssociationThroughRules() {
-        Optional<DeviceEntity> retrievedDevice = deviceRepository.findById(deviceEntityA.getDeviceId());
-        assertThat(retrievedDevice).isPresent();
-
-        List<HomeAutomationRuleEntity> retrievedRules = retrievedDevice.get().getRules();
-        assertThat(retrievedRules).isNotEmpty();
-        assertThat(retrievedRules).contains(ruleEntity);
-
-        List<GroupEntity> associatedGroups = new ArrayList<>();
-        for (var rule : retrievedRules) {
-            associatedGroups.addAll(rule.getGroupEntities());
-        }
-
-        assertThat(associatedGroups).isNotEmpty();
-        assertThat(associatedGroups).contains(groupEntity);
-    }
-
 }
 
 

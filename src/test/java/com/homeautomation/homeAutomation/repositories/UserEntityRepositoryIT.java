@@ -104,7 +104,6 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedUser).isPresent();
 
         userRepository.deleteById(retrievedUser.get().getUserId());
-        userRepository.flush();
         Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUserAfterDeletion).isNotPresent();
     }
@@ -114,6 +113,7 @@ public class UserEntityRepositoryIT {
     @Transactional
     public void testThatMultipleUsersCanBeCreatedAndRecalled() {
         userRepository.delete(userEntity);
+
         assertThat(userRepository.findById(userEntity.getUserId())).isNotPresent();
 
         UserEntity userEntityA = TestDataUtil.createTestUserEntityA();
@@ -158,6 +158,7 @@ public class UserEntityRepositoryIT {
 
         Optional<UserEntity> retrievedUserAfterUpdate = userRepository.findById(userEntityAfterPartialUpdate.getUserId());
         assertThat(retrievedUserAfterUpdate).isPresent();
+//        userRepository.save(retrievedUserAfterUpdate.get());
 
         assertThat(retrievedUserAfterUpdate.get()).isEqualTo(updatedUserEntity);
         assertThat(retrievedUser.get()).isNotEqualTo(retrievedUserAfterUpdate.get());
@@ -170,7 +171,6 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedUser).isPresent();
 
         userRepository.delete(retrievedUser.get());
-        userRepository.flush();
 
         Optional<UserEntity> deletedUser = userRepository.findById(userEntity.getUserId());
         assertThat(deletedUser).isNotPresent();

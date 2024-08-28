@@ -89,6 +89,17 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.10.0</version>
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/home_automation</url>
+					<user>devuser</user>
+					<password>FrenKURoSanji186!</password>
+					<driver>com.mysql.cj.jdbc.Driver</driver>
+				</configuration>
+			</plugin>
 <!--			<plugin>-->
 <!--				<groupId>org.apache.maven.plugins</groupId>-->
 <!--				<artifactId>maven-failsafe-plugin</artifactId>-->

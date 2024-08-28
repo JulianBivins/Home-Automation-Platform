@@ -123,7 +123,7 @@ public class HomeAutomationRuleEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testDeleteUserEntity(){
+    public void testDeleteRuleEntity(){
         Optional<HomeAutomationRuleEntity> retrievedRule = ruleRepository.findById(ruleEntity.getRuleId());
         assertThat(retrievedRule).isPresent();
 

@@ -13,21 +13,21 @@ public final class TestDataUtil {
 
     public static UserEntity createTestUserEntityA() {
         UserEntity userEntityA = new UserEntity();
-        userEntityA.setUsername("testuser");
+        userEntityA.setUsername("testuserA");
         userEntityA.setPassword("1234");
         return userEntityA;
     }
 
     public static UserEntity createTestUserEntityB() {
         UserEntity userEntityB = new UserEntity();
-        userEntityB.setUsername("testuser");
+        userEntityB.setUsername("testuserB");
         userEntityB.setPassword("5678");
         return userEntityB;
     }
 
     public static UserEntity createTestUserEntityC() {
         UserEntity userEntityC = new UserEntity();
-        userEntityC.setUsername("testuser");
+        userEntityC.setUsername("testuserC");
         userEntityC.setPassword("9012");
         return userEntityC;
     }

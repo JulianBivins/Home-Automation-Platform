@@ -94,7 +94,10 @@ public class DeviceEntityRepositoryIT {
     @Test
     @Transactional
     public void testThatMultipleDevicesCanBeCreatedAndRecalled() {
-        deviceRepository.deleteAll();
+        deviceRepository.delete(deviceEntityA);
+        deviceRepository.delete(deviceEntityB);
+        deviceRepository.flush();
+
         assertThat(deviceRepository.findAll()).isEmpty();
 
         assertThat(deviceRepository.findById(deviceEntityA.getDeviceId())).isNotPresent();
@@ -165,7 +168,7 @@ public class DeviceEntityRepositoryIT {
         retrievedRules.add(ruleEntity);
         retrievedDevice.get().setRules(new ArrayList<>(retrievedRules));
 
-        DeviceEntity save = deviceRepository.save(retrievedDevice.get());
+//        deviceRepository.save(retrievedDevice.get());
 
         Optional<DeviceEntity> updatedDevice = deviceRepository.findById(deviceEntityA.getDeviceId());
         assertThat(updatedDevice).isPresent();
@@ -185,7 +188,7 @@ public class DeviceEntityRepositoryIT {
         }
         retrievedRules.add(ruleEntity);
         retrievedDevice.get().setRules(new ArrayList<>(retrievedRules));
-        deviceRepository.save(retrievedDevice.get());
+//        deviceRepository.save(retrievedDevice.get());
 
         retrievedRules.remove(ruleEntity);
         retrievedDevice.get().setRules(retrievedRules);

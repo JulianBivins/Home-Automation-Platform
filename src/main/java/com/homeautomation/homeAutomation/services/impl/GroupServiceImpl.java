@@ -71,7 +71,8 @@ public class GroupServiceImpl implements GroupService {
 //            Optional.ofNullable(groupEntity.getDevices()).ifPresent(newDevices -> {
 //                existingGroup.setDevices(new ArrayList<>(newDevices));
 //            });
-            return groupRepository.save(existingGroup);
+//            return groupRepository.save(existingGroup);
+            return existingGroup;
         }).orElseThrow(() -> new RuntimeException("Group does not exist"));
     }
 

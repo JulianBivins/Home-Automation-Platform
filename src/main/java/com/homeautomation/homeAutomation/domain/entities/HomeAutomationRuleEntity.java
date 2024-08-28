@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Data
@@ -61,7 +58,7 @@ public class HomeAutomationRuleEntity {
     @ElementCollection
     @CollectionTable(name = "rule_device_behaviour", joinColumns = @JoinColumn(name = "rule_id"))
     @Column(name = "behaviour")
-    private Map<DeviceEntity, Behaviour> deviceBehaviours;
+    private Map<DeviceEntity, Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Behaviour {
         ON,
@@ -96,6 +93,7 @@ public class HomeAutomationRuleEntity {
     public int hashCode() {
         return Objects.hash(ruleId, ruleName, description, event);
     }
+
 
 
 }

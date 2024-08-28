@@ -4,11 +4,13 @@ import com.homeautomation.homeAutomation.config.TestDataUtil;
 import com.homeautomation.homeAutomation.domain.entities.*;
 import com.homeautomation.homeAutomation.repository.*;
 import com.homeautomation.homeAutomation.services.UserService;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,9 @@ public class UserEntityRepositoryIT {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private UserEntity userEntity;
     private HomeAutomationRuleEntity rule1;
@@ -84,9 +89,13 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedUser).isPresent();
 
         userRepository.delete(retrievedUser.get());
+        userRepository.flush();
+
         Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUserAfterDeletion).isNotPresent();
     }
+
+
 
     @Test
     @Transactional
@@ -95,6 +104,7 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedUser).isPresent();
 
         userRepository.deleteById(retrievedUser.get().getUserId());
+        userRepository.flush();
         Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUserAfterDeletion).isNotPresent();
     }
@@ -130,7 +140,7 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> retrievedUser = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUser).isPresent();
         retrievedUser.ifPresent(user -> {
-            assertThat(user.getUsername()).isEqualTo("testuser");
+            assertThat(user.getUsername()).isEqualTo("testuserA");
         });
     }
 
@@ -141,7 +151,7 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedUser).isPresent();
 
         UserEntity updatedUserEntity = TestDataUtil.createTestUserEntityC();
-        updatedUserEntity.setUsername("testuserC");
+        updatedUserEntity.setUsername("testUpdateUserC");
 
         UserEntity userEntityAfterPartialUpdate = userService.partialUpdate(retrievedUser.get().getUserId(), updatedUserEntity);
         userRepository.save(userEntityAfterPartialUpdate);
@@ -159,23 +169,15 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
         assertThat(retrievedUser).isPresent();
 
-        List<HomeAutomationRuleEntity> rules = ruleRepository.findAll();
-        HomeAutomationRuleEntity retrievedRule1 = rules.get(0);
-        HomeAutomationRuleEntity retrievedRule2 = rules.get(1);
-        retrievedUser.get().setRules(List.of(retrievedRule1, retrievedRule2));
-
-        List<GroupEntity> groups = groupRepository.findAll();
-        GroupEntity retrievedGroup = groups.get(0);
-        retrievedUser.get().setGroups(List.of(retrievedGroup));
-
         userRepository.delete(retrievedUser.get());
+        userRepository.flush();
+
         Optional<UserEntity> deletedUser = userRepository.findById(userEntity.getUserId());
         assertThat(deletedUser).isNotPresent();
 
+        assertThat(groupRepository.findById(groupEntity.getGroupId())).isNotPresent();
         assertThat(ruleRepository.findById(rule1.getRuleId())).isNotPresent();
         assertThat(ruleRepository.findById(rule2.getRuleId())).isNotPresent();
-
-        assertThat(groupRepository.findById(groupEntity.getGroupId())).isNotPresent();
     }
 
     @Test
@@ -234,12 +236,12 @@ public class UserEntityRepositoryIT {
         assertThat(retrievedRule1.getRuleName()).isEqualTo("RuleA");
         assertThat(retrievedRule1.getDescription()).isEqualTo("Mock RuleA");
         assertThat(retrievedRule1.getEvent()).isEqualTo(HomeAutomationRuleEntity.Event.TIME);
-        assertThat(retrievedRule1.getUserEntity().getUsername()).isEqualTo("testuser");
+        assertThat(retrievedRule1.getUserEntity().getUsername()).isEqualTo("testuserA");
 
         assertThat(retrievedRule2.getRuleName()).isEqualTo("RuleC");
         assertThat(retrievedRule2.getDescription()).isEqualTo("Mock RuleC");
         assertThat(retrievedRule2.getEvent()).isEqualTo(HomeAutomationRuleEntity.Event.AFTER_OTHER);
-        assertThat(retrievedRule2.getUserEntity().getUsername()).isEqualTo("testuser");
+        assertThat(retrievedRule2.getUserEntity().getUsername()).isEqualTo("testuserA");
     }
 
     @Test

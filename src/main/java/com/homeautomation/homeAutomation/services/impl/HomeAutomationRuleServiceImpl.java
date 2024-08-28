@@ -61,7 +61,8 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> {
                 existingRule.setGroupEntities(new ArrayList<>(newGroups));
             });
-            return homeAutomationRuleRepository.save(existingRule);
+//            return homeAutomationRuleRepository.save(existingRule);
+            return existingRule;
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
     }
 

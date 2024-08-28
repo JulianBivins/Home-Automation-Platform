@@ -112,7 +112,7 @@ public class GroupEntityRepositoryIT {
         updatedGroupEntity.setName("testGroupB");
 
         GroupEntity groupEntityAfterPartialUpdate = groupService.partialUpdate(retrievedGroup.get().getGroupId(), updatedGroupEntity);
-        groupRepository.save(groupEntityAfterPartialUpdate);
+//        groupRepository.save(groupEntityAfterPartialUpdate);
 
         Optional<GroupEntity> retrievedGroupAfterUpdate = groupRepository.findById(groupEntityAfterPartialUpdate.getGroupId());
         assertThat(retrievedGroupAfterUpdate).isPresent();

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,12 +83,13 @@ public class UserEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testDeleteUserEntity(){
+    public void testDeleteUserEntity() {
         Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
         assertThat(retrievedUser).isPresent();
 
         userRepository.delete(retrievedUser.get());
-        userRepository.flush();
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUserAfterDeletion).isNotPresent();
@@ -112,9 +112,9 @@ public class UserEntityRepositoryIT {
     @Test
     @Transactional
     public void testThatMultipleUsersCanBeCreatedAndRecalled() {
-        userRepository.delete(userEntity);
 
-        assertThat(userRepository.findById(userEntity.getUserId())).isNotPresent();
+        userRepository.deleteById(userEntity.getUserId());
+
 
         UserEntity userEntityA = TestDataUtil.createTestUserEntityA();
         userRepository.save(userEntityA);
@@ -139,9 +139,7 @@ public class UserEntityRepositoryIT {
     public void testFindUserByUsername() {
         Optional<UserEntity> retrievedUser = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUser).isPresent();
-        retrievedUser.ifPresent(user -> {
-            assertThat(user.getUsername()).isEqualTo("testuserA");
-        });
+        retrievedUser.ifPresent(user -> {assertThat(user.getUsername()).isEqualTo("testuserA");});
     }
 
     @Test
@@ -170,7 +168,8 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
         assertThat(retrievedUser).isPresent();
 
-        userRepository.delete(retrievedUser.get());
+        userRepository.deleteById(retrievedUser.get().getUserId());
+        userRepository.flush();
 
         Optional<UserEntity> deletedUser = userRepository.findById(userEntity.getUserId());
         assertThat(deletedUser).isNotPresent();

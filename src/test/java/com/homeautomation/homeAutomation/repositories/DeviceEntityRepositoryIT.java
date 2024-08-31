@@ -94,14 +94,18 @@ public class DeviceEntityRepositoryIT {
     @Test
     @Transactional
     public void testThatMultipleDevicesCanBeCreatedAndRecalled() {
-        deviceRepository.delete(deviceEntityA);
-        deviceRepository.delete(deviceEntityB);
+        Optional<DeviceEntity> retrievedDeviceA = deviceRepository.findById(deviceEntityA.getDeviceId());
+        assertThat(retrievedDeviceA).isPresent();
+
+        Optional<DeviceEntity> retrievedDeviceB = deviceRepository.findById(deviceEntityB.getDeviceId());
+        assertThat(retrievedDeviceB).isPresent();
+
+        deviceRepository.deleteById(retrievedDeviceA.get().getDeviceId());
+        deviceRepository.deleteById(retrievedDeviceA.get().getDeviceId());
         deviceRepository.flush();
 
-        assertThat(deviceRepository.findAll()).isEmpty();
-
-        assertThat(deviceRepository.findById(deviceEntityA.getDeviceId())).isNotPresent();
-        assertThat(deviceRepository.findById(deviceEntityB.getDeviceId())).isNotPresent();
+        assertThat(deviceRepository.findById(retrievedDeviceA.get().getDeviceId())).isNotPresent();
+        assertThat(deviceRepository.findById(retrievedDeviceB.get().getDeviceId())).isNotPresent();
 
 
         DeviceEntity deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);

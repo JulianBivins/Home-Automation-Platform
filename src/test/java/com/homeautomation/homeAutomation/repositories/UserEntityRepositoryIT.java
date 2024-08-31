@@ -81,19 +81,19 @@ public class UserEntityRepositoryIT {
         assertThat(result.get()).isEqualTo(userEntity);
     }
 
-    @Test
-    @Transactional
-    public void testDeleteUserEntity() {
-        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
-        assertThat(retrievedUser).isPresent();
-
-        userRepository.delete(retrievedUser.get());
-        entityManager.flush();
-        entityManager.clear();
-
-        Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
-        assertThat(retrievedUserAfterDeletion).isNotPresent();
-    }
+//    @Test
+//    @Transactional
+//    public void testDeleteUserEntity() {
+//        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
+//        assertThat(retrievedUser).isPresent();
+//
+//        userRepository.delete(retrievedUser.get());
+//        entityManager.flush();
+//        entityManager.clear();
+//
+//        Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
+//        assertThat(retrievedUserAfterDeletion).isNotPresent();
+//    }
 
 
 

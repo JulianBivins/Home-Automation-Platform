@@ -58,13 +58,33 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         return homeAutomationRuleRepository.findById(id).map(existingRule -> {
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
-            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> {
-                existingRule.setGroupEntities(new ArrayList<>(newGroups));
-            });
-//            return homeAutomationRuleRepository.save(existingRule);
-            return existingRule;
+            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
+            return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
     }
+
+//    @Override
+//    public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
+//        // Find the existing rule by ID
+//        return homeAutomationRuleRepository.findById(id).map(existingRule -> {
+//            // Update the basic fields only if they are provided in the current entity
+//            Optional.ofNullable(homeAutomationRuleEntity.getRuleName())
+//                    .ifPresent(existingRule::setRuleName);
+//
+//            Optional.ofNullable(homeAutomationRuleEntity.getDescription())
+//                    .ifPresent(existingRule::setDescription);
+//
+//            // Update group entities if provided; create a new mutable list to avoid issues with immutability
+//            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities())
+//                    .ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
+//            Optional.ofNullable(homeAutomationRuleEntity.getEvent()).ifPresent(existingRule::setEvent);
+//
+//            // Save the updated existing rule entity
+//            return homeAutomationRuleRepository.save(existingRule);
+//        }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
+//    }
+
+
 
     @Override
     public boolean isExists(Long id) {
@@ -91,9 +111,12 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         }
     }
 
-    @Override
-    public List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId) {
-        return homeAutomationRuleRepository.findByGroupEntities_GroupId(groupId);
-    }
+//    @Override
+//    public List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId) {
+//        return homeAutomationRuleRepository.findByGroupEntities_GroupId(groupId);
+//    }
+
+
+
 
 }

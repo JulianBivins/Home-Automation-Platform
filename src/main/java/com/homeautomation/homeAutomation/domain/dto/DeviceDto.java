@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,7 +20,7 @@ public class DeviceDto {
 
     private UserDto userDto;
 
-    private List<HomeAutomationRuleDto> rules;
+    private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
     public enum DeviceType {
         LIGHTS,

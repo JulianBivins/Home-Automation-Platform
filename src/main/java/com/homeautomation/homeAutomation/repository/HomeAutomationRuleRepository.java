@@ -15,5 +15,5 @@ public interface HomeAutomationRuleRepository extends JpaRepository<HomeAutomati
 
     List<HomeAutomationRuleEntity> findByUserEntity_UserId(Long userId);
     Optional<HomeAutomationRuleEntity> findByRuleName(String ruleName);
-    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
+//    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
 }

@@ -19,7 +19,7 @@ public class GroupDto {
 
     private String name;
 
-    private List<HomeAutomationRuleDto> rules;
+    private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
     private UserDto userDto;
 

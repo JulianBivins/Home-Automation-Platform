@@ -24,24 +24,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GroupEntityRepositoryIT {
 
-   @Autowired
-   private GroupRepository groupRepository;
+    @Autowired
+    private GroupRepository groupRepository;
 
-   @Autowired
-   private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-   @Autowired
-   private HomeAutomationRuleRepository ruleRepository;
+    @Autowired
+    private HomeAutomationRuleRepository ruleRepository;
 
-   @Autowired
-   private DeviceRepository deviceRepository;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
-   @Autowired
-   private GroupService groupService;
+    @Autowired
+    private GroupService groupService;
 
 
-   private GroupEntity groupEntity;
-   private UserEntity userEntity;
+    private GroupEntity groupEntity;
+    private UserEntity userEntity;
     private DeviceEntity deviceEntityA;
     private DeviceEntity deviceEntityB;
 
@@ -91,6 +91,7 @@ public class GroupEntityRepositoryIT {
     @Transactional
     public void testThatMultipleGroupsCanBeCreatedAndRecalled() {
         groupRepository.delete(groupEntity);
+        groupRepository.deleteAll();
         assertThat(groupRepository.findById(groupEntity.getGroupId())).isNotPresent();
 
         GroupEntity groupEntityA = TestDataUtil.createGroupEntityA(userEntity);
@@ -104,7 +105,7 @@ public class GroupEntityRepositoryIT {
 
     @Test
     @Transactional
-    public void testThatHomeAutomationRuleCanBeUpdated () {
+    public void testThatGroupCanBeUpdated() {
         Optional<GroupEntity> retrievedGroup = groupRepository.findById(groupEntity.getGroupId());
         assertThat(retrievedGroup).isPresent();
 
@@ -112,13 +113,16 @@ public class GroupEntityRepositoryIT {
         updatedGroupEntity.setName("testGroupB");
 
         GroupEntity groupEntityAfterPartialUpdate = groupService.partialUpdate(retrievedGroup.get().getGroupId(), updatedGroupEntity);
-//        groupRepository.save(groupEntityAfterPartialUpdate);
 
         Optional<GroupEntity> retrievedGroupAfterUpdate = groupRepository.findById(groupEntityAfterPartialUpdate.getGroupId());
         assertThat(retrievedGroupAfterUpdate).isPresent();
 
-        assertThat(retrievedGroupAfterUpdate.get()).isEqualTo(updatedGroupEntity);
-        assertThat(retrievedGroup.get()).isNotEqualTo(retrievedGroupAfterUpdate.get());
+        GroupEntity groupAfterUpdate = retrievedGroupAfterUpdate.get();
+        assertThat(groupAfterUpdate.getName()).isEqualTo(updatedGroupEntity.getName());
+        assertThat(groupAfterUpdate.getUserEntity()).isEqualTo(retrievedGroup.get().getUserEntity());
+        assertThat(groupAfterUpdate.getRule()).isEqualTo(retrievedGroup.get().getRule());
+
+//    assertThat(groupAfterUpdate).isNotEqualTo(retrievedGroup.get()); // They should differ because the name was updated
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.GroupService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,8 +67,9 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findById(id).map(existingDevice -> {
             Optional.ofNullable(deviceEntity.getName()).ifPresent(existingDevice::setName);
             Optional.ofNullable(deviceEntity.getType()).ifPresent(existingDevice::setType);
-//            Optional.ofNullable(deviceEntity.getGroupEntity()).ifPresent(existingDevice::setGroupEntity);
-//            Optional.ofNullable(deviceEntity.getBehaviourEntities()).ifPresent(existingDevice::setBehaviourEntities);
+            Optional.ofNullable(deviceEntity.getRules()).ifPresent(newRules -> {
+                existingDevice.setRules(new ArrayList<>(newRules));
+            });
             return deviceRepository.save(existingDevice);
         }).orElseThrow(() -> new RuntimeException("Device does not exist"));
     }

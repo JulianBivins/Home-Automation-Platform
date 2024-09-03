@@ -61,8 +61,32 @@ public class UserServiceImpl implements UserService {
         }).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
 
+    public UserEntity secondPartialUpdate(Long id, UserEntity userEntity) {
+        Optional<UserEntity> existingUserOptional = userRepository.findById(id);
+        if (existingUserOptional.isEmpty()) throw new RuntimeException("User not found with id: " + id);
+
+        userEntity.setUserId(id);
+        UserEntity existingUser = existingUserOptional.get();
+
+        if (userEntity.getUsername() != null) {
+                existingUser.setUsername(userEntity.getUsername());
+            }
+            if (userEntity.getPassword() != null) {
+                existingUser.setPassword(userEntity.getPassword());
+            }
+            if (userEntity.getRules() != null && !userEntity.getRules().isEmpty()) {
+                existingUser.setRules(userEntity.getRules());
+            }
+            if (userEntity.getGroups() != null && !userEntity.getGroups().isEmpty()) {
+                existingUser.setGroups(userEntity.getGroups());
+            }
+            return userRepository.save(existingUser);
+    }
+
+
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
 }
+

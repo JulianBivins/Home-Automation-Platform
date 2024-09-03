@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,13 +26,13 @@ public class HomeAutomationRuleDto {
 
     private UserDto userDto;
 
-    private List<GroupDto> groupDtos;
+    private List<GroupDto> groupDtos = new ArrayList<>();
 
-    private List<DeviceDto> deviceDtos;
+    private List<DeviceDto> deviceDtos = new ArrayList<>();
 
-    private List<Event> events;
+    private Event event;
 
-    private Map<DeviceDto, Behaviour> deviceBehaviours;
+    private Map<DeviceDto, Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Event {
         TIME,

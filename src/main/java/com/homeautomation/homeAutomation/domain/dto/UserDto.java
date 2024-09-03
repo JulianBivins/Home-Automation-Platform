@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class UserDto {
 
     String password;
 
-    private List<HomeAutomationRuleDto> rules;
+    private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
     public UserDto(Long l, String userEntityB, List<HomeAutomationRuleDto> homeAutomationRuleEntities) {
 

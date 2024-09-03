@@ -20,7 +20,7 @@ public interface HomeAutomationRuleService {
 
     Optional<HomeAutomationRuleEntity> findByRuleName (String ruleName);
 
-    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
+//    List<HomeAutomationRuleEntity> findByGroupEntities_GroupId(Long groupId);
 
 
     HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity);

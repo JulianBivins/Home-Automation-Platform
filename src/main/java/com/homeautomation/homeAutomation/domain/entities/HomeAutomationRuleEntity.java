@@ -29,7 +29,7 @@ public class HomeAutomationRuleEntity {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
-    private List<GroupEntity> groupEntities;
+    private List<GroupEntity> groupEntities = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -37,7 +37,7 @@ public class HomeAutomationRuleEntity {
         joinColumns = @JoinColumn(name = "rule_id"),
         inverseJoinColumns = @JoinColumn(name = "device_id")
     )
-    private List<DeviceEntity> deviceEntities;
+    private List<DeviceEntity> deviceEntities = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event")

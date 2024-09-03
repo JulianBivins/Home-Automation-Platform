@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,6 @@ public class DeviceEntity {
     private UserEntity userEntity;
 
     @ManyToMany(mappedBy = "deviceEntities", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<HomeAutomationRuleEntity> rules;
+    private List<HomeAutomationRuleEntity> rules = new ArrayList<>();
 }
 

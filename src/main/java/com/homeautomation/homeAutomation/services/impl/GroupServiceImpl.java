@@ -68,11 +68,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.findById(id).map(existingGroup -> {
             Optional.ofNullable(groupEntity.getUserEntity()).ifPresent(existingGroup::setUserEntity);
             Optional.ofNullable(groupEntity.getName()).ifPresent(existingGroup::setName);
-//            Optional.ofNullable(groupEntity.getDevices()).ifPresent(newDevices -> {
-//                existingGroup.setDevices(new ArrayList<>(newDevices));
-//            });
-//            return groupRepository.save(existingGroup);
-            return existingGroup;
+            return groupRepository.save(existingGroup);
         }).orElseThrow(() -> new RuntimeException("Group does not exist"));
     }
 

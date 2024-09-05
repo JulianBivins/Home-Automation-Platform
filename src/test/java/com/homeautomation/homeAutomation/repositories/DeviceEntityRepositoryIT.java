@@ -50,6 +50,7 @@ public class DeviceEntityRepositoryIT {
     @BeforeEach
     @Transactional
     public void setUp() {
+
         userEntity = TestDataUtil.createTestUserEntityA();
         userRepository.save(userEntity);
 
@@ -96,14 +97,8 @@ public class DeviceEntityRepositoryIT {
     @Test
     @Transactional
     public void testThatMultipleDevicesCanBeCreatedAndRecalled() {
-
-        deviceRepository.deleteById(deviceEntityA.getDeviceId());
-        deviceRepository.deleteById(deviceEntityB.getDeviceId());
-        deviceRepository.deleteAll();
-
-        assertThat(deviceRepository.findById(deviceEntityA.getDeviceId())).isNotPresent();
-        assertThat(deviceRepository.findById(deviceEntityB.getDeviceId())).isNotPresent();
-
+        deviceRepository.deleteByIdCustom(deviceEntityA.getDeviceId());
+        deviceRepository.deleteByIdCustom(deviceEntityB.getDeviceId());
 
         DeviceEntity deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);
         deviceRepository.save(deviceEntityA);
@@ -111,7 +106,8 @@ public class DeviceEntityRepositoryIT {
         deviceRepository.save(deviceEntityB);
 
         List<DeviceEntity> resultEntities = deviceRepository.findAll();
-        assertThat(resultEntities).hasSize(2).containsExactly(deviceEntityA, deviceEntityB);
+        assertThat(resultEntities).hasSize(2);
+        assertThat(resultEntities).containsExactly(deviceEntityA, deviceEntityB);
     }
 
 

@@ -8,6 +8,7 @@ import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,8 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
             Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
             Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
             Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities()).ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
+            Optional.ofNullable(homeAutomationRuleEntity.getDeviceEntities()).ifPresent(newDevices -> existingRule.setDeviceEntities(new ArrayList<>(newDevices)));
+            Optional.ofNullable(homeAutomationRuleEntity.getDeviceBehaviours()).ifPresent(newBehaviours -> existingRule.setDeviceBehaviours(new HashMap<>(newBehaviours)));
             return homeAutomationRuleRepository.save(existingRule);
         }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
     }

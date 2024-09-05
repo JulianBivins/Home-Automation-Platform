@@ -56,7 +56,7 @@ public class UserEntityRepositoryIT {
     @Transactional
     public void setUp() {
 
-        userRepository.deleteAll();
+//        userRepository.deleteAll();
         userEntity = TestDataUtil.createTestUserEntityA();
         userRepository.save(userEntity);
 
@@ -89,7 +89,7 @@ public class UserEntityRepositoryIT {
         Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
         assertThat(retrievedUser).isPresent();
 
-        userRepository.deleteById(retrievedUser.get().getUserId());
+        userRepository.deleteByIdCustom(retrievedUser.get().getUserId());
         Optional<UserEntity> retrievedUserAfterDeletion = userRepository.findByUsername(userEntity.getUsername());
         assertThat(retrievedUserAfterDeletion).isNotPresent();
     }
@@ -99,7 +99,7 @@ public class UserEntityRepositoryIT {
     @Transactional
     public void testThatMultipleUsersCanBeCreatedAndRecalled() {
 
-        userRepository.deleteById(userEntity.getUserId());
+        userRepository.deleteByIdCustom(userEntity.getUserId());
 //        userRepository.deleteAll();
 
 

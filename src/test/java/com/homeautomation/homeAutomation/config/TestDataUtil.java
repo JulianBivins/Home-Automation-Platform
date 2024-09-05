@@ -42,7 +42,6 @@ public final class TestDataUtil {
         groupEntities.add(groupEntity);
         ruleEntityA.setGroupEntities(groupEntities);
 
-        // Add DeviceEntities to Rule and Set Behaviors
         ruleEntityA.setDeviceEntities(devices);
         Map<DeviceEntity, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
                 devices.get(0), HomeAutomationRuleEntity.Behaviour.ON,

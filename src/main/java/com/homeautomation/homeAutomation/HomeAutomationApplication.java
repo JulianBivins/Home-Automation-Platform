@@ -6,7 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HomeAutomationApplication implements CommandLineRunner {
+public class HomeAutomationApplication
+//		implements CommandLineRunner
+{
 
 	private final UserRepository userRepository;
 
@@ -18,8 +20,8 @@ public class HomeAutomationApplication implements CommandLineRunner {
 		SpringApplication.run(HomeAutomationApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-		userRepository.findAll().forEach(System.out::println);
-	}
+//	@Override
+//	public void run(String... args) throws Exception {
+//		userRepository.findAll().forEach(System.out::println);
+//	}
 }

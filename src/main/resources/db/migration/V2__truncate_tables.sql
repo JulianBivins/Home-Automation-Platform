@@ -1,0 +1,11 @@
+--
+--SET FOREIGN_KEY_CHECKS = 0;
+--
+--TRUNCATE TABLE device_rule;
+--TRUNCATE TABLE rule_device_behaviour;
+--TRUNCATE TABLE `groups`;
+--TRUNCATE TABLE home_automation_rules;
+--TRUNCATE TABLE devices;
+--TRUNCATE TABLE users;
+--
+--SET FOREIGN_KEY_CHECKS = 1;

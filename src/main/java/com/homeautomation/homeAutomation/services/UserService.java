@@ -11,7 +11,7 @@ public interface UserService {
 
     Iterable<UserEntity> findAll();
 
-    Optional<UserEntity> findOne(Long id);
+    Optional<UserEntity> findById(Long id);
 
     Optional<UserEntity> findByUsername(String username);
 
@@ -21,4 +21,6 @@ public interface UserService {
     UserEntity secondPartialUpdate(Long id, UserEntity userEntity);
 
     void delete(Long id);
+
+    void deleteByIdCustom(Long userId);
 }

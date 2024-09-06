@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.config;
 
+import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,13 @@ public final class TestDataUtil {
         userEntityA.setPassword("1234");
         return userEntityA;
     }
+
+//    public static UserDto createTestUserDtoB() {
+//        UserDto userDtoB = new UserDto();
+//        userDtoB.setUsername("testuserB");
+//        userDtoB.setPassword("5678");
+//        return userDtoB;
+//    }
 
     public static UserEntity createTestUserEntityB() {
         UserEntity userEntityB = new UserEntity();

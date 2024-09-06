@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Optional<UserEntity> findOne(Long id) {
+    public Optional<UserEntity> findById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -87,6 +87,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByIdCustom(Long userId) {
+        userRepository.deleteByIdCustom(userId);
     }
 }
 

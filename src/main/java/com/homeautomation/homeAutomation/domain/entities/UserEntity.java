@@ -26,14 +26,10 @@ public class UserEntity {
 
     String password;
 
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL
-          , orphanRemoval = true
-  )
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HomeAutomationRuleEntity> rules = new ArrayList<>();
 
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL
-          , orphanRemoval = true
-  )
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupEntity> groups = new ArrayList<>();
 
     public UserEntity(String username, String password) {

@@ -6,7 +6,6 @@ import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,7 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(value = "/users", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
-//    @PostMapping("/users")
+    @PostMapping("/users")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserEntity userEntity = userMapper.mapFrom(userDto);
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
@@ -59,14 +57,13 @@ public class UserController {
         return new ResponseEntity<>(userMapper.mapTo(savedUpdatedUser), HttpStatus.OK);
     }
 
-    // Passing in the whole user and updating the necessary fields.
     @PatchMapping("/users/{userId}")
-    public ResponseEntity<UserDto> partialUpdate(@PathVariable Long id, @RequestBody UserDto userDto) {
-            if(!userService.isExists(id)) {
+    public ResponseEntity<UserDto> partialUpdate(@PathVariable Long userId, @RequestBody UserDto userDto) {
+            if(!userService.isExists(userId)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             UserEntity userEntity = userMapper.mapFrom(userDto);
-            UserEntity updatedDevice = userService.partialUpdate(id, userEntity);
+            UserEntity updatedDevice = userService.partialUpdate(userId, userEntity);
             return new ResponseEntity<>(
                     userMapper.mapTo(updatedDevice),
                     HttpStatus.OK);
@@ -78,6 +75,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         userService.deleteByIdCustom(userId);
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

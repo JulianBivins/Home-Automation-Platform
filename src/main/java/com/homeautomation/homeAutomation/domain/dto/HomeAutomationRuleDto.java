@@ -1,9 +1,5 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
-//import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
-import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
-import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
-import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +28,7 @@ public class HomeAutomationRuleDto {
 
     private Event event;
 
-    private Map<DeviceDto, Behaviour> deviceBehaviours = new HashMap<>();
+    private Map<Long, Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Event {
         TIME,

@@ -25,91 +25,87 @@ public class HomeAutomationRuleController {
     private  HomeAutomationRuleService homeAutomationRuleService;
 
     @Autowired
-    private  Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper;
-//    @Autowired
-//    private BehaviourService behaviourService;
+    private  Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> ruleMapper;
 
-//    public HomeAutomationRuleController(HomeAutomationRuleService homeAutomationRuleService, Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> homeAutomationRuleMapper) {
-//        this.homeAutomationRuleService = homeAutomationRuleService;
-//        this.homeAutomationRuleMapper = homeAutomationRuleMapper;
+
+//     @GetMapping("rules/{ruleId}")
+//        public ResponseEntity<HomeAutomationRuleDto> getRuleById (@PathVariable Long ruleId) {
+//        //Every I rule id should be uniquely tied to the user. user1  rule id 1 different from user2 rule2 rule id 1
+//         //need to first validate which rule belongs to which user and then give out appropriate response
+//            Optional<HomeAutomationRuleEntity> returnedRule = homeAutomationRuleService.findOne(ruleId);
+//            return returnedRule.map(ruleEntity -> {
+//                HomeAutomationRuleDto homeAutomationRuleDto = homeAutomationRuleMapper.mapTo(ruleEntity);
+//                return new ResponseEntity<>(homeAutomationRuleDto, HttpStatus.OK);
+//            }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+//        }
+//
+//    @GetMapping("/rules/list")
+//    public List<HomeAutomationRuleDto> listHomeAutomationRules() {
+//        //need to make sure only rules tied to specific user is being spit out. Need to test. Don't know if the Jpa annotations solve this problem for me yet.
+//        //need to first validate which rule belongs to which user and then give out appropriate response
+//        Iterable<HomeAutomationRuleEntity> rules = homeAutomationRuleService.findAll();
+//        return StreamSupport.stream(
+//                rules.spliterator(), false)
+//                .map(homeAutomationRuleMapper::mapTo)
+//                .collect(Collectors.toList());
 //    }
 
+//    @GetMapping("/rules/{ruleId}/behaviours")
+//    public ResponseEntity<ArrayList<String>> retrieveBehavioursByRule (@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+////        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByRuleID(homeAutomationRuleDto);
+//        ArrayList<String> behaviourArray = new ArrayList<>();
+////        for(var behaviour : behaviours) {
+////            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+////        }
+//        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
+//    }
 
-//TODO ALL
-    //need to check this solution
-
-     @GetMapping("rules/{ruleId}")
-        public ResponseEntity<HomeAutomationRuleDto> getRuleById (@PathVariable Long ruleId) {
-        //Every I rule id should be uniquely tied to the user. user1  rule id 1 different from user2 rule2 rule id 1
-         //need to first validate which rule belongs to which user and then give out appropriate response
-            Optional<HomeAutomationRuleEntity> returnedRule = homeAutomationRuleService.findOne(ruleId);
-            return returnedRule.map(ruleEntity -> {
-                HomeAutomationRuleDto homeAutomationRuleDto = homeAutomationRuleMapper.mapTo(ruleEntity);
-                return new ResponseEntity<>(homeAutomationRuleDto, HttpStatus.OK);
-            }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        }
-
-    @GetMapping("/rules/list")
-    public List<HomeAutomationRuleDto> listHomeAutomationRules() {
-        //need to make sure only rules tied to specific user is being spit out. Need to test. Don't know if the Jpa annotations solve this problem for me yet.
-        //need to first validate which rule belongs to which user and then give out appropriate response
-        Iterable<HomeAutomationRuleEntity> rules = homeAutomationRuleService.findAll();
-        return StreamSupport.stream(
-                rules.spliterator(), false)
-                .map(homeAutomationRuleMapper::mapTo)
-                .collect(Collectors.toList());
+    @PostMapping("/rules")
+    public ResponseEntity<HomeAutomationRuleDto> createHomeAutomationRuleEntity(@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+        HomeAutomationRuleEntity ruleEntity = ruleMapper.mapFrom(homeAutomationRuleDto);
+        HomeAutomationRuleEntity createdRuleEntity = homeAutomationRuleService.save(ruleEntity);
+        return new ResponseEntity<>(ruleMapper.mapTo(createdRuleEntity), HttpStatus.OK);
     }
 
-
-    @GetMapping("/rules/{ruleId}/behaviours")
-    public ResponseEntity<ArrayList<String>> retrieveBehavioursByRule (@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
-//        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByRuleID(homeAutomationRuleDto);
-        ArrayList<String> behaviourArray = new ArrayList<>();
-//        for(var behaviour : behaviours) {
-//            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
+//@PostMapping("/rules/{ruleId}")
+//    public ResponseEntity<HomeAutomationRuleDto> createUpdateFullRule (@PathVariable Long ruleId, @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+//
+//        HomeAutomationRuleEntity homeAutomationRuleEntity = homeAutomationRuleMapper.mapFrom(homeAutomationRuleDto);
+//        boolean ruleExists = homeAutomationRuleService.isExists(ruleId);
+//        HomeAutomationRuleEntity savedHomeAutomationRule = homeAutomationRuleService.saveUpdate(ruleId, homeAutomationRuleEntity);
+//        HomeAutomationRuleDto savedUpdatedHomeAutomationRuleDto = homeAutomationRuleMapper.mapTo(savedHomeAutomationRule);
+//
+//        if(ruleExists){
+//            return new ResponseEntity(savedUpdatedHomeAutomationRuleDto, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity(savedUpdatedHomeAutomationRuleDto, HttpStatus.CREATED);
 //        }
-        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
-    }
-
-    @PostMapping("rules/{ruleId}")
-    public ResponseEntity<HomeAutomationRuleDto> createUpdateFullRule (@PathVariable Long ruleId, @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
-
-        HomeAutomationRuleEntity homeAutomationRuleEntity = homeAutomationRuleMapper.mapFrom(homeAutomationRuleDto);
-        boolean ruleExists = homeAutomationRuleService.isExists(ruleId);
-        HomeAutomationRuleEntity savedHomeAutomationRule = homeAutomationRuleService.saveUpdate(ruleId, homeAutomationRuleEntity);
-        HomeAutomationRuleDto saedUpdatedHomeAutomationRuleDto = homeAutomationRuleMapper.mapTo(savedHomeAutomationRule);
-
-        if(ruleExists){
-            return new ResponseEntity(saedUpdatedHomeAutomationRuleDto, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(saedUpdatedHomeAutomationRuleDto, HttpStatus.CREATED);
-        }
-
-    }
-
-    //TODO
-    @PatchMapping("rules/{device}")
-    void addDevice (@RequestBody DeviceEntity deviceEntity){
-        //Device id will be generated for the specific homeautomationrule
-
-    }
-
-
-    @DeleteMapping( "/rules/{ruleId}")
-    public ResponseEntity deleteRule(@PathVariable Long id) {
-         if(!homeAutomationRuleService.isExists(id)) {
-             return new ResponseEntity(HttpStatus.NOT_FOUND);
-         }
-        homeAutomationRuleService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/{ruleId}/devices/{deviceId}")
-    public ResponseEntity removeDeviceFromRule(@PathVariable Long ruleId, @PathVariable Long deviceId) {
-        homeAutomationRuleService.removeDeviceFromRule(ruleId, deviceId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-
-
+//
+//    }
+//
+//    //TODO
+//    @PatchMapping("rules/{device}")
+//    void addDevice (@RequestBody DeviceEntity deviceEntity){
+//        //Device id will be generated for the specific homeautomationrule
+//
+//    }
+//
+//
+//    @DeleteMapping( "/rules/{ruleId}")
+//    public ResponseEntity deleteRule(@PathVariable Long id) {
+//         if(!homeAutomationRuleService.isExists(id)) {
+//             return new ResponseEntity(HttpStatus.NOT_FOUND);
+//         }
+//        homeAutomationRuleService.delete(id);
+//        return new ResponseEntity(HttpStatus.NO_CONTENT);
+//    }
+//
+//    @DeleteMapping("/{ruleId}/devices/{deviceId}")
+//    public ResponseEntity removeDeviceFromRule(@PathVariable Long ruleId, @PathVariable Long deviceId) {
+//        homeAutomationRuleService.removeDeviceFromRule(ruleId, deviceId);
+//        return new ResponseEntity(HttpStatus.NO_CONTENT);
+//    }
+//
+//
+//
 }

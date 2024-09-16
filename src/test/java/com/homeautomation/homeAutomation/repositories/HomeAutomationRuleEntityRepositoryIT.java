@@ -242,12 +242,12 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRule).isPresent();
 
         retrievedRule.get().setDeviceBehaviours(new HashMap<>(retrievedRule.get().getDeviceBehaviours()));
-        retrievedRule.get().getDeviceBehaviours().put(deviceEntityA, HomeAutomationRuleEntity.Behaviour.TIMED);
+        retrievedRule.get().getDeviceBehaviours().put(deviceEntityA.getDeviceId(), HomeAutomationRuleEntity.Behaviour.TIMED);
         ruleRepository.save(retrievedRule.get());
 
         Optional<HomeAutomationRuleEntity> retrievedRuleAfterSettingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());
         assertThat(retrievedRuleAfterSettingBehaviour).isPresent();
-        assertThat(retrievedRuleAfterSettingBehaviour.get().getDeviceBehaviours()).containsEntry(deviceEntityA, HomeAutomationRuleEntity.Behaviour.TIMED);
+        assertThat(retrievedRuleAfterSettingBehaviour.get().getDeviceBehaviours()).containsEntry(deviceEntityA.getDeviceId(), HomeAutomationRuleEntity.Behaviour.TIMED);
     }
 
     @Test
@@ -262,7 +262,7 @@ public class HomeAutomationRuleEntityRepositoryIT {
 
         Optional<HomeAutomationRuleEntity> retrievedRuleAfterRemovingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());
         assertThat(retrievedRuleAfterRemovingBehaviour).isPresent();
-        assertThat(retrievedRuleAfterRemovingBehaviour.get().getDeviceBehaviours()).doesNotContainKey(deviceEntityA);
+        assertThat(retrievedRuleAfterRemovingBehaviour.get().getDeviceBehaviours()).doesNotContainKey(deviceEntityA.getDeviceId());
     }
 
 }

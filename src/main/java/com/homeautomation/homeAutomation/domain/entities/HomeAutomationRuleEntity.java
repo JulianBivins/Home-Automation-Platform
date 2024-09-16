@@ -52,13 +52,19 @@ public class HomeAutomationRuleEntity {
         WHEN_INSERT_OFF
     }
 
-    @MapKeyJoinColumn(name = "device_id")
-    @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "device_id")
+//    @MapKeyJoinColumn(name = "device_id")
+//    @MapKeyEnumerated(EnumType.STRING)
+//    @MapKeyColumn(name = "device_id")
+//    @ElementCollection
+//    @CollectionTable(name = "rule_device_behaviour", joinColumns = @JoinColumn(name = "rule_id"))
+//    @Column(name = "behaviour")
+//    private Map<DeviceEntity, Behaviour> deviceBehaviours = new HashMap<>();
+
     @ElementCollection
     @CollectionTable(name = "rule_device_behaviour", joinColumns = @JoinColumn(name = "rule_id"))
+    @MapKeyColumn(name = "device_id")
     @Column(name = "behaviour")
-    private Map<DeviceEntity, Behaviour> deviceBehaviours = new HashMap<>();
+    private Map<Long, Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Behaviour {
         ON,

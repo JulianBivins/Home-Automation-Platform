@@ -34,19 +34,20 @@ public class HomeAutomationApplication
 
 	@Override
 	public void run(String... args) throws Exception {
-//		userRepository.findAll().forEach(System.out::println);
-        testUserEntityA = createTestUserEntityA();
-        userRepository.save(testUserEntityA);
-        UserDto testUserDtoA = userMapper.mapTo(testUserEntityA);
-        String userJson = objectMapper.writeValueAsString(testUserDtoA);
-        System.out.println("THIS IS THE MAPPED USER = " + testUserDtoA);
-        System.out.println("THIS IS USERJSON = " + userJson);
+////		userRepository.findAll().forEach(System.out::println);
+////        testUserEntityA = createTestUserEntityA();
+////        userRepository.save(testUserEntityA);
+////        UserDto testUserDtoA = userMapper.mapTo(testUserEntityA);
+////        String userJson = objectMapper.writeValueAsString(testUserDtoA);
+////        System.out.println("THIS IS THE MAPPED USER = " + testUserDtoA);
+////        System.out.println("THIS IS USERJSON = " + userJson);
+        userRepository.deleteAll();
 	}
-
-    public static UserEntity createTestUserEntityA() {
-        UserEntity userEntityA = new UserEntity();
-        userEntityA.setUsername("testuserA");
-        userEntityA.setPassword("1234");
-        return userEntityA;
-    }
+//
+//    public static UserEntity createTestUserEntityA() {
+//        UserEntity userEntityA = new UserEntity();
+//        userEntityA.setUsername("testuserA");
+//        userEntityA.setPassword("1234");
+//        return userEntityA;
+//    }
 }

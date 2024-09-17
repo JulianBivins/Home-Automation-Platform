@@ -23,4 +23,6 @@ public interface UserService {
     void delete(Long id);
 
     void deleteByIdCustom(Long userId);
+
+    boolean existsByUsername(String username);
 }

@@ -65,7 +65,9 @@ public class UserEntityRepositoryIT {
 
         deviceEntityA = TestDataUtil.createDeviceEntityA(userEntity);
         deviceEntityB = TestDataUtil.createDeviceEntityB(userEntity);
-        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityA));
+//        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityA));
+        deviceRepository.save(deviceEntityA);
+        deviceRepository.save(deviceEntityB);
 
         rule1 = TestDataUtil.createTestRuleEntityA(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         rule2 = TestDataUtil.createTestRuleEntityC(userEntity, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
@@ -148,22 +150,6 @@ public class UserEntityRepositoryIT {
 //        assertThat(retrievedUser.get()).isNotEqualTo(retrievedUserAfterUpdate.get());
     }
 
-//    @Test
-//    @Transactional
-//    public void testCascadeDeleteUserEntity() {
-//        Optional<UserEntity> retrievedUser = userRepository.findById(userEntity.getUserId());
-//        assertThat(retrievedUser).isPresent();
-//
-//        userRepository.deleteById(retrievedUser.get().getUserId());
-//        userRepository.flush();
-//
-//        Optional<UserEntity> deletedUser = userRepository.findById(userEntity.getUserId());
-//        assertThat(deletedUser).isNotPresent();
-//
-//        assertThat(groupRepository.findById(groupEntity.getGroupId())).isNotPresent();
-//        assertThat(ruleRepository.findById(rule1.getRuleId())).isNotPresent();
-//        assertThat(ruleRepository.findById(rule2.getRuleId())).isNotPresent();
-//    }
 
     @Test
     @Transactional

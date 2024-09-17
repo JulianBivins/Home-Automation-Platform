@@ -38,7 +38,7 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     }
 
     @Override
-    public Optional<HomeAutomationRuleEntity> findOne(Long id) {
+    public Optional<HomeAutomationRuleEntity> findById(Long id) {
         return homeAutomationRuleRepository.findById(id);
     }
 
@@ -106,10 +106,11 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         if (ruleOptional.isPresent()) {
             HomeAutomationRuleEntity rule = ruleOptional.get();
 
-            rule.getDeviceEntities().removeIf(device -> device.getDeviceId().equals(deviceId));
+            if(!rule.getDeviceEntities().removeIf(device -> device.getDeviceId().equals(deviceId))) throw new RuntimeException("This device Id isn't associated with this particular rule");
 
-            homeAutomationRuleRepository.save(rule);
-        } else {
+//            homeAutomationRuleRepository.save(rule);
+            partialUpdate(ruleId, rule);
+        } else{
             throw new RuntimeException("Rule not found with id: " + ruleId);
         }
     }

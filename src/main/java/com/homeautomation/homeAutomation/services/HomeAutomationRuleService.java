@@ -14,7 +14,7 @@ public interface HomeAutomationRuleService {
 
     Iterable<HomeAutomationRuleEntity> findAll();
 
-    Optional<HomeAutomationRuleEntity> findOne(Long id);
+    Optional<HomeAutomationRuleEntity> findById(Long id);
 
     List<HomeAutomationRuleEntity> getRulesByUserId(UserEntity userEntity);
 

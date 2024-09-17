@@ -257,7 +257,7 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRule).isPresent();
 
         retrievedRule.get().setDeviceBehaviours(new HashMap<>(retrievedRule.get().getDeviceBehaviours()));
-        retrievedRule.get().getDeviceBehaviours().remove(deviceEntityA);
+        retrievedRule.get().getDeviceBehaviours().remove(deviceEntityA.getDeviceId());
         ruleRepository.save(retrievedRule.get());
 
         Optional<HomeAutomationRuleEntity> retrievedRuleAfterRemovingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());

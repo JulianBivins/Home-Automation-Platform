@@ -19,6 +19,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -189,6 +192,8 @@ public class UserEntityControllerIT {
     public void testThatDeleteUserReturnsHttpStatus204ForExistingUser() throws Exception {
         UserEntity testUserEntityA = TestDataUtil.createTestUserEntityA();
         UserEntity savedUser = userService.save(testUserEntityA);
+
+        System.out.println("LOGGING = " + testUserEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/users/" + savedUser.getUserId())

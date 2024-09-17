@@ -93,5 +93,10 @@ public class UserServiceImpl implements UserService {
     public void deleteByIdCustom(Long userId) {
         userRepository.deleteByIdCustom(userId);
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+       return userRepository.existsByUsername(username);
+    }
 }
 

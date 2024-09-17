@@ -2,10 +2,12 @@ package com.homeautomation.homeAutomation.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homeautomation.homeAutomation.config.TestDataUtil;
+import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
@@ -46,6 +48,8 @@ public class HomeAutomationRuleEntityControllerIT {
     private DeviceRepository deviceRepository;
     @Autowired
     private HomeAutomationRuleRepository ruleRepository;
+    @Autowired
+    private Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> ruleMapper;
 
     private UserEntity userEntityA;
     private HomeAutomationRuleEntity ruleEntityA;
@@ -64,7 +68,9 @@ public class HomeAutomationRuleEntityControllerIT {
 
         deviceEntityA = TestDataUtil.createDeviceEntityA(userEntityA);
         deviceEntityB = TestDataUtil.createDeviceEntityB(userEntityA);
-        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityB));
+        deviceRepository.save(deviceEntityA);
+        deviceRepository.save(deviceEntityB);
+//        deviceRepository.saveAll(List.of(deviceEntityA, deviceEntityB));
 
         ruleEntityA = TestDataUtil.createTestRuleEntityA(userEntityA, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntityB)));
         ruleRepository.save(ruleEntityA);
@@ -73,7 +79,8 @@ public class HomeAutomationRuleEntityControllerIT {
 
     @Test
     public void testThatCreateRuleSuccessfullyReturnsHttp201Created() throws Exception {
-        String ruleJson = objectMapper.writeValueAsString(ruleEntityA);
+        HomeAutomationRuleDto ruleDtoA = ruleMapper.mapTo(ruleEntityA);
+        String ruleJson = objectMapper.writeValueAsString(ruleDtoA);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/rules")
                         .contentType(MediaType.APPLICATION_JSON)

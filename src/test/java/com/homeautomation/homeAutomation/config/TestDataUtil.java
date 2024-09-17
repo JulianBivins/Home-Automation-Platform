@@ -3,9 +3,7 @@ package com.homeautomation.homeAutomation.config;
 import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TestDataUtil {
 
@@ -16,20 +14,16 @@ public final class TestDataUtil {
         UserEntity userEntityA = new UserEntity();
         userEntityA.setUsername("testuserA");
         userEntityA.setPassword("1234");
+        userEntityA.setRole(new HashSet<>(Set.of(UserEntity.Roles.ADMIN)));
         return userEntityA;
     }
 
-//    public static UserDto createTestUserDtoB() {
-//        UserDto userDtoB = new UserDto();
-//        userDtoB.setUsername("testuserB");
-//        userDtoB.setPassword("5678");
-//        return userDtoB;
-//    }
 
     public static UserEntity createTestUserEntityB() {
         UserEntity userEntityB = new UserEntity();
         userEntityB.setUsername("testuserB");
         userEntityB.setPassword("5678");
+        userEntityB.setRole(new HashSet<>(Set.of(UserEntity.Roles.USER)));
         return userEntityB;
     }
 
@@ -37,6 +31,7 @@ public final class TestDataUtil {
         UserEntity userEntityC = new UserEntity();
         userEntityC.setUsername("testuserC");
         userEntityC.setPassword("9012");
+        userEntityC.setRole(new HashSet<>(Set.of(UserEntity.Roles.USER)));
         return userEntityC;
     }
 
@@ -49,6 +44,10 @@ public final class TestDataUtil {
         List<GroupEntity> groupEntities = new ArrayList<>();
         groupEntities.add(groupEntity);
         ruleEntityA.setGroupEntities(groupEntities);
+
+        if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
+            throw new IllegalStateException("Device IDs must not be null");
+        }
 
         ruleEntityA.setDeviceEntities(devices);
         Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
@@ -72,6 +71,10 @@ public final class TestDataUtil {
         groupEntities.add(groupEntity);
         ruleEntityB.setGroupEntities(groupEntities);
 
+        if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
+            throw new IllegalStateException("Device IDs must not be null");
+        }
+
         ruleEntityB.setDeviceEntities(devices);
         Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
                 devices.get(0).getDeviceId(), HomeAutomationRuleEntity.Behaviour.OFF,
@@ -93,6 +96,10 @@ public final class TestDataUtil {
         List<GroupEntity> groupEntities = new ArrayList<>();
         groupEntities.add(groupEntity);
         ruleEntityC.setGroupEntities(groupEntities);
+
+        if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
+            throw new IllegalStateException("Device IDs must not be null");
+        }
 
         ruleEntityC.setDeviceEntities(devices);
         Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(

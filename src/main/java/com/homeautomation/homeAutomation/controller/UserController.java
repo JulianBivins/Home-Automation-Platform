@@ -18,6 +18,7 @@ import java.util.Set;
 
 
 @RestController
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
@@ -29,7 +30,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/users/me")
+    @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         String currentUsername = authentication.getName();
         Optional<UserEntity> retrievedUser = userService.findByUsername(currentUsername);
@@ -39,25 +40,25 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/users/register")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        if (userService.existsByUsername(userDto.getUsername())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        UserEntity userEntity = userMapper.mapFrom(userDto);
-        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
-        userEntity.setPassword(encodedPassword);
-
-        userEntity.setRole(new HashSet<>(Set.of(UserEntity.Roles.USER))); //Default
-
-        UserEntity createdUserEntity = userService.save(userEntity);
-        return new ResponseEntity<>(userMapper.mapTo(createdUserEntity), HttpStatus.CREATED);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+//        if (userService.existsByUsername(userDto.getUsername())) {
+//            return new ResponseEntity<>(HttpStatus.CONFLICT);
+//        }
+//        UserEntity userEntity = userMapper.mapFrom(userDto);
+//        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+//        userEntity.setPassword(encodedPassword);
+//
+//        userEntity.setRoles(new HashSet<>(Set.of(UserEntity.Roles.USER))); //Default
+//
+//        UserEntity createdUserEntity = userService.save(userEntity);
+//        return new ResponseEntity<>(userMapper.mapTo(createdUserEntity), HttpStatus.CREATED);
+//    }
 
 
     //For replacing the entire user (most likely won't be to relevant)
     @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    @PutMapping("/users/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateFullUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
         if(!userService.isExists(userId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    @PatchMapping("/users/{userId}")
+    @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> partialUpdate(@PathVariable Long userId, @RequestBody UserDto userDto) {
             if(!userService.isExists(userId)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -82,7 +83,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         if (!userService.isExists(userId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

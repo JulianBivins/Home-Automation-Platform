@@ -14,7 +14,7 @@ public final class TestDataUtil {
         UserEntity userEntityA = new UserEntity();
         userEntityA.setUsername("testuserA");
         userEntityA.setPassword("1234");
-        userEntityA.setRole(new HashSet<>(Set.of(UserEntity.Roles.ADMIN)));
+        userEntityA.setRoles(new HashSet<>(Set.of(UserEntity.Roles.ADMIN)));
         return userEntityA;
     }
 
@@ -23,7 +23,7 @@ public final class TestDataUtil {
         UserEntity userEntityB = new UserEntity();
         userEntityB.setUsername("testuserB");
         userEntityB.setPassword("5678");
-        userEntityB.setRole(new HashSet<>(Set.of(UserEntity.Roles.USER)));
+        userEntityB.setRoles(new HashSet<>(Set.of(UserEntity.Roles.USER)));
         return userEntityB;
     }
 
@@ -31,7 +31,7 @@ public final class TestDataUtil {
         UserEntity userEntityC = new UserEntity();
         userEntityC.setUsername("testuserC");
         userEntityC.setPassword("9012");
-        userEntityC.setRole(new HashSet<>(Set.of(UserEntity.Roles.USER)));
+        userEntityC.setRoles(new HashSet<>(Set.of(UserEntity.Roles.USER)));
         return userEntityC;
     }
 

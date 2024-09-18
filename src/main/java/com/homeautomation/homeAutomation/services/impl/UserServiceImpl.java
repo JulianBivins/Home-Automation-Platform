@@ -4,6 +4,9 @@ package com.homeautomation.homeAutomation.services.impl;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.repository.UserRepository;
 import com.homeautomation.homeAutomation.services.UserService;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -98,5 +101,7 @@ public class UserServiceImpl implements UserService {
     public boolean existsByUsername(String username) {
        return userRepository.existsByUsername(username);
     }
+
+
 }
 

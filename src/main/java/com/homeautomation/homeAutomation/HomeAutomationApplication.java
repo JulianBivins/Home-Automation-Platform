@@ -12,28 +12,28 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class HomeAutomationApplication
-		implements CommandLineRunner
+//		implements CommandLineRunner
 {
 
-    private final UserRepository userRepository;
-    private final Mapper<UserEntity, UserDto> userMapper; // Ensure this is injected
-    private final ObjectMapper objectMapper;
-
-    private UserEntity testUserEntityA;
-
-    @Autowired
-    public HomeAutomationApplication(UserRepository userRepository, Mapper<UserEntity, UserDto> userMapper, ObjectMapper objectMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper; // Injected via constructor
-        this.objectMapper = objectMapper;
-    }
+//    private final UserRepository userRepository;
+//    private final Mapper<UserEntity, UserDto> userMapper; // Ensure this is injected
+//    private final ObjectMapper objectMapper;
+//
+//    private UserEntity testUserEntityA;
+//
+//    @Autowired
+//    public HomeAutomationApplication(UserRepository userRepository, Mapper<UserEntity, UserDto> userMapper, ObjectMapper objectMapper) {
+//        this.userRepository = userRepository;
+//        this.userMapper = userMapper; // Injected via constructor
+//        this.objectMapper = objectMapper;
+//    }
 
     public static void main(String[] args) {
 		SpringApplication.run(HomeAutomationApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
+//	@Override
+//	public void run(String... args) throws Exception {
 ////		userRepository.findAll().forEach(System.out::println);
 ////        testUserEntityA = createTestUserEntityA();
 ////        userRepository.save(testUserEntityA);
@@ -41,8 +41,8 @@ public class HomeAutomationApplication
 ////        String userJson = objectMapper.writeValueAsString(testUserDtoA);
 ////        System.out.println("THIS IS THE MAPPED USER = " + testUserDtoA);
 ////        System.out.println("THIS IS USERJSON = " + userJson);
-        userRepository.deleteAll();
-	}
+//        userRepository.deleteAll();
+//	}
 //
 //    public static UserEntity createTestUserEntityA() {
 //        UserEntity userEntityA = new UserEntity();

@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class AuthenticationRequest {
     private String username;
     private String password;
+//    private Set<String> roles; //actually not needed, duh
 }

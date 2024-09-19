@@ -12,6 +12,7 @@ import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,6 +79,7 @@ public class HomeAutomationRuleEntityControllerIT {
     }
 
     @Test
+    @Transactional
     public void testThatCreateRuleSuccessfullyReturnsHttp201Created() throws Exception {
         HomeAutomationRuleDto ruleDtoA = ruleMapper.mapTo(ruleEntityA);
         String ruleJson = objectMapper.writeValueAsString(ruleDtoA);

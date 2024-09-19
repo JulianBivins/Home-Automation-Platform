@@ -24,7 +24,7 @@ public class UtilController {
     private Mapper<UserEntity, UserDto> userMapper;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("users/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         Optional<UserEntity> retrievedUser = userService.findById(userId);
         return retrievedUser.map(userEntity -> {

@@ -48,6 +48,7 @@ public class UtilControllerIT {
     }
 
     @Test
+    @Transactional
     public void testThatGetUserReturnsUserWhenUserExist() throws Exception {
         UserEntity testUserEntityA = TestDataUtil.createTestUserEntityA();
         userService.save(testUserEntityA);

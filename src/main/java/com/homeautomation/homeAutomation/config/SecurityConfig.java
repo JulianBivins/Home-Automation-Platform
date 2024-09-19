@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // Whitelisting
                         .requestMatchers("/users/**").hasAnyRole("ADMIN", "USER") // Securing other user paths
+                        .requestMatchers("/demo").hasAnyRole("ADMIN", "USER") // Securing other user paths
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session

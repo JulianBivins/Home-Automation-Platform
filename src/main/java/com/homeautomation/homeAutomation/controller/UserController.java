@@ -18,7 +18,7 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -30,6 +30,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")
     @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         String currentUsername = authentication.getName();

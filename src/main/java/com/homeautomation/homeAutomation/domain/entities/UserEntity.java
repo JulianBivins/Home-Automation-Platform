@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -46,13 +48,22 @@ public class UserEntity implements UserDetails {
         this.password = password;
     }
 
+//    @Override
+//    public String toString() {
+//        return "UserEntity{" +
+//               "userId=" + userId +
+//               ", username='" + username + '\'' +
+//               ", password='" + password + '\'' +
+////               ", rules=" + rules +
+//               '}';
+//    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
                "userId=" + userId +
                ", username='" + username + '\'' +
-               ", password='" + password + '\'' +
-//               ", rules=" + rules +
+               ", roles=" + roles +
                '}';
     }
 
@@ -74,8 +85,8 @@ public class UserEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(r -> (GrantedAuthority) () -> "ROLE_" + r.name()) // Convert roles to authorities
-                .toList();
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -51,20 +51,4 @@ public class AuthenticationController {
 
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<Void> authenticateUser(@RequestBody UserDto userDto) {
-//        UserEntity userEntity = userMapper.mapFrom(userDto);
-//
-//        Optional<UserEntity> retrievedUser = userService.findByUsername(userEntity.getUsername());
-//        if (retrievedUser.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//
-//        boolean matches = passwordEncoder.matches(userEntity.getPassword(), retrievedUser.get().getPassword());
-//        if (matches){
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
-
 }

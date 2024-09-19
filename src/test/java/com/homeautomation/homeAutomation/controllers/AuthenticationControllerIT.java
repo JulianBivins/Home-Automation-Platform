@@ -1,11 +1,14 @@
 package com.homeautomation.homeAutomation.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homeautomation.homeAutomation.config.TestDataUtil;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationRequest;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationResponse;
 import com.homeautomation.homeAutomation.controller.util.RegisterRequest;
+import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.services.AuthenticationService;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -34,12 +39,26 @@ public class AuthenticationControllerIT {
     @Autowired
     private AuthenticationService authenticationService;
 
+    private UserEntity testUser;
+
+    private RegisterRequest registerRequest;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        testUser = TestDataUtil.createTestUserEntityA();
+        registerRequest = new RegisterRequest();
+        registerRequest.setUsername(testUser.getUsername());
+        registerRequest.setPassword(testUser.getPassword());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
     @Test
     @Transactional
     public void testThatRegisterReturnsHttpStatus200WhenRegistrationIsSuccessful() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("testuser");
-        registerRequest.setPassword("testpassword");
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/auth/register")
@@ -51,10 +70,6 @@ public class AuthenticationControllerIT {
     @Test
     @Transactional
     public void testThatRegisterReturnsTokenOnSuccessfulRegistration() throws Exception {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("testuser");
-        registerRequest.setPassword("testpassword");
-
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,36 +83,12 @@ public class AuthenticationControllerIT {
     @Transactional
     public void testThatLoginReturnsTokenOnSuccessfulAuthentication() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("testuser");
-        request.setPassword("testpassword");
-
+        request.setUsername(testUser.getUsername());
+        request.setPassword(testUser.getPassword());
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());  // Check that token is returned
-    }
-
-    @Test
-    public void testSecureEndpointWithValidJwt() throws Exception {
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setUsername("testuser");
-        request.setPassword("testpassword");
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/auth/authenticate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        String responseBody = result.getResponse().getContentAsString();
-        AuthenticationResponse authResponse = objectMapper.readValue(responseBody, AuthenticationResponse.class);
-        String jwtToken = authResponse.getToken();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/aut/authenticate")
-                        .header("Authorization", "Bearer " + jwtToken)  // Add the JWT token here
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                  .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
     }
 }

@@ -2,6 +2,7 @@ package com.homeautomation.homeAutomation.services;
 
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +32,6 @@ public interface HomeAutomationRuleService {
 
     void removeDeviceFromRule(Long ruleId, Long deviceId);
 
+    boolean isOwner(Long ruleId, String currentUsername);
+    boolean isOwner(Long ruleId, Long deviceId, String currentUsername);
 }

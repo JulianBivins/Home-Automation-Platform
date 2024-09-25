@@ -13,6 +13,7 @@ import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -37,6 +38,7 @@ public class HomeAutomationRuleController {
     private Mapper<DeviceEntity, DeviceDto> deviceMapper;
 
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @GetMapping("/{ruleId}")
     public ResponseEntity<HomeAutomationRuleDto> getRuleById(@PathVariable Long ruleId, Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -54,6 +56,7 @@ public class HomeAutomationRuleController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<List<HomeAutomationRuleDto>> listHomeAutomationRules(Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -74,6 +77,7 @@ public class HomeAutomationRuleController {
 //        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
 //    }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @GetMapping("/rules/{ruleId}/Events")
     public ResponseEntity<String> getEventFromRule(@PathVariable Long ruleId) {
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
@@ -88,6 +92,7 @@ public class HomeAutomationRuleController {
         return new ResponseEntity<>(associatedEventString, HttpStatus.OK);
     }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @GetMapping("/rules/devices")
     public ResponseEntity<List<DeviceDto>> getDeviceAssociatedWithARule(@PathVariable Long ruleId) {
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
@@ -99,14 +104,19 @@ public class HomeAutomationRuleController {
         return  new ResponseEntity<>(deviceDtos, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/rules")
-    public ResponseEntity<HomeAutomationRuleDto> createHomeAutomationRuleEntity(@RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+    public ResponseEntity<HomeAutomationRuleDto> createHomeAutomationRuleEntity(@RequestBody HomeAutomationRuleDto homeAutomationRuleDto, Authentication authentication) {
+        String currentUsername = authentication.getName();
+        UserEntity currentUser = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("User not found"));
         HomeAutomationRuleEntity ruleEntity = ruleMapper.mapFrom(homeAutomationRuleDto);
+        ruleEntity.setUserEntity(currentUser);
+
         HomeAutomationRuleEntity createdRuleEntity = homeAutomationRuleService.save(ruleEntity);
         return new ResponseEntity<>(ruleMapper.mapTo(createdRuleEntity), HttpStatus.OK);
     }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @PostMapping("/rules/{ruleId}")
     public ResponseEntity<HomeAutomationRuleDto> updateFullRule (@PathVariable Long ruleId, @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
 
@@ -121,9 +131,9 @@ public class HomeAutomationRuleController {
         return new ResponseEntity<>(savedUpdatedHomeAutomationRuleDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @PatchMapping("rules/{ruleId}/devices")
     public ResponseEntity<HomeAutomationRuleDto> addDevice (@PathVariable Long ruleId, @RequestBody DeviceDto deviceDto){
-        //Device id will be generated for the specific homeautomationrule
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
         if (retrievedDBRuleEntity.isEmpty()) throw new RuntimeException("There is not Rule associated with this ruleId");
         HomeAutomationRuleEntity retrievedRuleEntity = retrievedDBRuleEntity.get();
@@ -139,6 +149,7 @@ public class HomeAutomationRuleController {
         return new ResponseEntity<>(ruleDtoAfterAddingDevice, HttpStatus.OK);
     }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, #deviceId, authentication.name)")
     @PatchMapping("/rules/{ruleId}/devices/{deviceId}/addBehaviours")
     public ResponseEntity<String> addBehaviourToDevices(@PathVariable Long ruleId, @PathVariable Long deviceId, @RequestBody HomeAutomationRuleDto.Behaviour behaviour) {
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
@@ -159,6 +170,7 @@ public class HomeAutomationRuleController {
     }
 
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @DeleteMapping( "/rules/{ruleId}")
     public ResponseEntity<Void> deleteRule(@PathVariable Long id) {
         if(!homeAutomationRuleService.isExists(id)) {
@@ -168,6 +180,7 @@ public class HomeAutomationRuleController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, #deviceId, authentication.name)")
     @DeleteMapping("/{ruleId}/devices/{deviceId}")
     public ResponseEntity<Void> removeDeviceFromRule(@PathVariable Long ruleId, @PathVariable Long deviceId) {
         homeAutomationRuleService.removeDeviceFromRule(ruleId, deviceId);

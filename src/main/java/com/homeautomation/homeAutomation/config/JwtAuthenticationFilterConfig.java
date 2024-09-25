@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Configuration
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class JwtAuthenticationFilterConfig extends OncePerRequestFilter {
 
     @Autowired
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilterConfig extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 //updating SecurityContext holder
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken); // so that logged-in user is persisted?
             }
         }
         filterChain.doFilter(request, response);

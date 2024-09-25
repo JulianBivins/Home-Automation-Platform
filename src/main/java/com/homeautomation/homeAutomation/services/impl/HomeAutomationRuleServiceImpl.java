@@ -1,8 +1,10 @@
 package com.homeautomation.homeAutomation.services.impl;
 
 
+import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import org.springframework.stereotype.Service;
@@ -12,13 +14,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("homeAutomationRuleService")//SpEL expressions
 public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService {
 
     final private HomeAutomationRuleRepository homeAutomationRuleRepository;
+    final private DeviceRepository deviceRepository;
 
-    public HomeAutomationRuleServiceImpl(HomeAutomationRuleRepository homeAutomationRuleRepository) {
+    public HomeAutomationRuleServiceImpl(HomeAutomationRuleRepository homeAutomationRuleRepository, DeviceRepository deviceRepository) {
         this.homeAutomationRuleRepository = homeAutomationRuleRepository;
+        this.deviceRepository = deviceRepository;
     }
 
     @Override
@@ -113,6 +117,21 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
         } else{
             throw new RuntimeException("Rule not found with id: " + ruleId);
         }
+    }
+
+    @Override
+    public boolean isOwner(Long ruleId, String currentUsername) {
+        Optional<HomeAutomationRuleEntity> rule = homeAutomationRuleRepository.findById(ruleId);
+        return rule.isPresent() && rule.get().getUserEntity().getUsername().equals(currentUsername);
+    }
+
+    @Override
+    public boolean isOwner(Long ruleId, Long deviceId, String currentUsername) {
+        Optional<HomeAutomationRuleEntity> rule = homeAutomationRuleRepository.findById(ruleId);
+        Optional<DeviceEntity> device = deviceRepository.findById(deviceId);
+        return rule.isPresent() && rule.get().getUserEntity().getUsername().equals(currentUsername)
+               && device.isPresent() && device.get().getRules().contains(rule.get());
+
     }
 
 //    @Override

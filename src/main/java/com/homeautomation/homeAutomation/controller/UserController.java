@@ -41,21 +41,6 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-//        if (userService.existsByUsername(userDto.getUsername())) {
-//            return new ResponseEntity<>(HttpStatus.CONFLICT);
-//        }
-//        UserEntity userEntity = userMapper.mapFrom(userDto);
-//        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
-//        userEntity.setPassword(encodedPassword);
-//
-//        userEntity.setRoles(new HashSet<>(Set.of(UserEntity.Roles.USER))); //Default
-//
-//        UserEntity createdUserEntity = userService.save(userEntity);
-//        return new ResponseEntity<>(userMapper.mapTo(createdUserEntity), HttpStatus.CREATED);
-//    }
-
 
     //For replacing the entire user (most likely won't be to relevant)
     @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.userId")

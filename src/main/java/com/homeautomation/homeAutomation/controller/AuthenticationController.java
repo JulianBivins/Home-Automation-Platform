@@ -26,14 +26,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private Mapper<UserEntity, UserDto> userMapper;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationService authenticationService;
+//    @Autowired
+//    private Mapper<UserEntity, UserDto> userMapper;
+//    @Autowired
+//    private UserService userService;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private AuthenticationService authenticationService;
+
+    private final Mapper<UserEntity, UserDto> userMapper;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationService authenticationService;
 
 
     @PostMapping("/register")
@@ -44,7 +49,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));

@@ -21,18 +21,29 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtServiceConfig jwtService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private JwtServiceConfig jwtService;
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtServiceConfig jwtService;
+
+    private final AuthenticationManager authenticationManager;
 
     //allows to create user, save it and generate token
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("Username is already taken");
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(request.getUsername());
         userEntity.setPassword(passwordEncoder.encode(request.getPassword()));

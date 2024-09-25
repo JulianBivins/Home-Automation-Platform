@@ -23,6 +23,7 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long userId;
 
+//    @Column(unique = true)
     String username;
 
     String password;

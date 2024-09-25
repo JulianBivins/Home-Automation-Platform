@@ -5,10 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,7 +20,22 @@ import java.util.function.Function;
 @Configuration
 public class JwtServiceConfig {
 
-    public static final String KEY = "26F72326CB92216DE8BAB256C1438";
+    @Value("${jwt.secret.key}")
+    private String secretKeyString;
+
+    private Key secretKey;
+
+    private Key getSignInKey() {
+        if (this.secretKey == null) {
+            byte[] keyBytes = secretKeyString.getBytes(StandardCharsets.UTF_8);
+            this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        }
+        return this.secretKey;
+    }
+
+//    private Key getSignInKey() {
+//        return Keys.secretKeyFor(SignatureAlgorithm.HS256); // HS256 ensures a secure key size
+//    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -64,13 +81,8 @@ public class JwtServiceConfig {
                 parserBuilder()
                 .setSigningKey(getSignInKey()) //Sign in Key is the secret signature to verify the sender is correct and the message hasn't been tempered with
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
-    }
-
-
-    private Key getSignInKey() {
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256); // HS256 ensures a secure key size
     }
 
 }

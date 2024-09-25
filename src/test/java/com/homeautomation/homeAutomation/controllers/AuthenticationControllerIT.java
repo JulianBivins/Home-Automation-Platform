@@ -43,7 +43,10 @@ public class AuthenticationControllerIT {
 
     private RegisterRequest registerRequest;
 
+    private static int counter;
+
     @BeforeEach
+    @Transactional
     public void setUp() throws Exception {
         testUser = TestDataUtil.createTestUserEntityA();
         registerRequest = new RegisterRequest();
@@ -59,21 +62,32 @@ public class AuthenticationControllerIT {
     @Test
     @Transactional
     public void testThatRegisterReturnsHttpStatus200WhenRegistrationIsSuccessful() throws Exception {
+        UserEntity testUserForMethod = TestDataUtil.createTestUserEntityA();
+        testUserForMethod.setUsername("ForTestMethod" + counter++);
+        RegisterRequest registerRequestForMethod = new RegisterRequest();
+        registerRequestForMethod.setUsername(testUserForMethod.getUsername());
+        registerRequestForMethod.setPassword(testUserForMethod.getPassword());
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerRequest))
+                        .content(objectMapper.writeValueAsString(registerRequestForMethod))
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @Transactional
     public void testThatRegisterReturnsTokenOnSuccessfulRegistration() throws Exception {
+        UserEntity testUserForMethod = TestDataUtil.createTestUserEntityA();
+        testUserForMethod.setUsername("ForTestMethod" + counter++);
+        RegisterRequest registerRequestForMethod = new RegisterRequest();
+        registerRequestForMethod.setUsername(testUserForMethod.getUsername());
+        registerRequestForMethod.setPassword(testUserForMethod.getPassword());
+
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerRequest))
+                        .content(objectMapper.writeValueAsString(registerRequestForMethod))
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.token").exists()
         );
@@ -91,4 +105,6 @@ public class AuthenticationControllerIT {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
     }
+
+
 }

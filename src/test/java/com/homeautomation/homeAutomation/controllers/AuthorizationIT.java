@@ -189,21 +189,70 @@ public class AuthorizationIT {
     @Test
     @Transactional
     public void testThatDeleteRuleReturnsHttpStatus403ForNonOwner() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.delete("/rules/" + ruleEntityA.getRuleId())
+        UserEntity nonOwner = TestDataUtil.createTestUserEntityB();
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername(nonOwner.getUsername());
+        registerRequest.setPassword(nonOwner.getPassword());
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + jwtToken)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        nonOwner = userService.findByUsername(nonOwner.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        GroupEntity anotherGroupEntity = TestDataUtil.createGroupEntityA(nonOwner);
+        groupRepository.save(anotherGroupEntity);
+
+        DeviceEntity anotherDeviceEntityA = TestDataUtil.createDeviceEntityA(nonOwner);
+        DeviceEntity anotherDeviceEntityB = TestDataUtil.createDeviceEntityB(nonOwner);
+        deviceRepository.saveAll(List.of(anotherDeviceEntityA, anotherDeviceEntityB));
+
+        HomeAutomationRuleEntity anotherRuleEntity = TestDataUtil.createTestRuleEntityA(nonOwner, anotherGroupEntity, new ArrayList<>(List.of(anotherDeviceEntityA, anotherDeviceEntityB)));
+        ruleRepository.save(anotherRuleEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/rules/" + anotherRuleEntity.getRuleId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken) //test user token
         ).andExpect(
                 MockMvcResultMatchers.status().isForbidden()
         );
     }
 
+
     @Test
     @Transactional
     public void testThatUserCannotAccessAnotherUsersRule() throws Exception {
 
+        UserEntity anotherUser = TestDataUtil.createTestUserEntityB();
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername(anotherUser.getUsername());
+        registerRequest.setPassword(anotherUser.getPassword());
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        anotherUser = userService.findByUsername(anotherUser.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        GroupEntity anotherGroupEntity = TestDataUtil.createGroupEntityA(anotherUser);
+        groupRepository.save(anotherGroupEntity);
+
+        DeviceEntity anotherDeviceEntityA = TestDataUtil.createDeviceEntityA(anotherUser);
+        DeviceEntity anotherDeviceEntityB = TestDataUtil.createDeviceEntityB(anotherUser);
+        deviceRepository.saveAll(List.of(anotherDeviceEntityA, anotherDeviceEntityB));
+
+        HomeAutomationRuleEntity anotherRuleEntity = TestDataUtil.createTestRuleEntityA(anotherUser, anotherGroupEntity, new ArrayList<>(List.of(anotherDeviceEntityA, anotherDeviceEntityB)));
+        ruleRepository.save(anotherRuleEntity);
+
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/rules/" + ruleEntityA.getRuleId())
+                MockMvcRequestBuilders.get("/rules/" + anotherRuleEntity.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtToken)
         ).andExpect(

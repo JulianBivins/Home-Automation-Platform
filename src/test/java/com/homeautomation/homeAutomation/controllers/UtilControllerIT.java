@@ -125,7 +125,7 @@ public void setUp() throws Exception {
     public void testThatGetUserReturnsHttpStatus200WhenUserExist() throws Exception {
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/users/" + testUser.getUserId())
+                MockMvcRequestBuilders.get("/util/users/" + testUser.getUserId())
                         .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -136,7 +136,7 @@ public void setUp() throws Exception {
     public void testThatGetUserReturnsUserWhenUserExist() throws Exception {
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/users/" + testUser.getUserId())
+                MockMvcRequestBuilders.get("/util/users/" + testUser.getUserId())
                         .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
@@ -152,7 +152,7 @@ public void setUp() throws Exception {
     @Transactional
     public void testThatGetUserReturnsHttpStatus404WhenNoUserExists() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/users/-1")
+                MockMvcRequestBuilders.get("/util/users/-1")
                         .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());

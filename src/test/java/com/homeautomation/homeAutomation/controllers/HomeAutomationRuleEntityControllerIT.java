@@ -31,10 +31,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -267,7 +270,7 @@ public class HomeAutomationRuleEntityControllerIT {
         String ruleJson = objectMapper.writeValueAsString(ruleDto);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/rules/update/" + ruleEntityA.getRuleId())
+        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/update/" + ruleEntityA.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
                          .header("Authorization", "Bearer " + jwtToken)
                         .content(ruleJson)
@@ -308,18 +311,71 @@ public class HomeAutomationRuleEntityControllerIT {
         DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);
         String deviceJson = objectMapper.writeValueAsString(deviceDto);
 
-
-        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/update/" + ruleEntityA.getRuleId())
+        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/devices/add/" + ruleEntityA.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtToken)
                         .content(deviceJson)
                 ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @Transactional
+    public void testAddDeviceReturnsUpdatedDevices() throws Exception {
+        DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityB(testUser);
+        deviceEntity.setName("TO BE ADDED");
+        deviceEntity.setType(DeviceEntity.DeviceType.CAMERA);
+        deviceRepository.save(deviceEntity);
+
+        DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);
+        String deviceJson = objectMapper.writeValueAsString(deviceDto);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.patch("/rules/devices/add/" + ruleEntityA.getRuleId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken)
+                        .content(deviceJson)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(ruleEntityA.getDeviceEntities().size())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].deviceId", hasItem(deviceEntity.getDeviceId().intValue())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].name", hasItem("TO BE ADDED")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].type", hasItem("CAMERA")))
+                .andReturn();
+
+        String contentAsString = result.getResponse().getContentAsString();
+        DeviceDto[] deviceDtos = objectMapper.readValue(contentAsString, DeviceDto[].class);
+
+        List<Integer> responseDeviceIds = Arrays.stream(deviceDtos)
+                .map(device -> device.getDeviceId().intValue())
+                .toList();
+
+        List<DeviceEntity> retrievedDeviceEntities = ruleRepository.findById(ruleEntityA.getRuleId())
+                .orElseThrow(() -> new RuntimeException("Rule not found with id " + ruleEntityA.getRuleId()))
+                .getDeviceEntities();
+
+        List<Integer> expectedDeviceIds = retrievedDeviceEntities.stream()
+                .map(DeviceEntity::getDeviceId)
+                .map(Long::intValue)
+                .toList();
+
+        assertEquals("should have increased by one", expectedDeviceIds.size(), deviceDtos.length);
+        assertTrue(responseDeviceIds.containsAll(expectedDeviceIds),
+                "Response device IDs should match the repository's device IDs");
+    }
 
 
+    @Test
+    @Transactional
+    public void TestThatAddBehaviourToDeviceReturnsHttpStatus200() throws Exception {
+        HomeAutomationRuleDto.Behaviour behaviour = HomeAutomationRuleDto.Behaviour.ON;
+        String behaviourString = objectMapper.writeValueAsString(behaviour);
 
 
+        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/" + ruleEntityA.getRuleId( )+ "/devices/addBehaviour/" + deviceEntityA.getDeviceId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtToken)
+                .content(behaviourString)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
 
+    }
 
 }

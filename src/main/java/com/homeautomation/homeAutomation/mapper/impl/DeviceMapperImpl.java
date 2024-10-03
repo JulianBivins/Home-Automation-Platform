@@ -22,9 +22,12 @@ public class DeviceMapperImpl implements Mapper<DeviceEntity, DeviceDto> {
         TypeMap<DeviceDto, DeviceEntity> typeMap = this.modelMapper.emptyTypeMap(DeviceDto.class, DeviceEntity.class);
 
         typeMap.addMappings(mapper -> mapper.skip(DeviceEntity::setUserEntity));
+//        typeMap.addMappings(mapper -> mapper.skip(DeviceEntity::setRules));
+
 
         typeMap.implicitMappings();
     }
+
 
     @Override
     public DeviceDto mapTo(DeviceEntity deviceEntity) {

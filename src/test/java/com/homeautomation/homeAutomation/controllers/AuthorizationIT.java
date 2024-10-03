@@ -214,7 +214,7 @@ public class AuthorizationIT {
         ruleRepository.save(anotherRuleEntity);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/rules/" + anotherRuleEntity.getRuleId())
+                MockMvcRequestBuilders.delete("/rules/delete/" + anotherRuleEntity.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtToken) //test user token
         ).andExpect(

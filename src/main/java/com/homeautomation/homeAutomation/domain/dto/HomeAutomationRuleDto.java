@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class HomeAutomationRuleDto {
 
     private List<GroupDto> groupDtos = new ArrayList<>();
 
+    @JsonIgnore
     private List<DeviceDto> deviceDtos = new ArrayList<>();
 
     private Event event;

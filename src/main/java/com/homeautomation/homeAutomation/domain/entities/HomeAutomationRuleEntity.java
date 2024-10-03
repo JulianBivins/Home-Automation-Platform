@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class HomeAutomationRuleEntity {
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     private List<GroupEntity> groupEntities = new ArrayList<>();
+
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

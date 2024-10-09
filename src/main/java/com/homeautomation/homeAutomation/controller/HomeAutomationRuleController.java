@@ -166,9 +166,9 @@ public class HomeAutomationRuleController {
 
     @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, #deviceId, authentication.name)")
     @PatchMapping("/{ruleId}/devices/addBehaviour/{deviceId}")
-    public ResponseEntity<String> addBehaviourToDevices(@PathVariable Long ruleId, @PathVariable Long deviceId, @RequestBody HomeAutomationRuleDto.Behaviour behaviour) {
+    public ResponseEntity<DeviceEntity> addBehaviourToDevices(@PathVariable Long ruleId, @PathVariable Long deviceId, @RequestBody HomeAutomationRuleDto.Behaviour behaviour) {
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
-        if(retrievedDBRuleEntity.isEmpty()) return new ResponseEntity<>("No Rule associated with this ruleId", HttpStatus.NOT_FOUND);
+        if(retrievedDBRuleEntity.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
         HomeAutomationRuleEntity retrievedRuleEntity = retrievedDBRuleEntity.get();
@@ -176,12 +176,20 @@ public class HomeAutomationRuleController {
 
         Map<Long, HomeAutomationRuleDto.Behaviour> deviceBehaviours = homeAutomationRuleDto.getDeviceBehaviours();
         deviceBehaviours.put(deviceId, behaviour);
-        if (!deviceBehaviours.containsKey(deviceId) && !deviceBehaviours.containsValue(behaviour)) return new ResponseEntity<>("ERROR: Unable to add the behaviour to the deviceId, behavior already exists", HttpStatus.BAD_REQUEST);
+        if (!deviceBehaviours.containsKey(deviceId) && !deviceBehaviours.containsValue(behaviour)) {System.err.println("ERROR: Unable to add the behaviour to the deviceId, behavior already exists"); return new ResponseEntity<>(HttpStatus.BAD_REQUEST);}
 
         homeAutomationRuleService.partialUpdate(ruleId, retrievedRuleEntity);
 
-        String associatedBehaviourString = behaviour.toString();
-        return new ResponseEntity<>(associatedBehaviourString, HttpStatus.OK);
+        DeviceEntity updatedDeviceEntity = deviceRepository.findById(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found with id " + deviceId));
+
+
+        return new ResponseEntity<>(updatedDeviceEntity, HttpStatus.OK);
+
+//        Map<Long, HomeAutomationRuleDto.Behaviour> deviceBehaviours = retrievedRuleEntity.getDeviceBehaviours();
+//        HomeAutomationRuleDto.Behaviour updatedBehaviour = deviceBehaviours.get(deviceId);
+//
+//        return new ResponseEntity<>(updatedBehaviour, HttpStatus.OK);
     }
 
 

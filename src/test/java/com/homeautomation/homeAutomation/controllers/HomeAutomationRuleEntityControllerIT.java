@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.homeautomation.homeAutomation.config.TestDataUtil;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationRequest;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationResponse;
@@ -36,9 +37,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @SpringBootTest
@@ -80,6 +79,9 @@ public class HomeAutomationRuleEntityControllerIT {
     @BeforeEach
     @Transactional
     void setUp() throws Exception {
+
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
 
         testUser = TestDataUtil.createTestUserEntityA();
         RegisterRequest registerRequest = new RegisterRequest();
@@ -328,6 +330,7 @@ public class HomeAutomationRuleEntityControllerIT {
 
         DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);
         String deviceJson = objectMapper.writeValueAsString(deviceDto);
+        System.out.println("Serialized DeviceDto JSON:\n" + deviceJson);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.patch("/rules/devices/add/" + ruleEntityA.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -342,7 +345,10 @@ public class HomeAutomationRuleEntityControllerIT {
                 .andReturn();
 
         String contentAsString = result.getResponse().getContentAsString();
+        System.out.println("Returned Content \n" + contentAsString);
+
         DeviceDto[] deviceDtos = objectMapper.readValue(contentAsString, DeviceDto[].class);
+
 
         List<Integer> responseDeviceIds = Arrays.stream(deviceDtos)
                 .map(device -> device.getDeviceId().intValue())
@@ -369,13 +375,66 @@ public class HomeAutomationRuleEntityControllerIT {
         HomeAutomationRuleDto.Behaviour behaviour = HomeAutomationRuleDto.Behaviour.ON;
         String behaviourString = objectMapper.writeValueAsString(behaviour);
 
+        DeviceEntity newDeviceEntity = TestDataUtil.createDeviceEntityB(testUser);
+        newDeviceEntity.setName("TO BE ADDED");
+        List<HomeAutomationRuleEntity> deviceRules = newDeviceEntity.getRules();
+        deviceRules.add(ruleEntityA);
+        newDeviceEntity.setRules(new ArrayList<>(deviceRules));
+        deviceRepository.save(newDeviceEntity);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/" + ruleEntityA.getRuleId( )+ "/devices/addBehaviour/" + deviceEntityA.getDeviceId())
+
+//        DeviceEntity deviceEntityFromDB = deviceRepository.findById(newDeviceEntity.getDeviceId()).orElseThrow(() -> new RuntimeException("Device couldn't be retrieved with Id = " + deviceEntityA.getDeviceId()));
+
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/rules/" + ruleEntityA.getRuleId( )+ "/devices/addBehaviour/" + newDeviceEntity.getDeviceId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + jwtToken)
                 .content(behaviourString)
         ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
+
+    @Test
+    @Transactional
+    public void TestThatAddBehaviourToDeviceReturnsCorrectlyAlteredDevice() throws Exception {
+        HomeAutomationRuleDto.Behaviour behaviour = HomeAutomationRuleDto.Behaviour.ON;
+        String behaviourString = objectMapper.writeValueAsString(behaviour);
+
+        DeviceEntity newDeviceEntity = TestDataUtil.createDeviceEntityB(testUser);
+        newDeviceEntity.setName("TO BE ADDED");
+        List<HomeAutomationRuleEntity> deviceRules = newDeviceEntity.getRules();
+        deviceRules.add(ruleEntityA);
+        newDeviceEntity.setRules(new ArrayList<>(deviceRules));
+        deviceRepository.save(newDeviceEntity);
+
+        //not really necessary (I think) just troubleshooting
+        DeviceEntity deviceEntityFromDB = deviceRepository.findById(newDeviceEntity.getDeviceId()).orElseThrow(() -> new RuntimeException("Device couldn't be retrieved with Id = " + deviceEntityA.getDeviceId()));
+        DeviceDto deviceDto = deviceMapper.mapTo(deviceEntityFromDB);
+
+         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.patch("/rules/" + ruleEntityA.getRuleId() + "/devices/addBehaviour/" + newDeviceEntity.getDeviceId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken)
+                        .content(behaviourString))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                 .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        DeviceDto deviceEntityFromEndPoint = objectMapper.readValue(responseContent, DeviceDto.class);
+
+        HomeAutomationRuleEntity updatedRuleEntity = ruleRepository.findById(ruleEntityA.getRuleId())
+                .orElseThrow(() -> new RuntimeException("Rule couldn't be retrieved with Id = " + ruleEntityA.getRuleId()));
+
+
+        HomeAutomationRuleEntity.Behaviour behaviourFromDevice = updatedRuleEntity.getDeviceBehaviours().get(deviceEntityFromEndPoint.getDeviceId());
+
+        assertEquals("Behavior should be ON", HomeAutomationRuleDto.Behaviour.ON, behaviourFromDevice);
+
+//              .andExpect(MockMvcResultMatchers.jsonPath("$.deviceId").value(newDeviceEntity.getDeviceId().intValue()))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.behaviour").value("ON"));
+
+
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.deviceId").value(newDeviceEntity.getDeviceId().intValue()))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.behaviour").value("ON"));
     }
 
 }

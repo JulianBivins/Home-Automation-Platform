@@ -1,5 +1,7 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,8 @@ public class UserEntity implements UserDetails {
     private List<HomeAutomationRuleEntity> rules = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    @JsonIgnore
     private List<GroupEntity> groups = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -84,6 +88,7 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))

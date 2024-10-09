@@ -1,5 +1,8 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,10 +28,13 @@ public class GroupEntity {
 
     @ManyToOne
     @JoinColumn(name = "rule_id")
+//    @JsonManagedReference
     private HomeAutomationRuleEntity rule;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+//    @JsonBackReference
+//    @JsonIgnore
     private UserEntity userEntity;
 
     @Override

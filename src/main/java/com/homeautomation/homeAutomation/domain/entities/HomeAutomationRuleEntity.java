@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class HomeAutomationRuleEntity {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
+//    @JsonBackReference
     private List<GroupEntity> groupEntities = new ArrayList<>();
 
 
@@ -66,6 +68,7 @@ public class HomeAutomationRuleEntity {
     @CollectionTable(name = "rule_device_behaviour", joinColumns = @JoinColumn(name = "rule_id"))
     @MapKeyColumn(name = "device_id")
     @Column(name = "behaviour")
+    @JsonIgnore
     private Map<Long, Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Behaviour {

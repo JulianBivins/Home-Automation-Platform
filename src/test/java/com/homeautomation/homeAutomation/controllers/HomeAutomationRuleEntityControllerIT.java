@@ -13,6 +13,7 @@ import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
@@ -34,6 +35,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
@@ -263,14 +265,16 @@ public class HomeAutomationRuleEntityControllerIT {
     @Transactional
     public void testThatPartialUpdateRuleReturnsHttpsStatus200() throws Exception {
 
-        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, List.of(deviceEntityA, deviceEntityB));
+//        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, List.of(deviceEntityA, deviceEntityB));
+//
+//        HomeAutomationRuleDto ruleDto = ruleMapper.mapTo(ruleEntityB);
+//
+//        ruleDto.setRuleId(null);
 
-        HomeAutomationRuleDto ruleDto = ruleMapper.mapTo(ruleEntityB);
-
-        ruleDto.setRuleId(null);
+        HomeAutomationRuleDto ruleDto = new HomeAutomationRuleDto();
+        ruleDto.setRuleName("TO BE PARTIALLY UPDATED");
 
         String ruleJson = objectMapper.writeValueAsString(ruleDto);
-
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/rules/update/" + ruleEntityA.getRuleId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -283,11 +287,17 @@ public class HomeAutomationRuleEntityControllerIT {
     @Transactional
     public void testThatPartialUpdateRuleReturnsUpdatedRule() throws Exception {
 
-        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, List.of(deviceEntityA, deviceEntityB));
+//        HomeAutomationRuleEntity ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, List.of(deviceEntityA, deviceEntityB));
+//
+//        //only necessary because otherwise the properties (device,group,etc) aren't persisted
+//        ruleRepository.save(ruleEntityB);
+//        HomeAutomationRuleDto ruleDto = ruleMapper.mapTo(ruleEntityA);
 
-        HomeAutomationRuleDto ruleDto = ruleMapper.mapTo(ruleEntityB);
+//        ruleDto.setRuleId(null);
+//        ruleDto.setRuleName("TO BE PARTIALLY UPDATED");
 
-        ruleDto.setRuleId(null);
+        HomeAutomationRuleDto ruleDto = new HomeAutomationRuleDto();
+        ruleDto.setRuleName("TO BE PARTIALLY UPDATED");
 
         String ruleJson = objectMapper.writeValueAsString(ruleDto);
 
@@ -298,7 +308,9 @@ public class HomeAutomationRuleEntityControllerIT {
                 .content(ruleJson)
         ).andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.ruleId").value(ruleEntityA.getRuleId()))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.ruleName").value(ruleEntityA.getRuleName()));
+        .andExpect(MockMvcResultMatchers.jsonPath("$.ruleName").value("TO BE PARTIALLY UPDATED"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Mock RuleA"));
+
     }
 
     @Test
@@ -372,7 +384,7 @@ public class HomeAutomationRuleEntityControllerIT {
     @Test
     @Transactional
     public void TestThatAddBehaviourToDeviceReturnsHttpStatus200() throws Exception {
-        HomeAutomationRuleDto.Behaviour behaviour = HomeAutomationRuleDto.Behaviour.ON;
+        Behaviour behaviour = Behaviour.ON;
         String behaviourString = objectMapper.writeValueAsString(behaviour);
 
         DeviceEntity newDeviceEntity = TestDataUtil.createDeviceEntityB(testUser);
@@ -397,7 +409,7 @@ public class HomeAutomationRuleEntityControllerIT {
     @Test
     @Transactional
     public void TestThatAddBehaviourToDeviceReturnsCorrectlyAlteredDevice() throws Exception {
-        HomeAutomationRuleDto.Behaviour behaviour = HomeAutomationRuleDto.Behaviour.ON;
+        Behaviour behaviour = Behaviour.ON;
         String behaviourString = objectMapper.writeValueAsString(behaviour);
 
         DeviceEntity newDeviceEntity = TestDataUtil.createDeviceEntityB(testUser);
@@ -425,9 +437,9 @@ public class HomeAutomationRuleEntityControllerIT {
                 .orElseThrow(() -> new RuntimeException("Rule couldn't be retrieved with Id = " + ruleEntityA.getRuleId()));
 
 
-        HomeAutomationRuleEntity.Behaviour behaviourFromDevice = updatedRuleEntity.getDeviceBehaviours().get(deviceEntityFromEndPoint.getDeviceId());
+        Behaviour behaviourFromDevice = updatedRuleEntity.getDeviceBehaviours().get(deviceEntityFromEndPoint.getDeviceId());
 
-        assertEquals("Behavior should be ON", HomeAutomationRuleDto.Behaviour.ON, behaviourFromDevice);
+        assertEquals("Behavior should be ON", Behaviour.ON, behaviourFromDevice);
 
 //              .andExpect(MockMvcResultMatchers.jsonPath("$.deviceId").value(newDeviceEntity.getDeviceId().intValue()))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.behaviour").value("ON"));
@@ -436,5 +448,70 @@ public class HomeAutomationRuleEntityControllerIT {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.deviceId").value(newDeviceEntity.getDeviceId().intValue()))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.behaviour").value("ON"));
     }
+
+//    @Test
+//    @Transactional
+//    public void TestThatRemoveDeviceFromRuleReturnsHttps200 () throws Exception {
+//        List<DeviceEntity> deviceEntities = ruleEntityA.getDeviceEntities();
+//        DeviceEntity deviceEntity = deviceEntities.get(0);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.delete("/rules/"+ ruleEntityA.getRuleId()+ "/devices/removeDevice/" + deviceEntity.getDeviceId())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header("Authorization", "Bearer " + jwtToken)
+//        ).andExpect(MockMvcResultMatchers.status().isOk());
+//    }
+
+    @Test
+    @Transactional
+    public void TestThatRemoveDeviceFromRuleReturnsHttps200() throws Exception {;
+
+        DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityB(testUser);
+        HomeAutomationRuleEntity ruleEntityB;
+        deviceRepository.save(deviceEntity);
+        ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntity)));
+
+        deviceEntity.setRules(new ArrayList<>(List.of(ruleEntityB)));
+        ruleRepository.save(ruleEntityB);
+
+
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/rules/" + ruleEntityB.getRuleId() + "/devices/removeDevice/" + deviceEntity.getDeviceId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtToken)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @Transactional
+    public void TestThatRemoveDeviceFromRuleReturnsRuleWithoutToBeRemovedDevice() throws Exception {
+        DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityB(testUser);
+        HomeAutomationRuleEntity ruleEntityB;
+        deviceRepository.save(deviceEntity);
+        ruleEntityB = TestDataUtil.createTestRuleEntityB(testUser, groupEntity, new ArrayList<>(List.of(deviceEntityA, deviceEntity)));
+
+        deviceEntity.setRules(new ArrayList<>(List.of(ruleEntityB)));
+        ruleRepository.save(ruleEntityB);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/rules/" + ruleEntityB.getRuleId() + "/devices/removeDevice/" + deviceEntity.getDeviceId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtToken)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.deviceDtos").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.deviceDtos[*].deviceId", not(hasItem(deviceEntity.getDeviceId().intValue()))))
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        HomeAutomationRuleDto updatedRule = objectMapper.readValue(responseBody, HomeAutomationRuleDto.class);
+
+        assertFalse(updatedRule.getDeviceDtos().stream()
+                        .anyMatch(deviceDto -> deviceDto.getDeviceId().equals(deviceEntity.getDeviceId())),
+                "Device should have been removed from the rule's device list.");
+
+        DeviceEntity updatedDevice = deviceRepository.findById(deviceEntity.getDeviceId()).orElseThrow(() -> new RuntimeException("Device not found"));
+        assertFalse(updatedDevice.getRules().contains(ruleEntityB),
+                "Rule should have been removed from the device's rules list.");
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//because of circular refrencing should replace with id?
+//because of circular referencing should replace with id?
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ruleId",    scope = HomeAutomationRuleDto.class)
 public class HomeAutomationRuleDto {
 
@@ -24,6 +25,7 @@ public class HomeAutomationRuleDto {
     private String description;
 
 //    @JsonBackReference(value = "user-rules")
+    @JsonIgnore
     private UserDto userDto;
 
 //    @JsonManagedReference(value = "rule-groups")
@@ -47,10 +49,10 @@ public class HomeAutomationRuleDto {
         WHEN_INSERT_OFF
     }
 
-    public enum Behaviour {
-        ON,
-        OFF,
-        STAND_BY,
-        TIMED,
-    }
+//    public enum Behaviour {
+//        ON,
+//        OFF,
+//        STAND_BY,
+//        TIMED,
+//    }
 }

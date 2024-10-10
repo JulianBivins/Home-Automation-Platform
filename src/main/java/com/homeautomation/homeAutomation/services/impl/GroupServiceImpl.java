@@ -66,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupEntity partialUpdate(Long id, GroupEntity groupEntity) {
         groupEntity.setGroupId(id);
         return groupRepository.findById(id).map(existingGroup -> {
-            Optional.ofNullable(groupEntity.getUserEntity()).ifPresent(existingGroup::setUserEntity);
+//            Optional.ofNullable(groupEntity.getUserEntity()).ifPresent(existingGroup::setUserEntity);
             Optional.ofNullable(groupEntity.getName()).ifPresent(existingGroup::setName);
             return groupRepository.save(existingGroup);
         }).orElseThrow(() -> new RuntimeException("Group does not exist"));

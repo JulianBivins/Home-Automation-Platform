@@ -20,9 +20,11 @@ public class DeviceDto {
 
     private DeviceType type;
 
+    @JsonIgnore
     private UserDto userDto;
 
 //    @JsonBackReference(value = "rule-devices")
+    @JsonIgnore
     private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
     public enum DeviceType {

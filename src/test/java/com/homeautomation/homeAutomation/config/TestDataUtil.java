@@ -2,6 +2,7 @@ package com.homeautomation.homeAutomation.config;
 
 import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.*;
+import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 
 import java.util.*;
 
@@ -50,9 +51,9 @@ public final class TestDataUtil {
         }
 
         ruleEntityA.setDeviceEntities(devices);
-        Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
-                devices.get(0).getDeviceId(), HomeAutomationRuleEntity.Behaviour.ON,
-                devices.get(1).getDeviceId(), HomeAutomationRuleEntity.Behaviour.STAND_BY
+        Map<Long, Behaviour> deviceBehaviours = Map.of(
+                devices.get(0).getDeviceId(), Behaviour.ON,
+                devices.get(1).getDeviceId(), Behaviour.STAND_BY
         );
         ruleEntityA.setDeviceBehaviours(deviceBehaviours);
 
@@ -76,9 +77,9 @@ public final class TestDataUtil {
         }
 
         ruleEntityB.setDeviceEntities(devices);
-        Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
-                devices.get(0).getDeviceId(), HomeAutomationRuleEntity.Behaviour.OFF,
-                devices.get(1).getDeviceId(), HomeAutomationRuleEntity.Behaviour.TIMED
+        Map<Long, Behaviour> deviceBehaviours = Map.of(
+                devices.get(0).getDeviceId(), Behaviour.OFF,
+                devices.get(1).getDeviceId(), Behaviour.TIMED
         );
         ruleEntityB.setDeviceBehaviours(deviceBehaviours);
 
@@ -102,9 +103,9 @@ public final class TestDataUtil {
         }
 
         ruleEntityC.setDeviceEntities(devices);
-        Map<Long, HomeAutomationRuleEntity.Behaviour> deviceBehaviours = Map.of(
-                devices.get(0).getDeviceId(), HomeAutomationRuleEntity.Behaviour.STAND_BY,
-                devices.get(1).getDeviceId(), HomeAutomationRuleEntity.Behaviour.ON
+        Map<Long, Behaviour> deviceBehaviours = Map.of(
+                devices.get(0).getDeviceId(), Behaviour.STAND_BY,
+                devices.get(1).getDeviceId(), Behaviour.ON
         );
         ruleEntityC.setDeviceBehaviours(deviceBehaviours);
 

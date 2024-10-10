@@ -2,6 +2,7 @@ package com.homeautomation.homeAutomation.repositories;
 
 import com.homeautomation.homeAutomation.config.TestDataUtil;
 import com.homeautomation.homeAutomation.domain.entities.*;
+import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import com.homeautomation.homeAutomation.repository.*;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import com.homeautomation.homeAutomation.services.UserService;
@@ -242,12 +243,12 @@ public class HomeAutomationRuleEntityRepositoryIT {
         assertThat(retrievedRule).isPresent();
 
         retrievedRule.get().setDeviceBehaviours(new HashMap<>(retrievedRule.get().getDeviceBehaviours()));
-        retrievedRule.get().getDeviceBehaviours().put(deviceEntityA.getDeviceId(), HomeAutomationRuleEntity.Behaviour.TIMED);
+        retrievedRule.get().getDeviceBehaviours().put(deviceEntityA.getDeviceId(), Behaviour.TIMED);
         ruleRepository.save(retrievedRule.get());
 
         Optional<HomeAutomationRuleEntity> retrievedRuleAfterSettingBehaviour = ruleRepository.findById(retrievedRule.get().getRuleId());
         assertThat(retrievedRuleAfterSettingBehaviour).isPresent();
-        assertThat(retrievedRuleAfterSettingBehaviour.get().getDeviceBehaviours()).containsEntry(deviceEntityA.getDeviceId(), HomeAutomationRuleEntity.Behaviour.TIMED);
+        assertThat(retrievedRuleAfterSettingBehaviour.get().getDeviceBehaviours()).containsEntry(deviceEntityA.getDeviceId(), Behaviour.TIMED);
     }
 
     @Test

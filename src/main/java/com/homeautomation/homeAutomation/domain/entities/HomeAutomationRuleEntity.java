@@ -2,6 +2,7 @@ package com.homeautomation.homeAutomation.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,12 +72,12 @@ public class HomeAutomationRuleEntity {
     @JsonIgnore
     private Map<Long, Behaviour> deviceBehaviours = new HashMap<>();
 
-    public enum Behaviour {
-        ON,
-        OFF,
-        STAND_BY,
-        TIMED,
-    }
+//    public enum Behaviour {
+//        ON,
+//        OFF,
+//        STAND_BY,
+//        TIMED,
+//    }
 
 
     @Override

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -43,5 +44,18 @@ public class DeviceEntity {
 
     @ManyToMany(mappedBy = "deviceEntities", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<HomeAutomationRuleEntity> rules = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeviceEntity that = (DeviceEntity) o;
+        return Objects.equals(deviceId, that.deviceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(deviceId);
+    }
 }
 

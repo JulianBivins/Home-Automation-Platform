@@ -11,8 +11,9 @@ import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository
 import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.GroupService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity.Behaviour;
+//import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity.Behaviour;
 
 import java.util.*;
 
@@ -65,95 +66,93 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     }
 
 
-    @Override
-    public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
-        homeAutomationRuleEntity.setRuleId(id);
-
-        //Scenario: What happens if new groups are added that haven't been persisted. Error message in code.
-            // this is only temporary. In production one will first persist a group anyway before being able to add it to the rule
-                //this code should therefore become boilerplate code
-        List<GroupEntity> groupEntities = homeAutomationRuleEntity.getGroupEntities();
-        List<GroupEntity> updatedGroups = new ArrayList<>();
-        if (groupEntities != null) {
-            for (GroupEntity group : groupEntities) {
-                if (group.getGroupId() == null) {
-                    group.setUserEntity(homeAutomationRuleEntity.getUserEntity());
-                    group = groupRepository.save(group);
-                }
-                updatedGroups.add(group);
-            }
-        }
-
-        List<DeviceEntity> deviceEntities = homeAutomationRuleEntity.getDeviceEntities();
-        List<DeviceEntity> updatedDevices = new ArrayList<>();
-        if (deviceEntities != null) {
-            for (DeviceEntity device : deviceEntities) {
-                if (device.getDeviceId() == null) {
-                    device.setUserEntity(homeAutomationRuleEntity.getUserEntity()); // Ensure user is set
-                    device = deviceRepository.save(device); // Update device with saved entity
-                }
-                updatedDevices.add(device);
-            }
-        }
-
-        Map<Long, Behaviour> deviceBehaviours = homeAutomationRuleEntity.getDeviceBehaviours();
-        Map<Long, Behaviour> toBeUpdatedBehaviours = new HashMap<>();
-        if (deviceBehaviours != null) {
-            for (Map.Entry<Long, Behaviour> entry : deviceBehaviours.entrySet()) {
-                Long deviceId = entry.getKey();
-                Behaviour behaviour = entry.getValue();
-                DeviceEntity device = deviceRepository.findById(deviceId)
-                        .orElseThrow(() -> new RuntimeException("Device not found with id " + deviceId));
-                toBeUpdatedBehaviours.put(device.getDeviceId(), behaviour);
-            }
-        }
-
-        return homeAutomationRuleRepository.findById(id).map(existingRule -> {
-            Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
-            Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
-            if (!updatedGroups.isEmpty()) {
-                for (GroupEntity group : updatedGroups) {
-                    group.setRule(existingRule);
-//                    groupService.partialUpdate(group.getGroupId(), group); // Saving updated group might not be necessary due to cascading
-                }
-                existingRule.setGroupEntities(updatedGroups);
-            }
-            if (!updatedDevices.isEmpty()) {
-                for (DeviceEntity device : updatedDevices) {
-                    List<HomeAutomationRuleEntity> rules = device.getRules();
-                    rules.add(existingRule);
-                    device.setRules(new ArrayList<>(rules));
-//                    deviceService.partialUpdate(device.getDeviceId(), device); // Saving updated device might not be necessary due to cascading
-                }
-                existingRule.setDeviceEntities(updatedDevices);
-
-            }
-            if (!toBeUpdatedBehaviours.isEmpty()) existingRule.setDeviceBehaviours(new HashMap<>(toBeUpdatedBehaviours));
-            return homeAutomationRuleRepository.save(existingRule);
-        }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
-    }
-
 //    @Override
 //    public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
-//        // Find the existing rule by ID
+//        homeAutomationRuleEntity.setRuleId(id);
+//
+//        //Scenario: What happens if new groups are added that haven't been persisted. Error message in code.
+//            // this is only temporary. In production one will first persist a group anyway before being able to add it to the rule
+//                //this code should therefore become boilerplate code
+//        List<GroupEntity> groupEntities = homeAutomationRuleEntity.getGroupEntities();
+//        List<GroupEntity> updatedGroups = new ArrayList<>();
+//        if (groupEntities != null) {
+//            for (GroupEntity group : groupEntities) {
+//                if (group.getGroupId() == null) {
+//                    group.setUserEntity(homeAutomationRuleEntity.getUserEntity());
+//                    group = groupRepository.save(group);
+//                }
+//                updatedGroups.add(group);
+//            }
+//        }
+//
+//        List<DeviceEntity> deviceEntities = homeAutomationRuleEntity.getDeviceEntities();
+//        List<DeviceEntity> updatedDevices = new ArrayList<>();
+//        if (deviceEntities != null) {
+//            for (DeviceEntity device : deviceEntities) {
+//                if (device.getDeviceId() == null) {
+//                    device.setUserEntity(homeAutomationRuleEntity.getUserEntity()); // Ensure user is set
+//                    device = deviceRepository.save(device); // Update device with saved entity
+//                }
+//                updatedDevices.add(device);
+//            }
+//        }
+//
+//        Map<Long, Behaviour> deviceBehaviours = homeAutomationRuleEntity.getDeviceBehaviours();
+//        Map<Long, Behaviour> toBeUpdatedBehaviours = new HashMap<>();
+//        if (deviceBehaviours != null) {
+//            for (Map.Entry<Long, Behaviour> entry : deviceBehaviours.entrySet()) {
+//                Long deviceId = entry.getKey();
+//                Behaviour behaviour = entry.getValue();
+//                DeviceEntity device = deviceRepository.findById(deviceId)
+//                        .orElseThrow(() -> new RuntimeException("Device not found with id " + deviceId));
+//                toBeUpdatedBehaviours.put(device.getDeviceId(), behaviour);
+//            }
+//        }
+//
 //        return homeAutomationRuleRepository.findById(id).map(existingRule -> {
-//            // Update the basic fields only if they are provided in the current entity
-//            Optional.ofNullable(homeAutomationRuleEntity.getRuleName())
-//                    .ifPresent(existingRule::setRuleName);
+//            Optional.ofNullable(homeAutomationRuleEntity.getRuleName()).ifPresent(existingRule::setRuleName);
+//            Optional.ofNullable(homeAutomationRuleEntity.getDescription()).ifPresent(existingRule::setDescription);
+//            if (!updatedGroups.isEmpty()) {
+//                for (GroupEntity group : updatedGroups) {
+//                    group.setRule(existingRule);
+//                }
+//                existingRule.setGroupEntities(updatedGroups);
+//            }
+//            if (!updatedDevices.isEmpty()) {
+//                for (DeviceEntity device : updatedDevices) {
+//                    List<HomeAutomationRuleEntity> rules = device.getRules();
+//                    rules.add(existingRule);
+//                    device.setRules(new ArrayList<>(rules));
+//                }
+//                existingRule.setDeviceEntities(updatedDevices);
 //
-//            Optional.ofNullable(homeAutomationRuleEntity.getDescription())
-//                    .ifPresent(existingRule::setDescription);
-//
-//            // Update group entities if provided; create a new mutable list to avoid issues with immutability
-//            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities())
-//                    .ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
-//            Optional.ofNullable(homeAutomationRuleEntity.getEvent()).ifPresent(existingRule::setEvent);
-//
-//            // Save the updated existing rule entity
+//            }
+//            if (!toBeUpdatedBehaviours.isEmpty()) existingRule.setDeviceBehaviours(new HashMap<>(toBeUpdatedBehaviours));
 //            return homeAutomationRuleRepository.save(existingRule);
 //        }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
 //    }
 
+    @Override
+    public HomeAutomationRuleEntity partialUpdate(Long id, HomeAutomationRuleEntity homeAutomationRuleEntity) {
+        homeAutomationRuleEntity.setRuleId(id);
+        return homeAutomationRuleRepository.findById(id).map(existingRule -> {
+            Optional.ofNullable(homeAutomationRuleEntity.getRuleName())
+                    .ifPresent(existingRule::setRuleName);
+            Optional.ofNullable(homeAutomationRuleEntity.getDescription())
+                    .ifPresent(existingRule::setDescription);
+
+            Optional.ofNullable(homeAutomationRuleEntity.getDeviceBehaviours())
+                    .ifPresent(newBehaviours -> existingRule.setDeviceBehaviours(new HashMap<>(newBehaviours)));
+
+            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities())
+                    .ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
+
+            Optional.ofNullable(homeAutomationRuleEntity.getDeviceEntities())
+                    .ifPresent(newDevices -> existingRule.setDeviceEntities(new ArrayList<>(newDevices)));
+
+            return homeAutomationRuleRepository.save(existingRule);
+        }).orElseThrow(() -> new RuntimeException("Rule does not exist"));
+    }
 
 
     @Override
@@ -170,17 +169,30 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
     public void removeDeviceFromRule(Long ruleId, Long deviceId) {
         Optional<HomeAutomationRuleEntity> ruleOptional = homeAutomationRuleRepository.findById(ruleId);
 
+
+
         if (ruleOptional.isPresent()) {
             HomeAutomationRuleEntity rule = ruleOptional.get();
+
+            DeviceEntity deviceEntity = deviceRepository.findById(deviceId)
+                    .orElseThrow(() -> new RuntimeException("Device not found with id: " + deviceId));
+            List<HomeAutomationRuleEntity> rules = deviceEntity.getRules();
+            List<HomeAutomationRuleEntity> rulesUpdated = new ArrayList<>(rules);
+            rulesUpdated.remove(rule);
+
+            deviceEntity.setRules(new ArrayList<>(rulesUpdated));
 
             if(!rule.getDeviceEntities().removeIf(device -> device.getDeviceId().equals(deviceId))) throw new RuntimeException("This device Id isn't associated with this particular rule");
 
 //            homeAutomationRuleRepository.save(rule);
             partialUpdate(ruleId, rule);
+            deviceService.partialUpdate(deviceId, deviceEntity);
+
         } else{
             throw new RuntimeException("Rule not found with id: " + ruleId);
         }
     }
+
 
     @Override
     public boolean isOwner(Long ruleId, String currentUsername) {

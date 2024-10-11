@@ -3,16 +3,14 @@ package com.homeautomation.homeAutomation.services.impl;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
-import com.homeautomation.homeAutomation.repository.GroupRepository;
 import com.homeautomation.homeAutomation.services.DeviceService;
-import com.homeautomation.homeAutomation.services.GroupService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("deviceService")//SpEL expressions
 public class DeviceServiceImpl implements DeviceService {
 
     final private DeviceRepository deviceRepository;
@@ -89,6 +87,11 @@ public class DeviceServiceImpl implements DeviceService {
 
     public List<DeviceEntity> findDevicesByGroupId(Long groupId) {
         return deviceRepository.findByRules_GroupEntities_GroupId(groupId);
+    }
 
+    @Override
+    public boolean isOwner(Long ruleId, String currentUsername) {
+        Optional<DeviceEntity> device = deviceRepository.findById(ruleId);
+        return device.isPresent() && device.get().getUserEntity().getUsername().equals(currentUsername);
     }
 }

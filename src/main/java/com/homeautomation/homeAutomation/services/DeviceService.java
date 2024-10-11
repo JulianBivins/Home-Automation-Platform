@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.services;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
+import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +32,7 @@ public interface DeviceService {
     void delete(Long id);
 
     DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
+
+
+    boolean isOwner(Long ruleId, String currentUsername);
 }

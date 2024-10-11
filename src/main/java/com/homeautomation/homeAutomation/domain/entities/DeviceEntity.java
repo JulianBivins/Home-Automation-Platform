@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.homeautomation.homeAutomation.domain.enums.DeviceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,14 +27,14 @@ public class DeviceEntity {
     // ex: Lights -> Living room
     private String name;
 
-    public enum DeviceType {
-            LIGHTS,
-            //Washer, Fridge, Blinds...
-            UTILITY,
-            SPEAKER,
-            TELEVISION,
-            CAMERA,
-    }
+//    public enum DeviceType {
+//            LIGHTS,
+//            //Washer, Fridge, Blinds...
+//            UTILITY,
+//            SPEAKER,
+//            TELEVISION,
+//            CAMERA,
+//    }
 
     @Enumerated(EnumType.STRING)
     private DeviceType type;

@@ -111,7 +111,7 @@ public class HomeAutomationRuleController {
         HomeAutomationRuleEntity ruleEntity = ruleMapper.mapFrom(homeAutomationRuleDto);
         ruleEntity.setUserEntity(currentUser);
         HomeAutomationRuleEntity createdRuleEntity = homeAutomationRuleService.save(ruleEntity);
-        return new ResponseEntity<>(ruleMapper.mapTo(createdRuleEntity), HttpStatus.OK);
+        return new ResponseEntity<>(ruleMapper.mapTo(createdRuleEntity), HttpStatus.CREATED);
     }
 
     @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")

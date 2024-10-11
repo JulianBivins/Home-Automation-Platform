@@ -11,6 +11,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +25,18 @@ import java.util.List;
 
 
 public class GroupDto {
+
+    @NotNull(message = "Group ID cannot be null")
     private Long groupId;
 
+    @NotBlank(message = "Group name is mandatory")
     private String name;
 
 //    @JsonBackReference(value = "rule-groups")
 //    @JsonIgnore
     private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
+    @NotNull(message = "User DTO cannot be null")
     private UserDto userDto;
 
 }

@@ -13,7 +13,6 @@ import com.homeautomation.homeAutomation.services.GroupService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-//import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity.Behaviour;
 
 import java.util.*;
 

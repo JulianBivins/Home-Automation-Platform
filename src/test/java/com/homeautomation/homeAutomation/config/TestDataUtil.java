@@ -3,6 +3,7 @@ package com.homeautomation.homeAutomation.config;
 import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.*;
 import com.homeautomation.homeAutomation.domain.enums.Behaviour;
+import com.homeautomation.homeAutomation.domain.enums.DeviceType;
 
 import java.util.*;
 
@@ -131,7 +132,7 @@ public final class TestDataUtil {
     public static DeviceEntity createDeviceEntityA(UserEntity userEntity) {
         DeviceEntity deviceEntityA = new DeviceEntity();
         deviceEntityA.setName("Lights_Bathroom");
-        deviceEntityA.setType(DeviceEntity.DeviceType.LIGHTS);
+        deviceEntityA.setType(DeviceType.LIGHTS);
         deviceEntityA.setUserEntity(userEntity);
         return deviceEntityA;
     }
@@ -139,7 +140,7 @@ public final class TestDataUtil {
     public static DeviceEntity createDeviceEntityB(UserEntity userEntity) {
         DeviceEntity deviceEntityB = new DeviceEntity();
         deviceEntityB.setName("Speaker_LivingRoom");
-        deviceEntityB.setType(DeviceEntity.DeviceType.SPEAKER);
+        deviceEntityB.setType(DeviceType.SPEAKER);
         deviceEntityB.setUserEntity(userEntity);
         return deviceEntityB;
     }

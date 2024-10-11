@@ -3,32 +3,36 @@ package com.homeautomation.homeAutomation.controller;
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 //import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
+import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.mapper.impl.DeviceMapperImpl;
 //import com.homeautomation.homeAutomation.services.BehaviourService;
 import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
+import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/devices")
 public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
     @Autowired
     private DeviceMapperImpl deviceMapper;
-//    @Autowired
-//    private BehaviourService behaviourService;
     @Autowired
     private HomeAutomationRuleService homeAutomationRuleService;
+    @Autowired
+    private UserService userService;
 
-    @GetMapping("/devices")
+    @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
+    @GetMapping("/{deviceId}")
     public ResponseEntity<DeviceDto> getDeviceById(@PathVariable Long deviceId) {
         Optional<DeviceEntity> returnedDeviceDto = deviceService.findOne(deviceId);
          return returnedDeviceDto.map(deviceEntity -> {
@@ -37,59 +41,40 @@ public class DeviceController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/behaviours/{deviceId}/behaviours")
-    //TODO need to think if a Requestbody of DeviceDto or if a long id is better
-    public ResponseEntity<ArrayList<String>> retrieveBehavioursByDeviceId (@RequestBody DeviceDto deviceDto) {
-//        List<BehaviourEntity> behaviours = behaviourService.getBehavioursByDeviceID(deviceDto);
-        ArrayList<String> behaviourArray = new ArrayList<>();
-//        for(var behaviour : behaviours) {
-//            behaviourArray.add(String.valueOf(behaviour.getBehaviour()));
-//        }
-        return new ResponseEntity<>(behaviourArray, HttpStatus.OK);
-    }
+//    @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
+//    @GetMapping("/{deviceId}/behaviours")
+//    public ResponseEntity<ArrayList<Behaviour>> retrieveBehavioursByDeviceId (@PathVariable Long deviceId) {
+//
+//    }
 
-    @PostMapping("/devices/{deviceType}")
-    public ResponseEntity<DeviceDto> createDevice(@PathVariable String deviceTypeString,
-                                                  @RequestBody DeviceDto deviceDto) {
-        DeviceDto.DeviceType deviceType = switch(deviceTypeString.toUpperCase()) {
-            case "LIGHTS" -> DeviceDto.DeviceType.LIGHTS;
-            case "UTILITY" -> DeviceDto.DeviceType.UTILITY;
-            case "SPEAKER" -> DeviceDto.DeviceType.SPEAKER;
-            case "TELEVISION" -> DeviceDto.DeviceType.TELEVISION;
-            case "CAMERA" -> DeviceDto.DeviceType.CAMERA;
-            default -> throw new IllegalArgumentException("Invalid deviceType: " + deviceTypeString);
-        };
-        deviceDto.setType(deviceType);
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/create")
+    public ResponseEntity<DeviceDto> createDevice(@RequestBody DeviceDto deviceDto, Authentication authentication) {
+        String currentUsername = authentication.getName();
+        UserEntity currentUser = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("User not found"));
+
         DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
+        deviceEntity.setUserEntity(currentUser);
         DeviceEntity savedDeviceEntity = deviceService.save(deviceEntity);
         return new ResponseEntity<>(deviceMapper.mapTo(savedDeviceEntity), HttpStatus.CREATED);
     }
 
-    @PutMapping("/devices/{deviceId}")
-    public ResponseEntity<DeviceDto> updateFullDevice(@PathVariable Long deviceId, @RequestBody DeviceDto deviceDto) {
+    @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
+    @PatchMapping("/update/{deviceId}")
+    public ResponseEntity<DeviceDto> partialUpdate(@PathVariable Long deviceId, @RequestBody DeviceDto deviceDto) {
         if(!deviceService.isExists(deviceId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        deviceDto.setDeviceId(deviceId);
-        DeviceEntity updatedDeviceEntity = deviceMapper.mapFrom(deviceDto);
-        DeviceEntity savedUpdateDevice = deviceService.saveUpdate(deviceId, updatedDeviceEntity);
-        return new ResponseEntity<>(deviceMapper.mapTo(savedUpdateDevice), HttpStatus.OK);
-    }
-
-
-    @PatchMapping("/devices/{deviceId}")
-    public ResponseEntity<DeviceDto> partialUpdate(@PathVariable Long id, @RequestBody DeviceDto deviceDto) {
-        if(!deviceService.isExists(id)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         DeviceEntity deviceEntity = deviceMapper.mapFrom(deviceDto);
-        DeviceEntity updatedDevice = deviceService.partialUpdate(id, deviceEntity);
+        DeviceEntity updatedDevice = deviceService.partialUpdate(deviceId, deviceEntity);
         return new ResponseEntity<>(
                 deviceMapper.mapTo(updatedDevice),
                 HttpStatus.OK);
     }
 
-//    @DeleteMapping("/devices/rules/{deviceId}")
+//    @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
+//    @DeleteMapping("/delete/rules/{deviceId}")
 //    public ResponseEntity deleteDeviceOutOfRule(@PathVariable Long deviceId) {
 //         if(homeAutomationRuleService.isDeviceExistsInRule(deviceId)) {
 //             homeAutomationRuleService.removeDeviceFromRule(deviceId);
@@ -99,10 +84,14 @@ public class DeviceController {
 //         }
 //    }
 
-    @DeleteMapping("/devices/{deviceId}")
-    public ResponseEntity deleteDevice (@PathVariable Long deviceId){
+    @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
+    @DeleteMapping("/delete/{deviceId}")
+    public ResponseEntity<Void> deleteDevice (@PathVariable Long deviceId){
+        if(!deviceService.isExists(deviceId)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         deviceService.delete(deviceId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -14,6 +14,7 @@ import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.domain.enums.Behaviour;
+import com.homeautomation.homeAutomation.domain.enums.DeviceType;
 import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
@@ -82,6 +83,7 @@ public class HomeAutomationRuleEntityControllerIT {
     @Transactional
     void setUp() throws Exception {
 
+        //Formatting
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
 
@@ -147,7 +149,7 @@ public class HomeAutomationRuleEntityControllerIT {
                         .header("Authorization", "Bearer " + jwtToken)
                         .content(ruleJson)
         ).andExpect(
-                MockMvcResultMatchers.status().isOk()
+                MockMvcResultMatchers.status().isCreated()
         );
     }
 
@@ -319,7 +321,7 @@ public class HomeAutomationRuleEntityControllerIT {
 
         DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityB(testUser);
         deviceEntity.setName("TO BE ADDED");
-        deviceEntity.setType(DeviceEntity.DeviceType.CAMERA);
+        deviceEntity.setType(DeviceType.CAMERA);
         deviceRepository.save(deviceEntity);
 
         DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);
@@ -337,7 +339,7 @@ public class HomeAutomationRuleEntityControllerIT {
     public void testAddDeviceReturnsUpdatedDevices() throws Exception {
         DeviceEntity deviceEntity = TestDataUtil.createDeviceEntityB(testUser);
         deviceEntity.setName("TO BE ADDED");
-        deviceEntity.setType(DeviceEntity.DeviceType.CAMERA);
+        deviceEntity.setType(DeviceType.CAMERA);
         deviceRepository.save(deviceEntity);
 
         DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);

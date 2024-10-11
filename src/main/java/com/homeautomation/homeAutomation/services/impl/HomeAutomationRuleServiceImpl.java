@@ -143,8 +143,8 @@ public class HomeAutomationRuleServiceImpl implements HomeAutomationRuleService 
             Optional.ofNullable(homeAutomationRuleEntity.getDeviceBehaviours())
                     .ifPresent(newBehaviours -> existingRule.setDeviceBehaviours(new HashMap<>(newBehaviours)));
 
-            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntities())
-                    .ifPresent(newGroups -> existingRule.setGroupEntities(new ArrayList<>(newGroups)));
+            Optional.ofNullable(homeAutomationRuleEntity.getGroupEntity())
+                    .ifPresent(existingRule::setGroupEntity);
 
             Optional.ofNullable(homeAutomationRuleEntity.getDeviceEntities())
                     .ifPresent(newDevices -> existingRule.setDeviceEntities(new ArrayList<>(newDevices)));

@@ -137,8 +137,8 @@ public class HomeAutomationRuleEntityControllerIT {
         if (ruleDtoA.getDeviceDtos() != null) {
             ruleDtoA.getDeviceDtos().forEach(deviceDto -> deviceDto.setDeviceId(null));
         }
-        if (ruleDtoA.getGroupDtos() != null) {
-            ruleDtoA.getGroupDtos().forEach(groupDto -> groupDto.setGroupId(null));
+        if (ruleDtoA.getGroupDto() != null) {
+            ruleDtoA.getGroupDto().setGroupId(null);
         }
 
 

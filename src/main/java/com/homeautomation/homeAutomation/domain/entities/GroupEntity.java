@@ -26,10 +26,12 @@ public class GroupEntity {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "rule_id")
+//    @ManyToOne
+//    @JoinColumn(name = "rule_id")
 //    @JsonManagedReference
-    private HomeAutomationRuleEntity rule;
+//    private HomeAutomationRuleEntity rule;
+    @OneToMany(mappedBy = "groupEntity", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+    private List<HomeAutomationRuleEntity> ruleEntities = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,7 +48,7 @@ public class GroupEntity {
 
         if (!groupId.equals(that.groupId)) return false;
         if (!name.equals(that.name)) return false;
-        if (!Objects.equals(rule, that.rule)) return false;
+//        if (!Objects.equals(rule, that.rule)) return false;
         return Objects.equals(userEntity, that.userEntity);
     }
 
@@ -54,7 +56,7 @@ public class GroupEntity {
     public int hashCode() {
         int result = groupId.hashCode();
         result = 31 * result + name.hashCode();
-        result = rule != null ? 31 * result + rule.hashCode() : 0;
+//        result = rule != null ? 31 * result + rule.hashCode() : 0;
         result = userEntity != null ? 31 * result + userEntity.hashCode() : 0;
         return result;
     }

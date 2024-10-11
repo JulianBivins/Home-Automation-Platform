@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,28 +22,31 @@ import java.util.Map;
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ruleId",    scope = HomeAutomationRuleDto.class)
 public class HomeAutomationRuleDto {
 
-    @NotNull(message = "Rule ID cannot be null")
+    @NotNull(message = "Rule ID cannot be null", groups = ValidationGroups.Update.class)
     private Long ruleId;
 
-    @NotBlank(message = "Rule name is mandatory")
+    @NotBlank(message = "Rule name is mandatory", groups = {ValidationGroups.Create.class
+//            , ValidationGroups.Update.class
+    })
     private String ruleName;
 
-    @NotBlank(message = "Description is mandatory")
+    @NotBlank(message = "Description is mandatory", groups = ValidationGroups.Create.class)
     private String description;
 
 //    @JsonBackReference(value = "user-rules")
     @JsonIgnore
-    @NotNull(message = "User DTO cannot be null")
+    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
     private UserDto userDto;
 
 //    @JsonManagedReference(value = "rule-groups")
 //    @JsonIgnore
-    private List<GroupDto> groupDtos = new ArrayList<>();
+//    private List<GroupDto> groupDtos = new ArrayList<>();
+    private GroupDto groupDto;
 
 //    @JsonManagedReference(value = "rule-devices")
     private List<DeviceDto> deviceDtos = new ArrayList<>();
 
-    @NotNull(message = "Event is mandatory")
+    @NotNull(message = "Event is mandatory", groups = ValidationGroups.Create.class )
     private Event event;
 
 //    @JsonIgnore

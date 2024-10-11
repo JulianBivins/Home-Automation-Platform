@@ -43,9 +43,9 @@ public final class TestDataUtil {
         ruleEntityA.setDescription("Mock RuleA");
         ruleEntityA.setUserEntity(userEntity);
 
-        List<GroupEntity> groupEntities = new ArrayList<>();
-        groupEntities.add(groupEntity);
-        ruleEntityA.setGroupEntities(groupEntities);
+//        List<GroupEntity> groupEntities = new ArrayList<>();
+//        groupEntities.add(groupEntity);
+        ruleEntityA.setGroupEntity(groupEntity);
 
         if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
             throw new IllegalStateException("Device IDs must not be null");
@@ -69,9 +69,9 @@ public final class TestDataUtil {
         ruleEntityB.setDescription("Mock RuleB");
         ruleEntityB.setUserEntity(userEntity);
 
-        List<GroupEntity> groupEntities = new ArrayList<>();
-        groupEntities.add(groupEntity);
-        ruleEntityB.setGroupEntities(groupEntities);
+//        List<GroupEntity> groupEntities = new ArrayList<>();
+//        groupEntities.add(groupEntity);
+        ruleEntityB.setGroupEntity(groupEntity);
 
         if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
             throw new IllegalStateException("Device IDs must not be null");
@@ -95,9 +95,9 @@ public final class TestDataUtil {
         ruleEntityC.setDescription("Mock RuleC");
         ruleEntityC.setUserEntity(userEntity);
 
-        List<GroupEntity> groupEntities = new ArrayList<>();
-        groupEntities.add(groupEntity);
-        ruleEntityC.setGroupEntities(groupEntities);
+//        List<GroupEntity> groupEntities = new ArrayList<>();
+//        groupEntities.add(groupEntity);
+        ruleEntityC.setGroupEntity(groupEntity);
 
         if (devices.get(0).getDeviceId() == null || devices.get(1).getDeviceId() == null) {
             throw new IllegalStateException("Device IDs must not be null");

@@ -31,9 +31,12 @@ public class HomeAutomationRuleEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
 //    @JsonBackReference
-    private List<GroupEntity> groupEntities = new ArrayList<>();
+//    private List<GroupEntity> groupEntities = new ArrayList<>();
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "group_id")
+    private GroupEntity groupEntity;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

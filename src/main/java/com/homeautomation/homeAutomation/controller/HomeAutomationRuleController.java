@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.controller;
 
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 //import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/rules")
+@Validated
 public class HomeAutomationRuleController {
 
     @Autowired
@@ -105,7 +108,7 @@ public class HomeAutomationRuleController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public ResponseEntity<HomeAutomationRuleDto> createHomeAutomationRuleEntity(@RequestBody HomeAutomationRuleDto homeAutomationRuleDto, Authentication authentication) {
+    public ResponseEntity<HomeAutomationRuleDto> createHomeAutomationRuleEntity(@Validated(ValidationGroups.Create.class) @RequestBody HomeAutomationRuleDto homeAutomationRuleDto, Authentication authentication) {
         String currentUsername = authentication.getName();
         UserEntity currentUser = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("User not found"));
         HomeAutomationRuleEntity ruleEntity = ruleMapper.mapFrom(homeAutomationRuleDto);
@@ -116,7 +119,7 @@ public class HomeAutomationRuleController {
 
     @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @PatchMapping("/update/{ruleId}")
-    public ResponseEntity<HomeAutomationRuleDto> partialUpdateRule (@PathVariable Long ruleId, @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
+    public ResponseEntity<HomeAutomationRuleDto> partialUpdateRule (@PathVariable Long ruleId, @Validated(ValidationGroups.Update.class) @RequestBody HomeAutomationRuleDto homeAutomationRuleDto) {
 
         if (!homeAutomationRuleService.isExists(ruleId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -131,7 +134,7 @@ public class HomeAutomationRuleController {
 
     @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @PatchMapping("/devices/add/{ruleId}")
-    public ResponseEntity<List<DeviceDto>> addDevice (@PathVariable Long ruleId, @RequestBody DeviceDto deviceDto){
+    public ResponseEntity<List<DeviceDto>> addDevice (@PathVariable Long ruleId, @Validated(ValidationGroups.Update.class) @RequestBody DeviceDto deviceDto){
         Optional<HomeAutomationRuleEntity> retrievedDBRuleEntity = homeAutomationRuleService.findById(ruleId);
         if (retrievedDBRuleEntity.isEmpty()) throw new RuntimeException("There is not Rule associated with this ruleId");
         HomeAutomationRuleEntity retrievedRuleEntity = retrievedDBRuleEntity.get();

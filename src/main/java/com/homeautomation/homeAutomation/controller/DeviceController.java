@@ -14,12 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/devices")
+@Validated
 public class DeviceController {
 
     @Autowired
@@ -34,8 +36,8 @@ public class DeviceController {
     @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
     @GetMapping("/{deviceId}")
     public ResponseEntity<DeviceDto> getDeviceById(@PathVariable Long deviceId) {
-        Optional<DeviceEntity> returnedDeviceDto = deviceService.findOne(deviceId);
-         return returnedDeviceDto.map(deviceEntity -> {
+        Optional<DeviceEntity> returnedDeviceEntity = deviceService.findById(deviceId);
+         return returnedDeviceEntity.map(deviceEntity -> {
             DeviceDto deviceDto = deviceMapper.mapTo(deviceEntity);
             return new ResponseEntity<>(deviceDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

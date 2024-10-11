@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.domain.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import jakarta.validation.constraints.NotBlank;
@@ -21,13 +22,14 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId",    scope = UserDto.class)
 public class UserDto {
 
-    @NotNull(message = "User ID cannot be null")
+    @NotNull(message = "User ID cannot be null", groups = ValidationGroups.Update.class)
     Long userId;
 
-    @NotBlank(message = "Username is mandatory")
+//    @NotBlank(message = "Username is mandatory", groups = ValidationGroups.Create.class)
     String username;
 
     @JsonIgnore
+//    @NotBlank(message = "Username is mandatory", groups = ValidationGroups.Create.class)
     String password;
 
 //    @JsonManagedReference(value = "user-rules")
@@ -35,7 +37,7 @@ public class UserDto {
 
     private List<GroupDto> groups = new ArrayList<>();
 
-    @NotEmpty(message = "User must have at least one role")
+//    @NotEmpty(message = "User must have at least one role", groups = ValidationGroups.Create.class)
     private Set<Roles> role = new HashSet<>();
 
     public enum Roles {

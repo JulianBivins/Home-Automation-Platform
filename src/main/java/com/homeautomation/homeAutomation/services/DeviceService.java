@@ -1,7 +1,6 @@
 package com.homeautomation.homeAutomation.services;
 
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
-import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public interface DeviceService {
 
     Iterable<DeviceEntity> findAll();
 
-    Optional<DeviceEntity> findOne(Long id);
+    Optional<DeviceEntity> findById(Long id);
 
     List<DeviceEntity> findDevicesByUserId(Long userId);
     List<DeviceEntity> findDevicesByRuleId(Long ruleId);
@@ -34,5 +33,5 @@ public interface DeviceService {
     DeviceEntity partialUpdate(Long id, DeviceEntity deviceEntity);
 
 
-    boolean isOwner(Long ruleId, String currentUsername);
+    boolean isOwner(Long deviceId, String currentUsername);
 }

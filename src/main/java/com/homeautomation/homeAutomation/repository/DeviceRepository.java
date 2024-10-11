@@ -15,7 +15,8 @@ List<DeviceEntity> findByUserEntity_UserId(Long userId);
 
     List<DeviceEntity> findByRules_RuleId(Long ruleId);
 
-    List<DeviceEntity> findByRules_GroupEntities_GroupId(Long groupId);
+    List<DeviceEntity> findByRules_GroupEntity_GroupId(Long groupId);
+//    List<DeviceEntity> findByRules_GroupEntities_GroupId(Long groupId);
 
 
     @Modifying

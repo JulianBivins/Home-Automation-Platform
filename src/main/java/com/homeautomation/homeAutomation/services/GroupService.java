@@ -1,6 +1,5 @@
 package com.homeautomation.homeAutomation.services;
 
-import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public interface GroupService {
 
     Iterable<GroupEntity> findAll();
 
-    Optional<GroupEntity> findOne(Long id);
+    Optional<GroupEntity> findById(Long id);
 
     List<GroupEntity> findByUserEntity_UserId(Long userId);
 
@@ -25,4 +24,7 @@ public interface GroupService {
     GroupEntity partialUpdate(Long id, GroupEntity groupEntity);
 
     GroupEntity saveUpdate(Long id, GroupEntity groupEntity);
+
+    boolean isOwner(Long groupId, String currentUsername);
+    boolean isOwner(Long groupId, Long ruleId, String currentUsername);
 }

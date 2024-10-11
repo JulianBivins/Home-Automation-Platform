@@ -57,6 +57,9 @@ public class AuthenticationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        System.out.println("REGISTER REQUEST" + registerRequest);
+
     }
 
     @Test
@@ -73,6 +76,7 @@ public class AuthenticationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequestForMethod))
         ).andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.homeautomation.homeAutomation.controller;
 
 
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationRequest;
 import com.homeautomation.homeAutomation.controller.util.AuthenticationResponse;
 import com.homeautomation.homeAutomation.controller.util.RegisterRequest;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Validated
 public class AuthenticationController {
 
 //    @Autowired
@@ -43,14 +46,14 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (
-            @RequestBody RegisterRequest request
+            @Validated(ValidationGroups.Create.class) @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+            @Validated @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
 

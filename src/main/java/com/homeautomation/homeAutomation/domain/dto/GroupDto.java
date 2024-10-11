@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
@@ -26,17 +27,20 @@ import java.util.List;
 
 public class GroupDto {
 
-    @NotNull(message = "Group ID cannot be null")
+    //need to check if this is what is most logical, because if i only pass the value to be updated, there will naturally not be any id to be replaced
+    @NotNull(message = "Group ID cannot be null", groups = ValidationGroups.Update.class)
     private Long groupId;
 
-    @NotBlank(message = "Group name is mandatory")
+    @NotBlank(message = "Group name is mandatory", groups = {ValidationGroups.Create.class
+//            , ValidationGroups.Update.class
+    })
     private String name;
 
 //    @JsonBackReference(value = "rule-groups")
 //    @JsonIgnore
     private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
-    @NotNull(message = "User DTO cannot be null")
+    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
     private UserDto userDto;
 
 }

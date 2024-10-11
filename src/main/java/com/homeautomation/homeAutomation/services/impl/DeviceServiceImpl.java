@@ -44,7 +44,7 @@ public class DeviceServiceImpl implements DeviceService {
 
 
     @Override
-    public Optional<DeviceEntity> findOne(Long id) {
+    public Optional<DeviceEntity> findById(Long id) {
         return deviceRepository.findById(id);
     }
 
@@ -86,12 +86,13 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     public List<DeviceEntity> findDevicesByGroupId(Long groupId) {
-        return deviceRepository.findByRules_GroupEntities_GroupId(groupId);
+//        return deviceRepository.findByRules_GroupEntities_GroupId(groupId);
+        return deviceRepository.findByRules_GroupEntity_GroupId(groupId);
     }
 
     @Override
-    public boolean isOwner(Long ruleId, String currentUsername) {
-        Optional<DeviceEntity> device = deviceRepository.findById(ruleId);
+    public boolean isOwner(Long deviceId, String currentUsername) {
+        Optional<DeviceEntity> device = deviceRepository.findById(deviceId);
         return device.isPresent() && device.get().getUserEntity().getUsername().equals(currentUsername);
     }
 }

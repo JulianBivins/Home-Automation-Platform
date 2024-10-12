@@ -8,12 +8,10 @@ import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
-import com.homeautomation.homeAutomation.domain.enums.Behaviour;
 import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.services.GroupService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import com.homeautomation.homeAutomation.services.UserService;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,16 +85,26 @@ public class GroupController {
     @PreAuthorize("@groupService.isOwner(#groupId, #ruleId, authentication.name)")
     @PatchMapping("/{groupId}/addRule/{ruleId}")
     public ResponseEntity<GroupDto> addRuleToGroup(@PathVariable Long groupId, @PathVariable Long ruleId, Authentication authentication ) {
+
         GroupEntity retrievedDBGroup = groupService.findById(groupId).orElseThrow(() -> new RuntimeException("Group not Found"));
 
         HomeAutomationRuleEntity homeAutomationRuleEntity = ruleService.findById(ruleId).orElseThrow(() -> new RuntimeException("Rule not Found"));
 
-        List<HomeAutomationRuleEntity> ruleList = new ArrayList<>(retrievedDBGroup.getRuleEntities());
-        ruleList.add(homeAutomationRuleEntity);
+        //just trying if the mistake is because of the other side not being persisted?
+        homeAutomationRuleEntity.setGroupEntity(retrievedDBGroup);
+        ruleService.partialUpdate(ruleId, homeAutomationRuleEntity);
 
-        retrievedDBGroup.setRuleEntities(new ArrayList<>(ruleList));
+        List<HomeAutomationRuleEntity> currentRuleEntities = retrievedDBGroup.getRuleEntities();
+        List<HomeAutomationRuleEntity> ruleListToBeUpdated = new ArrayList<>(currentRuleEntities);
+        ruleListToBeUpdated.add(homeAutomationRuleEntity);
+
+        retrievedDBGroup.setRuleEntities(new ArrayList<>(ruleListToBeUpdated));
+
+        if (!retrievedDBGroup.getRuleEntities().contains(homeAutomationRuleEntity)) throw new RuntimeException("The device could not be added");
+
 
         GroupEntity groupEntityUpdated = groupService.partialUpdate(groupId, retrievedDBGroup);
+//        GroupEntity groupEntityUpdated = groupService.saveUpdate(groupId, retrievedDBGroup);
 
         GroupEntity groupEntityDBUpdated = groupService.findById(groupEntityUpdated.getGroupId()).orElseThrow(() -> new RuntimeException("Group not Found"));
 

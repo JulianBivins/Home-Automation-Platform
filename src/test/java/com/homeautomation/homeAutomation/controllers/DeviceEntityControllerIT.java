@@ -9,6 +9,7 @@ import com.homeautomation.homeAutomation.controller.util.AuthenticationResponse;
 import com.homeautomation.homeAutomation.controller.util.RegisterRequest;
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
+import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;
@@ -55,6 +56,9 @@ public class DeviceEntityControllerIT {
     private ObjectMapper objectMapper;
     @Autowired
     private Mapper<DeviceEntity, DeviceDto> deviceMapper;
+    @Autowired
+    private Mapper<UserEntity, UserDto> userMapper;
+
 
     private UserEntity testUser;
     private DeviceEntity deviceEntityA;
@@ -129,8 +133,11 @@ public class DeviceEntityControllerIT {
     public void testThatCreateDeviceSuccessfullyReturnsHttp201Created() throws Exception {
         DeviceDto deviceDto = deviceMapper.mapTo(deviceEntityA);
         deviceDto.setDeviceId(null);
+//        UserDto userDto = userMapper.mapTo(testUser);
+//        deviceDto.setUserDto(userDto);
 
         String deviceJson = objectMapper.writeValueAsString(deviceDto);
+        System.out.println("THIS IS DEVICE JSON" + deviceJson);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/devices/create")
                         .contentType(MediaType.APPLICATION_JSON)

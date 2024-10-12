@@ -143,6 +143,7 @@ public class HomeAutomationRuleEntityControllerIT {
 
 
         String ruleJson = objectMapper.writeValueAsString(ruleDtoA);
+        System.out.println("THIS IS THE RULEJSON " + ruleJson);
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/rules/create")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -22,7 +22,7 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId",    scope = UserDto.class)
 public class UserDto {
 
-    @NotNull(message = "User ID cannot be null", groups = ValidationGroups.Update.class)
+//    @NotNull(message = "User ID cannot be null", groups = ValidationGroups.Update.class)
     Long userId;
 
 //    @NotBlank(message = "Username is mandatory", groups = ValidationGroups.Create.class)

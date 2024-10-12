@@ -145,13 +145,13 @@ public class GroupEntityControllerIT {
 
     @Test
     @Transactional
-    public void testThatCreateDeviceSuccessfullyReturnsHttp201Created() throws Exception {
+    public void testThatCreateGroupSuccessfullyReturnsHttp201Created() throws Exception {
         GroupDto groupDto = groupMapper.mapTo(groupEntityA);
         groupDto.setGroupId(null);
 
         String deviceJson = objectMapper.writeValueAsString(groupDto);
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/devices/create")
+                MockMvcRequestBuilders.post("/groups/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtToken)
                         .content(deviceJson)

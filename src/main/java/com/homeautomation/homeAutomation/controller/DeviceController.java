@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.controller;
 
+import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 //import com.homeautomation.homeAutomation.domain.entities.BehaviourEntity;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
@@ -52,7 +53,7 @@ public class DeviceController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public ResponseEntity<DeviceDto> createDevice(@RequestBody DeviceDto deviceDto, Authentication authentication) {
+    public ResponseEntity<DeviceDto> createDevice(@Validated(ValidationGroups.Create.class) @RequestBody DeviceDto deviceDto, Authentication authentication) {
         String currentUsername = authentication.getName();
         UserEntity currentUser = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -64,7 +65,7 @@ public class DeviceController {
 
     @PreAuthorize("@deviceService.isOwner(#deviceId, authentication.name)")
     @PatchMapping("/update/{deviceId}")
-    public ResponseEntity<DeviceDto> partialUpdate(@PathVariable Long deviceId, @RequestBody DeviceDto deviceDto) {
+    public ResponseEntity<DeviceDto> partialUpdate(@PathVariable Long deviceId, @Validated(ValidationGroups.Update.class) @RequestBody DeviceDto deviceDto) {
         if(!deviceService.isExists(deviceId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

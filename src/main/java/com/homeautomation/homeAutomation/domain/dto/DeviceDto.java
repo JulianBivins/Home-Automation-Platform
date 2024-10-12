@@ -18,7 +18,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "deviceId",    scope = DeviceDto.class)
 public class DeviceDto {
 
-    @NotNull(message = "Device ID cannot be null", groups = ValidationGroups.Update.class)
+//    @NotNull(message = "Device ID cannot be null", groups = ValidationGroups.Update.class)
     private Long deviceId;
 
     @NotBlank(message = "Device name is mandatory", groups = {ValidationGroups.Create.class
@@ -26,11 +26,11 @@ public class DeviceDto {
     })
     private String name;
 
-    @NotNull(message = "Device type is mandatory")
+    @NotNull(message = "Device type is mandatory", groups = ValidationGroups.Create.class)
     private DeviceType type;
 
     @JsonIgnore
-    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
+//    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
     private UserDto userDto;
 
 //    @JsonBackReference(value = "rule-devices")

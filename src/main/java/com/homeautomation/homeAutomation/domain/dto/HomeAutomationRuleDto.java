@@ -22,7 +22,7 @@ import java.util.Map;
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ruleId",    scope = HomeAutomationRuleDto.class)
 public class HomeAutomationRuleDto {
 
-    @NotNull(message = "Rule ID cannot be null", groups = ValidationGroups.Update.class)
+//    @NotNull(message = "Rule ID cannot be null", groups = ValidationGroups.Update.class)
     private Long ruleId;
 
     @NotBlank(message = "Rule name is mandatory", groups = {ValidationGroups.Create.class
@@ -35,7 +35,7 @@ public class HomeAutomationRuleDto {
 
 //    @JsonBackReference(value = "user-rules")
     @JsonIgnore
-    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
+//    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
     private UserDto userDto;
 
 //    @JsonManagedReference(value = "rule-groups")

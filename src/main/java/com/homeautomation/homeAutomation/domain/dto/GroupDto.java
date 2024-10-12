@@ -28,7 +28,7 @@ import java.util.List;
 public class GroupDto {
 
     //need to check if this is what is most logical, because if i only pass the value to be updated, there will naturally not be any id to be replaced
-    @NotNull(message = "Group ID cannot be null", groups = ValidationGroups.Update.class)
+//    @NotNull(message = "Group ID cannot be null", groups = ValidationGroups.Update.class)
     private Long groupId;
 
     @NotBlank(message = "Group name is mandatory", groups = {ValidationGroups.Create.class

@@ -1,27 +1,36 @@
 package com.homeautomation.homeAutomation.services.impl;
 
 
+import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
+import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.services.DeviceService;
+import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service("deviceService")//SpEL expressions
 public class DeviceServiceImpl implements DeviceService {
 
     final private DeviceRepository deviceRepository;
+    final private UserService userService;
+    final Mapper<DeviceEntity, DeviceDto> deviceMapper;
 
 //    final private GroupRepository groupRepository;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository
+    public DeviceServiceImpl(DeviceRepository deviceRepository, UserService userService, Mapper<DeviceEntity, DeviceDto> deviceMapper
 //                             ,GroupRepository groupRepository
     ) {
         this.deviceRepository = deviceRepository;
 //        this.groupRepository = groupRepository;
+        this.userService = userService;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
@@ -94,5 +103,13 @@ public class DeviceServiceImpl implements DeviceService {
     public boolean isOwner(Long deviceId, String currentUsername) {
         Optional<DeviceEntity> device = deviceRepository.findById(deviceId);
         return device.isPresent() && device.get().getUserEntity().getUsername().equals(currentUsername);
+    }
+
+    @Override
+    public List<DeviceDto> getDevicesByUser(String currentUsername) {
+        UserEntity userEntity = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("There exists no such user"));
+        Long userId = userEntity.getUserId();
+        List<DeviceEntity> devicesByUserId = findDevicesByUserId(userId);
+        return devicesByUserId.stream().map(deviceMapper::mapTo).toList();
     }
 }

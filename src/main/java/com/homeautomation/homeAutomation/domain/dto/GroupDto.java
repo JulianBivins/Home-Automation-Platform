@@ -38,9 +38,11 @@ public class GroupDto {
 
 //    @JsonBackReference(value = "rule-groups")
 //    @JsonIgnore
+    @JsonIgnore
     private List<HomeAutomationRuleDto> rules = new ArrayList<>();
 
-    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
+    @JsonIgnore
+//    @NotNull(message = "User DTO cannot be null", groups = ValidationGroups.Create.class)
     private UserDto userDto;
 
 }

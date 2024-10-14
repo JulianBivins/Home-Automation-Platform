@@ -35,8 +35,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Whitelisting
-//                        .requestMatchers("/auth/register", "/auth/authenticate").permitAll()
+//                        .requestMatchers("/auth/**").permitAll() // Whitelisting
+                        .requestMatchers("/auth/register", "/auth/authenticate").permitAll()
                         .requestMatchers("/users/**").hasAnyRole("ADMIN", "USER") // Securing other user paths
 //                        .requestMatchers("/demo").hasAnyRole("ADMIN", "USER") // Securing other user paths
 //                        .requestMatchers("/rules/**").authenticated() // Ensure rules endpoints require authentication

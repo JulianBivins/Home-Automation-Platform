@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.services;
 
+import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface DeviceService {
 
 
     boolean isOwner(Long deviceId, String currentUsername);
+
+    List<DeviceDto> getDevicesByUser(String currentUsername);
 }

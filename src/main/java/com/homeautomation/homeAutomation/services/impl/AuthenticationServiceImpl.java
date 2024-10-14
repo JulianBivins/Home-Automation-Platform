@@ -59,6 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
+//                        passwordEncoder.encode(request.getPassword())
                 )
          );
          //if we get to this point it means the user is authenticated

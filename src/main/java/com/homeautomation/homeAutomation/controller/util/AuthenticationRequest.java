@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class AuthenticationRequest {
     @NotBlank(message = "Username cannot be blank")
     private String username;
-    @NotBlank(message = "Username cannot be blank")
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 //    private Set<String> roles; //actually not needed, duh
 }

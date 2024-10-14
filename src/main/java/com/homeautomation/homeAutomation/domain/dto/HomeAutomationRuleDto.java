@@ -3,7 +3,6 @@ package com.homeautomation.homeAutomation.domain.dto;
 import com.fasterxml.jackson.annotation.*;
 import com.homeautomation.homeAutomation.config.ValidationGroups;
 import com.homeautomation.homeAutomation.domain.enums.Behaviour;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +24,7 @@ public class HomeAutomationRuleDto {
 //    @NotNull(message = "Rule ID cannot be null", groups = ValidationGroups.Update.class)
     private Long ruleId;
 
-    @NotBlank(message = "Rule name is mandatory", groups = {ValidationGroups.Create.class
-//            , ValidationGroups.Update.class
-    })
+    @NotBlank(message = "Rule name is mandatory", groups = ValidationGroups.Create.class)
     private String ruleName;
 
     @NotBlank(message = "Description is mandatory", groups = ValidationGroups.Create.class)
@@ -41,6 +38,7 @@ public class HomeAutomationRuleDto {
 //    @JsonManagedReference(value = "rule-groups")
 //    @JsonIgnore
 //    private List<GroupDto> groupDtos = new ArrayList<>();
+//    @NotNull(message = "Group is mandatory", groups = ValidationGroups.Create.class)
     private GroupDto groupDto;
 
 //    @JsonManagedReference(value = "rule-devices")
@@ -50,8 +48,8 @@ public class HomeAutomationRuleDto {
     private Event event;
 
 //    @JsonIgnore
-    @Valid
-    private Map<@NotNull(message = "Device ID cannot be null") Long, @NotNull(message = "Behaviour cannot be null") Behaviour> deviceBehaviours = new HashMap<>();
+//    @Valid
+    private Map< Long,Behaviour> deviceBehaviours = new HashMap<>();
 
     public enum Event {
         TIME,

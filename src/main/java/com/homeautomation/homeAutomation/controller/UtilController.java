@@ -1,10 +1,12 @@
 package com.homeautomation.homeAutomation.controller;
 
+import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;
+import com.homeautomation.homeAutomation.services.DeviceService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class UtilController {
     private HomeAutomationRuleService homeAutomationRuleService;
     @Autowired
     private Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> ruleMapper;
+    @Autowired
+    private DeviceService deviceService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/{userId}")
@@ -41,7 +45,7 @@ public class UtilController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<List<HomeAutomationRuleDto>> listHomeAutomationRules(Authentication authentication) {
         String currentUsername = authentication.getName();
@@ -55,6 +59,14 @@ public class UtilController {
                 .map(ruleMapper::mapTo)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(ruleDtos, HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/devices")
+    public ResponseEntity<List<DeviceDto>> getAllDevices(Authentication authentication) {
+        String currentUsername = authentication.getName();
+        List<DeviceDto> devices = deviceService.getDevicesByUser(currentUsername);
+        return ResponseEntity.ok(devices);
     }
 
 }

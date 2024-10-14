@@ -11,9 +11,29 @@
 }
 
 .input-field {
-    @apply  mb-2 w-full p-2 border border-gray-300 rounded
+    @apply  mb-2 w-full p-2 border border-gray-300 rounded 
 }
 
 .input-field-effect {
     @apply focus:outline-none focus:ring-2 focus:ring-blue-500
+}
+
+.body-login {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('/pictures/pexels-ollivves-931007.jpg') no-repeat;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+}
+.body-register {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('/pictures/pexels-packermann-1666021.jpg') no-repeat;
+    background-size: cover;  /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the background image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
 }

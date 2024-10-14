@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HomeAutomation_Plattform</title>
+    <link href="/src/output.css" rel="stylesheet" />
+  </head>
+
+  <body class="bg-gray-100 text-xl body-register">
+    <!--
+    <main>:
+      - flex: Applies Flexbox layout to center the content.
+      - items-center: Vertically centers the content inside the main element.
+      - justify-center: Horizontally centers the content.
+      - min-h-screen: Ensures the main element takes up the full viewport height (100vh).
+    -->
+    <main class="flex items-center justify-center min-h-screen "> 
+        <!--
+        <div>:
+            - flex: Applies Flexbox layout to align children.
+            - flex-col: Aligns children vertically (column direction).
+            - justify-center: Vertically centers the child elements within the div.
+          -->
+      <div class="flex flex-col justify-center bg-white rounded-lg shadow-2xl p-8 w-96">
+        <div class="flex items-center space-x-3 mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 ml-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              </svg>              
+          <h1 class="text-2xl font-semibold text-gray-700">Register</h1>
+        </div>         
+        <form id="registerForm">
+        <div class="input-box">
+          <label for="username"><span class="text-xl text-gray-700">Username:</span></label>
+          <input
+          class="input-field input-field-effect"
+            type="text"
+            id="username"
+            name="username"
+            minlength="5"
+            placeholder="Enter Username"
+            required
+          /><br />
+          </div>
+          <div  class="input-box">
+          <label for="password"><span class="text-xl text-gray-700">Password:</span></label>
+          <input
+          class="input-field input-field-effect"
+            type="password"
+            id="password"
+            name="password"
+            minlength="5"
+            maxlength="10"
+            placeholder="Enter Password"
+            required
+          /><br />
+        </div>
+        <div class="mt-4 flex justify-start">
+          <!-- <button type="reset">Reset Form</button> -->
+          <button type="submit" class="btn bg-red-400 w-full hover:bg-red-500"><span class="text-sm text-white tracking-widest">Register</span></button>
+        </div>
+        <div class="mt-4 text-center w-full tracking-wide">
+            <p class="text-gray-700">Have an Account? <a href="./index.html" class="font-medium decoration-solid ">Log In</a></p>
+        </div>
+        </form>
+      </div>     
+    </main>
+    <script src="/javascript/registerscript.js"></script>
+  </body>
+</html>

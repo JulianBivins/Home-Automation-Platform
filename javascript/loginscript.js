@@ -43,7 +43,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         if (result.token) {  
            
             localStorage.setItem('token', result.token);
-            window.location.href = '/home.html';
+            window.location.href = '/public/home.html';
         } else {
             showError();
         }
@@ -57,5 +57,4 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
 //Phase 2 
 const token = localStorage.getItem('token');  
-
 

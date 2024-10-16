@@ -18,24 +18,29 @@ function showError() {
     }
 }
 
-function logout() {
-    localStorage.removeItem('token'); 
-    window.location.href = '/login.html'; 
-}
-
 
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(this); 
-    const data = Object.fromEntries(formData.entries()); 
+    const data = Object.fromEntries(formData.entries());
+    
+    const trimmedData = {
+        username: data.username.trim(),
+        password: data.password.trim(),
+    };
+
+
+    if (data.username !== trimmedData.username || data.password !== trimmedData.password) {
+        console.log('Trailing spaces removed from inputs.');
+    }
 
     fetch('http://localhost:8080/auth/authenticate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data), 
+        body: JSON.stringify(trimmedData), 
     })
     .then(response => response.json()) 
     // Handle login success and gets the token

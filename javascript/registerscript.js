@@ -14,7 +14,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     .then(response => response.json())
     .then(result => {
         console.log('Success:', result);
-        
+        window.location.href = '/public/index.html';
     })
     .catch(error => {
         console.error('Error:', error);

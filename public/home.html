@@ -14,7 +14,7 @@
         <a href="#">Home Automation</a>
         <div>
           <button
-            class="btn w-full hover:bg-green-700 border border-white border-opacity-10 hover:border-transparent"
+            id="LogOut" class="btn w-full hover:bg-green-700 border border-white border-opacity-10 hover:border-transparent"
           >
             Log Out
           </button>
@@ -29,25 +29,23 @@
         <span class="text-white font-bold text-6xl">Today</span>
         <div class="stats">
           <span class="today-text">Temperature</span>
-          <div class="bar from-blue-500 to-red-500"></div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-thermometer"
-            viewBox="0 0 16 16"
-          >
-            <path d="M8 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
-            <path
-              d="M8 0a2.5 2.5 0 0 0-2.5 2.5v7.55a3.5 3.5 0 1 0 5 0V2.5A2.5 2.5 0 0 0 8 0M6.5 2.5a1.5 1.5 0 1 1 3 0v7.987l.167.15a2.5 2.5 0 1 1-3.333 0l.166-.15z"
-            />
-          </svg>
+          <span id="temp-1" class="ml-2 text-white/55">10°C</span>
+          <div class="temperature-backdrop">
+          <div class="bar from-cyan-500 to-amber-500"></div>
+         </div>
+         <span id="temp-2" class="mr-2 text-white">20°C</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-thermometer" viewBox="0 0 16 16">
+        <path d="M8 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+        <path d="M8 0a2.5 2.5 0 0 0-2.5 2.5v7.55a3.5 3.5 0 1 0 5 0V2.5A2.5 2.5 0 0 0 8 0M6.5 2.5a1.5 1.5 0 1 1 3 0v7.987l.167.15a2.5 2.5 0 1 1-3.333 0l.166-.15z"/>
+        </svg>
         </div>
 
         <div class="stats">
           <span class="today-text">Energy</span>
-          <div class="bar from-yellow-400 to-red-600"></div>
+          <div class="bar from-yellow-400 to-red-600 relative">
+            <div id="energy-dot" class="value-dot"></div>
+          </div>
+          <span id="energy-percent" class="mr-2 text-white">%</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -63,8 +61,10 @@
         </div>
 
         <div class="stats">
-          <span class="">Percepation </span>
-          <div class="bar from-blue-200 to-blue-700"></div>
+          <span class="today-text">Precipitation</span>
+          <div class="bar from-blue-200 to-blue-700 relative"><div id="precipitation-dot" class="value-dot"></div>
+        </div>
+        <span id="precipitation-percent" class="mr-2 text-white">%</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -79,10 +79,9 @@
           </svg>
         </div>
 
-        <div class="stats refresh">
-          <button class="text-white">Refresh</button>
-        </div>
-      </div>
+        <button id="refresh-btn" class="stats refresh">
+          <span class="text-white">Refresh</span>
+        </button>
     </main>
     <footer class="text-black p-4 rounded-t-2xl flex gap-8 justify-center items-center footer-blur">
         <div class="card group">
@@ -101,9 +100,7 @@
             <button class="btn footer-btn">Design</button>
           </div>   
       <div class="card group">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor" class="bi bi-lightbulb h-8 group-hover:text-yellow-500 transition-colors duration-300" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-lightbulb h-8 group-hover:text-yellow-500 transition-colors duration-300" viewBox="0 0 16 16">
           <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1"/>
         </svg>
         <h1 class="text-center font-bold mb-4">Devices</h1>
@@ -118,5 +115,6 @@
         <button class="btn footer-btn">Visit</button>
       </div>
     </footer>
+    <script src="/javascript/homescript.js"></script>
   </body>
 </html>

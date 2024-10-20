@@ -4,12 +4,23 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     const formData = new FormData(this); 
     const data = Object.fromEntries(formData.entries()); 
 
+    const trimmedData = {
+        username: data.username.trim(),
+        password: data.password.trim(),
+    };
+
+
+    if (data.username !== trimmedData.username || data.password !== trimmedData.password) {
+        console.log('Trailing spaces removed from inputs.');
+    }
+        
+
     fetch('http://localhost:8080/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(trimmedData),
     })
     .then(response => response.json())
     .then(result => {

@@ -1,97 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HomeAutomation_Plattform</title>
-    <link href="/src/output.css" rel="stylesheet" />
-  </head>
 
-  <body class="bg-gray-100 text-xl body-login">
-    <!--
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomeAutomation_Plattform</title>
+  <link href="/src/output.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100 text-xl body-login">
+  <!--
     <main>:
       - flex: Applies Flexbox layout to center the content.
       - items-center: Vertically centers the content inside the main element.
       - justify-center: Horizontally centers the content.
       - min-h-screen: Ensures the main element takes up the full viewport height (100vh).
     -->
-    <main class="flex items-center justify-center min-h-screen">
-      <!--
+  <main class="flex items-center justify-center min-h-screen">
+    <!--
         <div>:
             - flex: Applies Flexbox layout to align children.
             - flex-col: Aligns children vertically (column direction).
             - justify-center: Vertically centers the child elements within the div.
           -->
-      <div
-        class="flex flex-col justify-center bg-white rounded-lg p-8 shadow-2xl w-96"
-      >
-        <div class="flex items-center space-x-3 mb-8">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-7"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-            />
-          </svg>
-          <h1 class="text-2xl font-semibold text-gray-700">Login</h1>
-        </div>
-        <form id="loginForm">
-          <div class="input-box">
-            <label for="username"
-              ><span class="text-xl text-gray-700">Username:</span></label
-            >
-            <input
-              class="input-field input-field-effect"
-              type="text"
-              id="username"
-              name="username"
-              minlength="5"
-              placeholder="Enter Username"
-              required
-            /><br />
-          </div>
-          <div id="passwordForm" class="input-box">
-            <label for="password"
-              ><span class="text-xl text-gray-700">Password:</span></label
-            >
-            <input
-              class="input-field input-field-effect"
-              type="password"
-              id="password"
-              name="password"
-              minlength="5"
-              maxlength="10"
-              placeholder="Enter Password"
-              required
-            /><br />
-          </div>
-          <div class="mt-4 flex justify-start">
-            <!-- <button type="reset">Reset Form</button> -->
-            <button
-              type="submit"
-              class="btn bg-blue-500 w-full hover:bg-blue-600"
-            >
-              <span class="text-sm text-white">Log In</span>
-            </button>
-          </div>
-          <div class="mt-4 text-center w-full tracking-wide">
-            <p class="text-gray-700">
-              Don't have an Account?
-              <a href="./register.html" class="font-medium decoration-solid"
-                >Register</a
-              >
-            </p>
-          </div>
-        </form>
+    <div class="flex flex-col justify-center bg-white rounded-lg p-8 shadow-2xl w-96">
+      <div class="flex items-center space-x-3 mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-7">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+        </svg>
+        <h1 class="text-2xl font-semibold text-gray-700">Login</h1>
       </div>
-    </main>
-    <script src="/javascript/loginscript.js"></script>
-  </body>
+      <form id="loginForm">
+        <div class="input-box">
+          <label for="username"><span class="text-xl text-gray-700">Username:</span></label>
+          <input class="input-field input-field-effect" type="text" id="username" name="username" minlength="5"
+            placeholder="Enter Username" required /><br />
+        </div>
+        <div id="passwordForm" class="input-box">
+          <label for="password"><span class="text-xl text-gray-700">Password:</span></label>
+          <input class="input-field input-field-effect" type="password" id="password" name="password" minlength="5"
+            maxlength="10" placeholder="Enter Password" required /><br />
+        </div>
+        <div class="mt-4 flex justify-start">
+          <!-- <button type="reset">Reset Form</button> -->
+          <button type="submit" class="btn bg-blue-500 w-full hover:bg-blue-600">
+            <span class="text-sm text-white">Log In</span>
+          </button>
+        </div>
+        <div class="mt-4 text-center w-full tracking-wide">
+          <p class="text-gray-700">
+            Don't have an Account?
+            <a href="./register.html" class="font-medium decoration-solid">Register</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </main>
+  <script src="/javascript/loginscript.js"></script>
+</body>
+
 </html>

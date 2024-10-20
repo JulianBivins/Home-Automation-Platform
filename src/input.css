@@ -118,7 +118,7 @@
 }
 
 .navigation {
-    @apply fixed top-0 left-0 w-auto h-screen flex flex-col bg-customGray-600 text-white rounded-r-3xl shadow-2xl
+    @apply fixed top-0 left-0 w-auto h-screen flex flex-col bg-navbarIcon text-white rounded-r-3xl shadow-2xl
 }
 
 .sidebar-icon {
@@ -126,7 +126,7 @@
 }
 
 .card-icon {
-    @apply flex items-center justify-center  ml-4 mr-4 mx-auto p-3 bg-customGray-600 hover:bg-customGray-600 hover:rounded-3xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 cursor-pointer active:scale-95
+    @apply flex items-center justify-center  ml-4 mr-4 mx-auto p-3 hover:bg-transparent hover:rounded-3xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 cursor-pointer active:scale-95
  }
 
 /* .card-empty {
@@ -134,17 +134,25 @@
 } */
 
 .card-functionality {
-    @apply backdrop-blur-2xl bg-gray-300/60 p-10 rounded-3xl shadow-2xl items-center space-y-4 w-full h-full hover:border
+    @apply backdrop-blur-2xl bg-gray-300/60 p-10 rounded-3xl shadow-2xl items-center space-y-4 hover:border max-h-[80vh]  overflow-y-auto
 }
 
 .form-field {
-    @apply flex items-center backdrop-blur-2xl bg-gray-300/60 shadow-xl hover:shadow-2xl  rounded-full py-3 px-6 w-full max-w-md hover:scale-105 transform transition-all duration-300
+    @apply items-center backdrop-blur-2xl bg-gray-300/60 shadow-xl hover:shadow-2xl  rounded-full py-3 px-6 w-full max-w-md hover:scale-105 transform transition-all duration-300
 }
 
 .form-btn {
-    @apply  w-full max-w-md py-2 px-6 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex justify-center items-center  hover:scale-105 transform transition-all duration-300 shadow-2xl active:scale-95 hover:shadow-green-800
+    @apply  w-full max-w-md py-2 px-6 rounded-full bg-gradient-to-r  flex justify-center items-center  hover:scale-105 transform transition-all duration-300 shadow-2xl active:scale-95 
 }
 
 .shift-right {
-    @apply -mr-6 rounded-full transition-all duration-300; /* Smooth transition */
+    @apply -mr-6 rounded-full transition-all duration-300 bg-navbarIcon;
+}
+
+.card-user {
+    @apply bg-transparent p-10 items-center space-y-4 max-h-[80vh]  overflow-y-auto border rounded-2xl 
+}
+
+.form-field-usersettings {
+    @apply items-center backdrop-blur-2xl bg-white shadow-xl hover:shadow-2xl  rounded-full py-3 px-6 w-full max-w-md hover:scale-105 transform transition-all duration-300
 }

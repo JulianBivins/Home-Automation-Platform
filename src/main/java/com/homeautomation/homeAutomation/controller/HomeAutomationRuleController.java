@@ -63,21 +63,21 @@ public class HomeAutomationRuleController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/ruleList")
-    public ResponseEntity<List<HomeAutomationRuleDto>> listHomeAutomationRules(Authentication authentication) {
-        String currentUsername = authentication.getName();
-        Optional<UserEntity> retrievedUserAssociatedWithTheRule = userService.findByUsername(currentUsername);
-        if (retrievedUserAssociatedWithTheRule.isEmpty()) throw new RuntimeException("User is not Present");
-
-        List<HomeAutomationRuleEntity> returnedRules = homeAutomationRuleService.getRulesByUserId(retrievedUserAssociatedWithTheRule.get());
-
-        List<HomeAutomationRuleDto> ruleDtos = returnedRules.stream()
-                .map(ruleMapper::mapTo)
-                .collect(Collectors.toList());
-//        String string = ruleDtos.stream().toString();
-        return new ResponseEntity<>(ruleDtos, HttpStatus.OK);
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/ruleList")
+//    public ResponseEntity<List<HomeAutomationRuleDto>> listHomeAutomationRules(Authentication authentication) {
+//        String currentUsername = authentication.getName();
+//        Optional<UserEntity> retrievedUserAssociatedWithTheRule = userService.findByUsername(currentUsername);
+//        if (retrievedUserAssociatedWithTheRule.isEmpty()) throw new RuntimeException("User is not Present");
+//
+//        List<HomeAutomationRuleEntity> returnedRules = homeAutomationRuleService.getRulesByUserId(retrievedUserAssociatedWithTheRule.get());
+//
+//        List<HomeAutomationRuleDto> ruleDtos = returnedRules.stream()
+//                .map(ruleMapper::mapTo)
+//                .collect(Collectors.toList());
+////        String string = ruleDtos.stream().toString();
+//        return new ResponseEntity<>(ruleDtos, HttpStatus.OK);
+//    }
 
     @PreAuthorize("@homeAutomationRuleService.isOwner(#ruleId, authentication.name)")
     @GetMapping("/Event/{ruleId}")

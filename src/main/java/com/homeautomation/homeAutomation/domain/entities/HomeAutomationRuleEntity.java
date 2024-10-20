@@ -71,6 +71,7 @@ public class HomeAutomationRuleEntity {
     @ElementCollection
     @CollectionTable(name = "rule_device_behaviour", joinColumns = @JoinColumn(name = "rule_id"))
     @MapKeyColumn(name = "device_id")
+    @Enumerated(EnumType.STRING) // Add this annotation
     @Column(name = "behaviour")
     @JsonIgnore
     private Map<Long, Behaviour> deviceBehaviours = new HashMap<>();

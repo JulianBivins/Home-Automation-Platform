@@ -1,12 +1,17 @@
 package com.homeautomation.homeAutomation.services.impl;
 
+import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
+import com.homeautomation.homeAutomation.domain.dto.GroupDto;
 import com.homeautomation.homeAutomation.domain.entities.DeviceEntity;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
+import com.homeautomation.homeAutomation.domain.entities.UserEntity;
+import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.repository.DeviceRepository;
 import com.homeautomation.homeAutomation.repository.GroupRepository;
 import com.homeautomation.homeAutomation.repository.HomeAutomationRuleRepository;
 import com.homeautomation.homeAutomation.services.GroupService;
+import com.homeautomation.homeAutomation.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +25,15 @@ public class GroupServiceImpl implements GroupService {
     final private GroupRepository groupRepository;
     final private DeviceRepository deviceRepository;
     final private HomeAutomationRuleRepository ruleRepository;
+    final private UserService userService;
+    final private Mapper<GroupEntity, GroupDto> groupMapper;
 
-    public GroupServiceImpl(GroupRepository groupRepository, DeviceRepository deviceRepository, HomeAutomationRuleRepository ruleRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, DeviceRepository deviceRepository, HomeAutomationRuleRepository ruleRepository, UserService userService, Mapper<GroupEntity, GroupDto> groupMapper) {
         this.groupRepository = groupRepository;
         this.deviceRepository = deviceRepository;
         this.ruleRepository = ruleRepository;
+        this.userService = userService;
+        this.groupMapper = groupMapper;
     }
 
 
@@ -50,7 +59,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public List<GroupEntity> findByUserEntity_UserId(Long userId) {
+    public List<GroupEntity> findGroupsByUserId(Long userId) {
         return groupRepository.findByUserEntity_UserId(userId);
     }
 
@@ -109,6 +118,14 @@ public class GroupServiceImpl implements GroupService {
         }
 
         return isAssociated;
+    }
+
+    @Override
+    public List<GroupDto> getGroupsByUser(String currentUsername) {
+        UserEntity userEntity = userService.findByUsername(currentUsername).orElseThrow(() -> new RuntimeException("There exists no such user"));
+        Long userId = userEntity.getUserId();
+        List<GroupEntity> groupsByUserId = findGroupsByUserId(userId);
+        return groupsByUserId.stream().map(groupMapper::mapTo).toList();
     }
 
 

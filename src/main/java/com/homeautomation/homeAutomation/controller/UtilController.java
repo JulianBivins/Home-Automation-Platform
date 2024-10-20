@@ -1,12 +1,14 @@
 package com.homeautomation.homeAutomation.controller;
 
 import com.homeautomation.homeAutomation.domain.dto.DeviceDto;
+import com.homeautomation.homeAutomation.domain.dto.GroupDto;
 import com.homeautomation.homeAutomation.domain.dto.HomeAutomationRuleDto;
 import com.homeautomation.homeAutomation.domain.dto.UserDto;
 import com.homeautomation.homeAutomation.domain.entities.HomeAutomationRuleEntity;
 import com.homeautomation.homeAutomation.domain.entities.UserEntity;
 import com.homeautomation.homeAutomation.mapper.Mapper;
 import com.homeautomation.homeAutomation.services.DeviceService;
+import com.homeautomation.homeAutomation.services.GroupService;
 import com.homeautomation.homeAutomation.services.HomeAutomationRuleService;
 import com.homeautomation.homeAutomation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class UtilController {
     private Mapper<HomeAutomationRuleEntity, HomeAutomationRuleDto> ruleMapper;
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private GroupService groupService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users/{userId}")
@@ -46,7 +50,7 @@ public class UtilController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping
+    @GetMapping("/rules")
     public ResponseEntity<List<HomeAutomationRuleDto>> listHomeAutomationRules(Authentication authentication) {
         String currentUsername = authentication.getName();
         Optional<UserEntity> retrievedUser = userService.findByUsername(currentUsername);
@@ -67,6 +71,13 @@ public class UtilController {
         String currentUsername = authentication.getName();
         List<DeviceDto> devices = deviceService.getDevicesByUser(currentUsername);
         return ResponseEntity.ok(devices);
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/groups")
+    public ResponseEntity<List<GroupDto>> getAllGroups(Authentication authentication) {
+        String currentUsername = authentication.getName();
+        List<GroupDto> groups = groupService.getGroupsByUser(currentUsername);
+        return ResponseEntity.ok(groups);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.homeautomation.homeAutomation.services;
 
+import com.homeautomation.homeAutomation.domain.dto.GroupDto;
 import com.homeautomation.homeAutomation.domain.entities.GroupEntity;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface GroupService {
 
     Optional<GroupEntity> findById(Long id);
 
-    List<GroupEntity> findByUserEntity_UserId(Long userId);
+    List<GroupEntity> findGroupsByUserId(Long userId);
 
 //    List<DeviceEntity> getDevices(Long groupId);
 
@@ -27,4 +28,6 @@ public interface GroupService {
 
     boolean isOwner(Long groupId, String currentUsername);
     boolean isOwner(Long groupId, Long ruleId, String currentUsername);
+
+    List<GroupDto> getGroupsByUser(String currentUsername);
 }

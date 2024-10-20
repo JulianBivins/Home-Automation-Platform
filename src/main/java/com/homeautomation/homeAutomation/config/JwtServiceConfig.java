@@ -58,7 +58,7 @@ public class JwtServiceConfig {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date (System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 4))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256) // Use HS256 for HMAC
                 .compact();
     }
